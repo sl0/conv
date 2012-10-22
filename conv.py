@@ -183,7 +183,7 @@ class Tables(UserDict):
         except IOError, err:
             print fname + ": ", err.strerror
             sys.exit(1)
-        print "# generated from: %s\n" % (fname)
+        print "# generated from: %s" % (fname)
 
 
 def main():
