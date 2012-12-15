@@ -98,8 +98,8 @@ conv.py:    speeds up loading of many iptables-commands
 
    >>> filter.put_into_fgr("-N mychain")
    >>> filter.put_into_fgr("-E mychain firstchain")
-   Unknown filter command in input: -E mychain firstchain
-   Not yet implemented, sorry.
+   # Unknown filter command in input: -E mychain firstchain
+   # Not yet implemented, sorry.
 
 
    SKIP >>> print filter
@@ -310,6 +310,12 @@ conv.py:    speeds up loading of many iptables-commands
    :INPUT ACCEPT [0:0]
    :OUTPUT ACCEPT [0:0]
    COMMIT
+
+# ################################################################### #
+# force an error
+   >>> tables.put_into_tables('/sbin/iptables -L')
+   # Unknown filter command in input: -L 
+   # Not yet implemented, sorry.
 
 # ################################################################### #
 # EoF
