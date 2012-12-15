@@ -141,7 +141,7 @@ class Tables(UserDict):
                 for chain in self.data[key].keys():
                     #print type(self.data[key]), type(chain)
                     poli = self.data[key].poli[chain]
-                    print ":%s %s" % (chain, poli)
+                    print ":%s %s [0:0]" % (chain, poli)
                 for chain in self.data[key].values():
                     for elem in chain:
                         print elem
