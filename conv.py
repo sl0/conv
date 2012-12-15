@@ -86,8 +86,8 @@ class Chains(UserDict):
             kette.append(content)
             self.data[chain_name] = kette
             return
-        print "Unknown filter command in input:", content
-        print "Not yet implemented, sorry."
+        print "# Unknown filter command in input:", content
+        print "# Not yet implemented, sorry."
         return
 
     def reset(self): # name, tables):
