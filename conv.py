@@ -60,6 +60,8 @@ class Chains(UserDict):
             liste.pop(0)
             cha = liste.pop(0)
             new = liste.pop(0)
+            if not new in ["ACCEPT", "DROP", "REJECT"]:
+                raise ValueError("try to set illegal policy")
             self.poli[cha] = new
             return
         if "-X" in action:
