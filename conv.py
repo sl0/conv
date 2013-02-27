@@ -46,7 +46,11 @@ class Chains(UserDict):
         action = liste[0]
         if "-t" in action:
             liste.pop(0) # remove 1st: -t
-            liste.pop(0) # remove 1st: nat
+            fname = liste.pop(0)
+            legals = ["filter", "nat", "raw", "mangle"]
+            if fname not in legals:
+                msg = "Valid is one of %s, got: %s" % (legals, fname)
+                raise ValueError(msg)
             action = liste[0]
             content = ""                       # rebuild content from here
             for elem in liste:
@@ -61,25 +65,43 @@ class Chains(UserDict):
             cha = liste.pop(0)
             new = liste.pop(0)
             if not new in ["ACCEPT", "DROP", "REJECT"]:
-                raise ValueError("try to set illegal policy")
+                msg = "Illegal policy: % s" % (new)
+                raise ValueError(msg)
             self.poli[cha] = new
             return
         if "-X" in action:
+            predef = ['INPUT', 'FORWARD', 'OUTPUT', \
+                    'PREROUTING', 'POSTROUTING']
             rem_chain_name = liste.pop(1)
+            if rem_chain_name in predef:
+                msg = "Cannot remove prefined chain"
+                raise ValueError(msg)
+            if not rem_chain_name in self.data:
+                msg = "remove a none existing chain fails"
+                raise ValueError(msg)
             if rem_chain_name in self.data:
+                print "removing:", rem_chain_name
                 self.data[rem_chain_name] = []        # empty list
                 self.poli[rem_chain_name] = "-"       # empty policy, no need
                 self.data.pop(rem_chain_name)
             return
         if "-N" in action:
             new_chain_name = liste.pop(1)
+            existing = self.data.keys()
+            if new_chain_name in existing:
+                msg = "Chain %s already exists" % (new_chain_name)
+                raise ValueError(msg)
             self.data[new_chain_name] = []        # empty list
             self.poli[new_chain_name] = "-"       # empty policy, no need
             return
         if "-I" in action: # or "-A" in action:
             chain_name = liste[1]
             kette = self.data[chain_name]
-            kette.insert(0, content)
+            if len(kette) > 0:
+                kette.insert(0, content)
+            else:
+                msg = "Empty chain %s allows append only!" % (chain_name)
+                raise ValueError(msg)
             self.data[chain_name] = kette
             return
         if "-A" in action: # or "-I" in action:
@@ -88,8 +110,9 @@ class Chains(UserDict):
             kette.append(content)
             self.data[chain_name] = kette
             return
-        print "# Unknown filter command in input:", content
-        print "# Not yet implemented, sorry."
+        msg = "Unknown filter command in input:", content
+        raise ValueError(msg)
+        #print "# Not yet implemented, sorry."
         return
 
     def reset(self): # name, tables):

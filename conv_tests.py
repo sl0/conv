@@ -10,7 +10,10 @@ import unittest
 class Chains_Test(unittest.TestCase):
     '''some first tests for class Chain'''
 
-    def test_01_chains_object(self):
+    def test_01_create_an_object(self):
+        """
+        create a Filter group, f.e. filter
+        """
         self.assertIsInstance(Chains("filter", \
             ["INPUT", "FORWARD", "OUTPUT"]), Chains)
         self.assertEquals({}, Chains("filter", []))
@@ -23,7 +26,10 @@ class Chains_Test(unittest.TestCase):
             {'FORWARD': 'ACCEPT', 'INPUT': 'ACCEPT', 'OUTPUT': 'ACCEPT'}, \
             filter.poli)
 
-    def test_02_prove_policy(self):
+    def test_02_prove_policies(self):
+        """
+        check 3 valid policies, 1 exception
+        """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-P INPUT DROP")
         self.assertEquals( \
@@ -37,9 +43,133 @@ class Chains_Test(unittest.TestCase):
         self.assertEquals( \
             {'FORWARD': 'REJECT', 'INPUT': 'DROP', 'OUTPUT': 'DROP'}, \
             filter.poli)
-        filter.put_into_fgr("-P OUTPUT NONSENSE")
-        #self.assertRaises(filter, ValueError("try to set illegal policy"))
-        self.assertRaises(Filter(filter, ValueError("try to set illegal policy")))
+        self.assertRaises(ValueError, filter.put_into_fgr, "-P OUTPUT FAIL")
+
+    def test_03_tables_names(self):
+        """
+        3 cases OK, 1 Exception
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-t filter -A INPUT -i sl0 -j ACCEPT")
+        self.assertEquals(['-A INPUT -i sl0 -j ACCEPT '], filter.data["INPUT"])
+
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-t nat -A OUTPUT -j ACCEPT")
+        self.assertEquals(['-A OUTPUT -j ACCEPT '], filter.data["OUTPUT"])
+
+        #filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-t nat -A FORWARD -j ACCEPT")
+        self.assertEquals(['-A FORWARD -j ACCEPT '], filter.data["FORWARD"])
+
+        self.assertRaises(ValueError, filter.put_into_fgr, "-t na -A INPUT")
+
+    def test_04_flush(self):
+        """
+        flush filter group, 2 rules and an invalid chain
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-t filter -A INPUT -i sl0 -j ACCEPT")
+        self.assertEquals(['-A INPUT -i sl0 -j ACCEPT '], \
+            filter.data["INPUT"])
+        filter.put_into_fgr("-A OUTPUT -o sl1 -j ACCEPT")
+        self.assertEquals(['-A OUTPUT -o sl1 -j ACCEPT'], \
+            filter.data["OUTPUT"])
+
+        filter.put_into_fgr("-F")
+        self.assertEquals([], filter.data["INPUT"])
+        self.assertEquals([], filter.data["OUTPUT"])
+
+        self.assertRaises(ValueError, filter.put_into_fgr, "-t inval -F")
+
+    def test_05_new_chain(self):
+        """
+        create a new chain in filtergroup,
+        create an exsiting chain should fail
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-N NEWCHAIN")
+        self.assertEquals( \
+            {'FORWARD': [], 'INPUT': [], 'NEWCHAIN': [], 'OUTPUT': []},
+            filter.data)
+        self.assertRaises(ValueError, filter.put_into_fgr, "-N INPUT")
+
+    def test_06_insert_rule_fail(self):
+        """
+        insert a rule into an empty chain fails
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
+        self.assertRaises(ValueError, filter.put_into_fgr,  \
+            "-I INPUT -j ACCEPT")
+
+    def test_07_insert_rule_works(self):
+        """
+        insert a rule into a nonempty chain works at start
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-A INPUT -p tcp -j ACCEPT")
+        filter.put_into_fgr("-I INPUT -p udp -j ACCEPT")
+        filter.put_into_fgr("-I INPUT -p esp -j ACCEPT")
+        expect = ['-I INPUT -p esp -j ACCEPT', \
+                  '-I INPUT -p udp -j ACCEPT', \
+                  '-A INPUT -p tcp -j ACCEPT']
+        self.assertEquals(expect, filter.data["INPUT"])
+
+    def test_08_append_rule(self):
+        """
+        append a rule to a chain
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-A INPUT -p tcp -j ACCEPT")
+        self.assertEquals(['-A INPUT -p tcp -j ACCEPT'], filter.data["INPUT"])
+        filter.put_into_fgr("-A INPUT -p udp -j ACCEPT")
+        filter.put_into_fgr("-A INPUT -p esp -j ACCEPT")
+        expect = ['-A INPUT -p tcp -j ACCEPT', \
+                  '-A INPUT -p udp -j ACCEPT', \
+                  '-A INPUT -p esp -j ACCEPT']
+        self.assertEquals(expect, filter.data["INPUT"])
+
+    def test_09_remove_predef_chain(self):
+        """
+        try to remove a prefined chain
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        self.assertRaises(ValueError, filter.put_into_fgr,  \
+            "-X INPUT")
+
+    def test_10_remove_nonexisting_chain(self):
+        """
+        try to remove a nonexisting chain
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        self.assertRaises(ValueError, filter.put_into_fgr,  \
+            "-X USERDEFCHAIN")
+
+    def test_11_remove_chain(self):
+        """
+        try to remove an existing chain
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filter.put_into_fgr("-N NEWCHAIN")
+        self.assertEquals( \
+            {'FORWARD': [], 'INPUT': [], 'NEWCHAIN': [], 'OUTPUT': []},
+            filter.data)
+        filter.put_into_fgr("-X NEWCHAIN")
+        self.assertEquals( \
+            {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
+            filter.data)
+
+    def test_12_illegal_command(self):
+        """
+        try an ilegal command
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        self.assertRaises(ValueError, filter.put_into_fgr,  \
+            "-N USERCHAIN")
+        filter.put_into_fgr("-E USERCHAIN NEWCHAIN")
+        self.assertEquals( \
+            {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
+            filter.data)
 
 
 if __name__ == "__main__":
