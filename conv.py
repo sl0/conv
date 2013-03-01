@@ -80,7 +80,6 @@ class Chains(UserDict):
                 msg = "remove a none existing chain fails"
                 raise ValueError(msg)
             if rem_chain_name in self.data:
-                print "removing:", rem_chain_name
                 self.data[rem_chain_name] = []        # empty list
                 self.poli[rem_chain_name] = "-"       # empty policy, no need
                 self.data.pop(rem_chain_name)
@@ -96,6 +95,10 @@ class Chains(UserDict):
             return
         if "-I" in action: # or "-A" in action:
             chain_name = liste[1]
+            existing = self.data.keys()
+            if not chain_name in existing:
+                msg = "invalid chain name: %s" % (chain_name)
+                raise ValueError(msg)
             kette = self.data[chain_name]
             if len(kette) > 0:
                 kette.insert(0, content)
@@ -106,14 +109,16 @@ class Chains(UserDict):
             return
         if "-A" in action: # or "-I" in action:
             chain_name = liste[1]
+            existing = self.data.keys()
+            if not chain_name in existing:
+                msg = "invalid chain name: %s" % (chain_name)
+                raise ValueError(msg)
             kette = self.data[chain_name]
             kette.append(content)
             self.data[chain_name] = kette
             return
         msg = "Unknown filter command in input:", content
         raise ValueError(msg)
-        #print "# Not yet implemented, sorry."
-        return
 
     def reset(self): # name, tables):
         """
@@ -130,9 +135,10 @@ class Chains(UserDict):
 
 class Tables(UserDict):
     """
-    some tables are predef: filter, nat, mangle, raw"""
+    some chaingroups in tables are predef: filter, nat, mangle, raw
+    """
 
-    def __init__(self, fname):
+    def __init__(self, fname="reference-one"):
         """init Tables Object is easy going"""
         UserDict.__init__(self)
         self.reset(fname)
@@ -207,8 +213,10 @@ class Tables(UserDict):
             fil0.close()
         except IOError, err:
             print fname + ": ", err.strerror
-            sys.exit(1)
-        print "# generated from: %s" % (fname)
+            msg = "File not found: %s" % (fname)
+            raise ValueError(msg)
+        if not fname == "reference-one":
+            print "# generated from: %s" % (fname)
 
 
 def main():
@@ -217,7 +225,7 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.1"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.8"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
@@ -233,14 +241,11 @@ def main():
     if options.sourcefile == None:
         options.sourcefile = "rules"
     sourcefile = options.sourcefile
-    #if options.destination == None:
-    #    options.destination = sourcefile + "-saved-conv"
-    #destination = options.destination
 
     chains = Tables(sourcefile)
     chains.table_printout()
 
-    sys.exit(0)
 
 if __name__ == "__main__":
     main()
+    sys.exit(0)
