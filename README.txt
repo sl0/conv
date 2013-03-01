@@ -8,8 +8,11 @@
 #       License: GPLv3, see file gpl-3-0.txt                          #
 #                                                                     #
 #       Author:  sl0            <sl0.self@googlemail.com>             #
-#       Date:    2012-12-15                                           #
+#       Version: 0.3                                                  #
+#       Date:    2013-03-01                                           #
 #                                                                     #
+#       Details: have a look into the tests, please                   #
+#       Comments welcome                                              #
 #       Have fun!                                                     #
 #                                                                     #
 # ################################################################### #
