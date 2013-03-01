@@ -12,8 +12,8 @@ default filename to read is rules, to read some other
 output is written to stdout for maximum flexibilty
 
 Author:     sl0.self@googlemail.com
-Date:       2012-12-15
-Version:    0.2
+Date:       2013-03-01
+Version:    0.3
 License:    GNU General Public License version 3 or later
 
 Have Fun!
