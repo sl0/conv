@@ -237,7 +237,7 @@ class Tables_Test(unittest.TestCase):
         line = line + " -p tcp --dport   80 -j ACCEPT"
         happend = False
         try:
-            self.assertRaises(ValueError, tables.put_into_tables(line))
+            self.assertRaises(ValueError, tables, put_into_tables(), line)
         except:
             happend = True
         self.assertEquals(happend, True)
@@ -249,7 +249,7 @@ class Tables_Test(unittest.TestCase):
         filename = "not-exist-ist-ok"
         happend = False
         try:
-            self.assertRaises(ValueError, Tables(filename))
+            self.assertRaises(ValueError, Tables(), filename)
         except:
             happend = True
         self.assertEquals(happend, True)
