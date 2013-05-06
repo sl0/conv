@@ -12,8 +12,8 @@ default filename to read is rules, to read some other
 output is written to stdout for maximum flexibilty
 
 Author:     sl0.self@googlemail.com
-Date:       2013-03-01
-Version:    0.3
+Date:       2013-05-06
+Version:    0.4
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -74,11 +74,12 @@ class Chains(UserDict):
                     'PREROUTING', 'POSTROUTING']
             rem_chain_name = liste.pop(1)
             if rem_chain_name in predef:
-                msg = "Cannot remove prefined chain"
+                msg = "Cannot remove predefined chain"
                 raise ValueError(msg)
-            if not rem_chain_name in self.data:
-                msg = "remove a none existing chain fails"
-                raise ValueError(msg)
+            # next block commented for reason of practical usage, see tests
+            #if not rem_chain_name in self.data:
+            #    msg = "remove a none existing chain fails: %s" % (rem_chain_name)
+            #    #raise ValueError(msg)
             if rem_chain_name in self.data:
                 self.data[rem_chain_name] = []        # empty list
                 self.poli[rem_chain_name] = "-"       # empty policy, no need

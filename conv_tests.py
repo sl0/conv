@@ -109,7 +109,7 @@ class Chains_Test(unittest.TestCase):
         #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
         self.assertRaises(ValueError, filter.put_into_fgr,  \
             "-I PUT -j ACCEPT")
-    
+
     def test_08_insert_rule_works(self):
         """
         insert a rule into a nonempty chain works at start
@@ -145,13 +145,18 @@ class Chains_Test(unittest.TestCase):
         self.assertRaises(ValueError, filter.put_into_fgr,  \
             "-X INPUT")
 
-    def test_11_remove_nonexisting_chain(self):
-        """
-        try to remove a nonexisting chain
-        """
-        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertRaises(ValueError, filter.put_into_fgr,  \
-            "-X USERDEFCHAIN")
+    #def test_11_remove_nonexisting_chain(self):
+    #    """
+    #    try to remove a nonexisting chain
+    #    """
+    #    filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+    #    # following assertion removed because we always need to
+    #    # remove a non existing chain, especially on runing such
+    #    # genereated scripts for the ver first time on a machine
+    #    # so the raise is removed due to practicapability
+    #    #self.assertRaises(ValueError, filter.put_into_fgr,  \
+    #    #   "-X USERDEFCHAIN")
+    #    pass
 
     def test_12_remove_chain(self):
         """
@@ -241,7 +246,7 @@ class Tables_Test(unittest.TestCase):
         except:
             happend = True
         self.assertEquals(happend, True)
-    
+
     def test_06_read_not_existing_file(self):
         """
         read non existing file
