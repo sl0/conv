@@ -5,7 +5,8 @@
 #                                                                     #
 #       conv.py: convert iptables to iptables-save format             #
 #                output comes with [0:0] for iptables-restore -c      #
-#       License: GPLv3, see file gpl-3-0.txt                          #
+#       License: GPLv3, or any newer version                          #
+#                see LICENSE.txt                                      #
 #                                                                     #
 #       Author:  sl0            <sl0.self@googlemail.com>             #
 #       Version: 0.4                                                  #
