@@ -8,8 +8,8 @@
 #       License: GPLv3, see file gpl-3-0.txt                          #
 #                                                                     #
 #       Author:  sl0            <sl0.self@googlemail.com>             #
-#       Version: 0.3                                                  #
-#       Date:    2013-03-01                                           #
+#       Version: 0.4                                                  #
+#       Date:    2013-05-05                                           #
 #                                                                     #
 #       Details: have a look into the tests, please                   #
 #       Comments welcome                                              #
@@ -36,8 +36,8 @@ conv.py:    speeds up loading of many iptables-commands
         iptables-restore as well as to iptables-restore -c
 
         Tests ave been written using unittests, see conv_tests.py
-        test coverage 92%, 
-        not tested: main and optparse, but OK
+        test coverage 88%, 
+        not tested: main and optparse, but they seem to be OK ;-)
 
 # ################################################################### #
 # EoF
