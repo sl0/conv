@@ -3,17 +3,18 @@
 # -*- coding: utf-8 -*-
 #
 """
-conv.py: convert iptables commands within a script
-into a correspondig iptables-save script
+iptables_converter.py:
+    convert iptables commands within a script
+    into a correspondig iptables-save script
 
-default filename to read is rules, to read some other
+    default filename to read is rules, to read some other
         file, append: -s filename
 
-output is written to stdout for maximum flexibilty
+    output is written to stdout for maximum flexibilty
 
 Author:     sl0.self@googlemail.com
-Date:       2013-05-06
-Version:    0.4
+Date:       2013-05-22
+bersion:    0.5
 License:    GNU General Public License version 3 or later
 
 Have Fun!
