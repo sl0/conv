@@ -34,18 +34,18 @@ class Chains(UserDict):
         self.name = name
         self.tables = tables
         self.predef = tables
-        self.reset() #name, tables)
+        self.reset()  # name, tables)
 
     def put_into_fgr(self, content):
         """fill this line into this tabular"""
-        #print "put_into_fgr:", self.name, action, content
+        # print "put_into_fgr:", self.name, action, content
         self.length += 1
         cha = "filter"
-        #act = ""
+        # act = ""
         liste = content.split()
         action = liste[0]
         if "-t" in action:
-            liste.pop(0) # remove 1st: -t
+            liste.pop(0)  # remove 1st: -t
             fname = liste.pop(0)
             legals = ["filter", "nat", "raw", "mangle"]
             if fname not in legals:
@@ -70,16 +70,12 @@ class Chains(UserDict):
             self.poli[cha] = new
             return
         if "-X" in action:
-            predef = ['INPUT', 'FORWARD', 'OUTPUT', \
+            predef = ['INPUT', 'FORWARD', 'OUTPUT',
                     'PREROUTING', 'POSTROUTING']
             rem_chain_name = liste.pop(1)
             if rem_chain_name in predef:
                 msg = "Cannot remove predefined chain"
                 raise ValueError(msg)
-            # next block commented for reason of practical usage, see tests
-            #if not rem_chain_name in self.data:
-            #    msg = "remove a none existing chain fails: %s" % (rem_chain_name)
-            #    #raise ValueError(msg)
             if rem_chain_name in self.data:
                 self.data[rem_chain_name] = []        # empty list
                 self.poli[rem_chain_name] = "-"       # empty policy, no need
@@ -94,7 +90,7 @@ class Chains(UserDict):
             self.data[new_chain_name] = []        # empty list
             self.poli[new_chain_name] = "-"       # empty policy, no need
             return
-        if "-I" in action: # or "-A" in action:
+        if "-I" in action:  # or "-A" in action:
             chain_name = liste[1]
             existing = self.data.keys()
             if not chain_name in existing:
@@ -108,7 +104,7 @@ class Chains(UserDict):
                 raise ValueError(msg)
             self.data[chain_name] = kette
             return
-        if "-A" in action: # or "-I" in action:
+        if "-A" in action:  # or "-I" in action:
             chain_name = liste[1]
             existing = self.data.keys()
             if not chain_name in existing:
@@ -121,7 +117,7 @@ class Chains(UserDict):
         msg = "Unknown filter command in input:", content
         raise ValueError(msg)
 
-    def reset(self): # name, tables):
+    def reset(self):  # name, tables):
         """
         name is one of filter, nat, raw, mangle,
         tables is a list of tables in that table-class
@@ -130,7 +126,7 @@ class Chains(UserDict):
         self.length = 0
         self.policy = "-"
         for tabular in self.tables:
-            self.data[tabular] = []    #print "# init:", name, tabular
+            self.data[tabular] = []    # print "# init:", name, tabular
             self.poli[tabular] = "ACCEPT"
 
 
@@ -146,7 +142,7 @@ class Tables(UserDict):
 
     def reset(self, fname):
         """all predefined Chains aka lists are setup as new here"""
-        #print "# reading:", fname
+        # print "# reading:", fname
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
 
         mang = ["PREROUTING", "INPUT", "FORWARD", "OUTPUT", "POSTROUTING", ]
@@ -171,7 +167,7 @@ class Tables(UserDict):
             if len > -1:
                 print "*%s" % (self.data[key].name)
                 for chain in self.data[key].keys():
-                    #print type(self.data[key]), type(chain)
+                    # print type(self.data[key]), type(chain)
                     poli = self.data[key].poli[chain]
                     print ":%s %s [0:0]" % (chain, poli)
                 for chain in self.data[key].values():
@@ -230,16 +226,15 @@ def main():
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
-    parser.add_option("-s", "", #"--source-file",
-                        dest = "sourcefile",
-                        help = "file with iptables commands, default: rules\n")
-    #parser.add_option("-d", "", #"--destiantion-file",
+    parser.add_option("-s", "", dest="sourcefile",
+                        help="file with iptables commands, default: rules\n")
+    # parser.add_option("-d", "", # "--destiantion-file",
     #                    dest = "destination",
     #                    help = "file iptables-save are written to, \
     #                           default: rules-saved")
     (options, args) = parser.parse_args()
     hlp = "\n\tplease use \"--help\" as argument, abort!\n"
-    if options.sourcefile == None:
+    if options.sourcefile is None:
         options.sourcefile = "rules"
     sourcefile = options.sourcefile
 

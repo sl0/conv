@@ -265,15 +265,15 @@ class Tables_Test(unittest.TestCase):
         read default file: reference-one, check chains
         """
         tables = Tables()
-        expect = { \
-            'filter': {'FORWARD': [], \
-                'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '], \
-                'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], \
-                'OUTPUT': []}, \
-            'raw': {'OUTPUT': [], 'PREROUTING': []}, \
-            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],  \
-                'PREROUTING': [], 'OUTPUT': []}, \
-            'nat': {'OUTPUT': [], \
+        expect = {
+            'filter': {'FORWARD': [],
+                'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '],
+                'OUTPUT': []},
+            'raw': {'OUTPUT': [], 'PREROUTING': []},
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
+                'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [],
                 'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 '],
                 'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 ']}}
         self.maxDiff = None
