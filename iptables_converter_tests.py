@@ -2,7 +2,7 @@
 
 #encoding:utf8
 
-from conv import Chains, Tables, main as haupt
+from iptables_converter import Chains, Tables, main as haupt
 import unittest
 
 

@@ -1,9 +1,9 @@
-FILES= Makefile README.txt conv.py gpl-3-0.txt
+FILES= Makefile README.txt LICENSE.txt iptables_converter.py iptables_converter_tests.py 
 
 testing:
 	@more README.txt
 	@echo "Now starting tests ..."
-	@nosetests -v --with-coverage  conv_tests.py
+	@nosetests -v --with-coverage  iptables_converter_tests.py
 
 
 
