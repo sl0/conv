@@ -9,6 +9,6 @@ testing:
 
 
 clean:
-	@rm -rf *~ *.pyc .coverage .tox
-	python setup.py clean --bdist-base build
+	@python setup.py clean --bdist-base build
+	@rm -rf *~ *.pyc .coverage .tox build
 
