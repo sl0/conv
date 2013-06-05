@@ -10,5 +10,5 @@ testing:
 
 clean:
 	@python setup.py clean --bdist-base build
-	@rm -rf *~ *.pyc .coverage .tox build
+	@rm -rf *~ *.pyc .coverage build
 
