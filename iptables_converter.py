@@ -72,7 +72,7 @@ class Chains(UserDict):
             return
         if "-X" in action:
             predef = ['INPUT', 'FORWARD', 'OUTPUT',
-                    'PREROUTING', 'POSTROUTING']
+                      'PREROUTING', 'POSTROUTING']
             rem_chain_name = liste.pop(1)
             if rem_chain_name in predef:
                 msg = "Cannot remove predefined chain"
@@ -228,7 +228,7 @@ def main():
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
     parser.add_option("-s", "", dest="sourcefile",
-                        help="file with iptables commands, default: rules\n")
+                      help="file with iptables commands, default: rules\n")
     # parser.add_option("-d", "", # "--destiantion-file",
     #                    dest = "destination",
     #                    help = "file iptables-save are written to, \
