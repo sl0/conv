@@ -3,5 +3,4 @@ LICENSE.txt
 Makefile
 README.txt
 iptables_converter.py
-iptables_converter_tests.py
 setup.py
