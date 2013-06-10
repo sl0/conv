@@ -1,0 +1,5 @@
+iptables-converter (0.6-1) unstable; urgency=low
+
+  * Initial release: source package automatically created by stdeb 0.6.0+git
+
+ -- sl0 (Johannes Hubertz) <johannes@hubertz.de>  Tue, 11 Jun 2013 00:19:47 +0200
