@@ -238,11 +238,11 @@ class Tables_Test(unittest.TestCase):
         INPUT to not existing chain
         """
         tables = Tables("")
-        line = "iptables -t raw -A INPUT"
+        line = "iptables -t raw -A NONEXIST"
         line = line + " -p tcp --dport   80 -j ACCEPT"
         happend = False
         try:
-            self.assertRaises(ValueError, tables, put_into_tables(), line)
+            self.assertRaises(ValueError, tables, tables.put_into_tables(line))
         except:
             happend = True
         self.assertEquals(happend, True)
@@ -253,12 +253,12 @@ class Tables_Test(unittest.TestCase):
         """
         filename = "not-exist-ist-ok"
         happend = False
+        #self.assertRaises(ValueError, Tables(filename))
         try:
-            self.assertRaises(ValueError, Tables(), filename)
+            self.assertRaises(ValueError, Tables(filename))
         except:
             happend = True
         self.assertEquals(happend, True)
-
 
     def test_07_reference_one(self):
         """
