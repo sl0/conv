@@ -280,16 +280,18 @@ class Tables_Test(unittest.TestCase):
         self.assertEquals(expect, tables.data)
         tables.table_printout()
 
-    def test_08_main(self):
+    def test_08_read_empty_file(self):
+        """read empty file (in relation to iptables-commands)
         """
-        procedure main
-        """
-        try:
-            helper = True
-            self.assertAlmostEquals("nosetests: -v", haupt, "-h")
-        except:
-            helper = False
-        self.assertEquals(helper, False)
+        filename = "MANIFEST"
+        tables = Tables(filename)
+        expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
+                  'raw': {'OUTPUT': [], 'PREROUTING': []},
+                  'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
+                             'PREROUTING': [], 'OUTPUT': []},
+                  'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
+        self.assertEquals(expect, tables.data)
+
 
 if __name__ == "__main__":
         unittest.main()
