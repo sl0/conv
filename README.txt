@@ -8,9 +8,9 @@
 #       License: GPLv3, or any newer version                          #
 #                see LICENSE.txt                                      #
 #                                                                     #
-#       Author:  sl0 (Johannes Hubertz)   <sl0.self@googlemail.com>   #
-#       Version: 0.5                                                  #
-#       Date:    2013-05-22                                           #
+#       Author:  sl0 (Johannes Hubertz)   <johannes@hubertz.de>       #
+#       Version: 0.6                                                  #
+#       Date:    2013-06-10                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #
@@ -39,7 +39,7 @@ iptables_converter.py:
         iptables-restore -c
 
         Tests have been written using unittests, see file:
-        iptables_converter_tests.py, test coverage 88%,
+        iptables_converter_tests.py, test coverage 92%,
         untested: main and optparse, but they seem to be OK ;-)
 
         Comments welcome
