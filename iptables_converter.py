@@ -13,8 +13,8 @@ iptables_converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     sl0.self@googlemail.com
-Date:       2013-05-22
-bersion:    0.5
+Date:       2013-06-11
+version:    0.6
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -229,10 +229,6 @@ def main():
     parser.disable_interspersed_args()
     parser.add_option("-s", "", dest="sourcefile",
                       help="file with iptables commands, default: rules\n")
-    # parser.add_option("-d", "", # "--destiantion-file",
-    #                    dest = "destination",
-    #                    help = "file iptables-save are written to, \
-    #                           default: rules-saved")
     (options, args) = parser.parse_args()
     hlp = "\n\tplease use \"--help\" as argument, abort!\n"
     if options.sourcefile is None:
