@@ -17,6 +17,3 @@ Description: convert set of iptables-commands to iptables-save format
  Version: 0.6
  Date:    2013-06-10
  Have fun!
- .
- .
- iptables_converter.py
