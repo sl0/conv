@@ -1,0 +1,36 @@
+
+.\"Created with GNOME Manpages Editor Wizard gmanedit
+.TH iptables-converter 1 "June 2013" "Johannes Hubertz" " "
+
+.SH NAME
+iptables-converter \- program to convert iptables commands from file to iptables-restore format
+
+.SH SYNOPSIS
+.B iptables-converter
+.RI [ -s \  iptables-skript-file ]
+.br
+
+.SH DESCRIPTION
+This manual page explains the
+.B iptables-converter
+program, which is used to convert a shellskript containing (a lot) 
+of valid iptables commands to a format understood by iptables-restore.
+
+.PP
+\fBiptables-converter\fP run without any arguments tries to read a file named rules in workdir.
+Output is send to stdout for your convienience. Then you can inspect it and write to file for later feeding the iptables-restore command.
+
+.SH OPTIONS
+.B
+.IP -s filename
+This option gives you a chance to take another filename instaed of "rules"
+
+.SH AUTHOR
+Johannes Hubertz <johannes@hubertz.de> wrote iptables-converter in 2013
+Any comments welcome.
+
+.SH "SEE ALSO"
+.BR iptables
+.BR iptables-save
+.BR iptables-restore
+
