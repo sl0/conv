@@ -1,5 +1,5 @@
 Source: iptables-converter
-Maintainer: sl0 (Johannes Hubertz) <johannes@hubertz.de>
+Maintainer: Johannes Hubertz <johannes@hubertz.de>
 Section: python
 Priority: optional
 Build-Depends: python-all (>= 2.6.6-3), debhelper (>= 9)
