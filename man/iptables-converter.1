@@ -11,14 +11,39 @@ iptables-converter \- program to convert iptables commands from file to iptables
 .br
 
 .SH DESCRIPTION
-This manual page explains the
+This manual page tries to explain the usage of
 .B iptables-converter
-program, which is used to convert a shellskript containing (a lot) 
-of valid iptables commands to a format understood by iptables-restore.
+program, which is used to convert a file (usually a shellskript) containing (a lot)
+of valid iptables commands to some output, which usually might be understood
+by the familiar
+.B iptables-restore
+command.
 
 .PP
-\fBiptables-converter\fP run without any arguments tries to read a file named rules in workdir.
-Output is send to stdout for your convienience. Then you can inspect it and write to file for later feeding the iptables-restore command.
+if \fBiptables-converter\fP is run without any arguments, it tries to read a file named "rules" in workdir. That's the tribute to my way of doing.
+
+Output generally is send to
+.B stdout
+for your convienience and nowhere else. So you can inspect it and write to file for later feeding the iptables-restore command.
+
+.PP
+Something needs to be mentioned:
+.B iptables -E
+intellectually still is an unsolved problem and not implemented for now, sorry. Thank you for any
+.B hints
+of how to do it, I can't imagine because of some lacks in my brain.
+
+.SH "EXIT STATUS"
+Normally iptables-converter returns a value of 0.
+.B No
+other values are foreseen for now, because at least every input-file validates to an "empty" output for any nonsense input. And please, don't assume
+.B iptables-converter
+as an input-validator for any error-checking.
+
+.SH VERSIONS
+iptables-converter
+.B should
+be compatibe to any iptables implementations out in the wild. If not, keep me informed, thanks. I'll do my very best.
 
 .SH OPTIONS
 .B
@@ -26,11 +51,11 @@ Output is send to stdout for your convienience. Then you can inspect it and writ
 This option gives you a chance to take another filename instaed of "rules"
 
 .SH AUTHOR
-Johannes Hubertz <johannes@hubertz.de> wrote iptables-converter in 2013
-Any comments welcome.
+Johannes Hubertz <johannes@hubertz.de> wrote this in 2013.
+Any comments welcome anytime.
 
 .SH "SEE ALSO"
-.BR iptables
-.BR iptables-save
-.BR iptables-restore
+.BR iptables (8)
+.BR iptables-save (8)
+.BR iptables-restore (8)
 
