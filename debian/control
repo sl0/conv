@@ -1,4 +1,4 @@
-Source: iptables-converter
+Source: python-iptables-converter
 Maintainer: Johannes Hubertz <johannes@hubertz.de>
 Section: python
 Priority: optional
