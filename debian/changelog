@@ -1,3 +1,10 @@
+iptables-converter (0.7) unstable; urgency=low
+
+  * [f4a6673] Version 0.7 released
+  * /usr/sbin/iptables-converter shipped, no more a python-module
+
+ -- Johannes Hubertz <johannes@hubertz.de>  Sat, 20 Jul 2013 21:51:57 +0200
+
 iptables-converter (0.6) unstable; urgency=low
 
   * Initial release closes: #712263
