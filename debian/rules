@@ -16,7 +16,7 @@ install:	build
 	dh_prep
 	dh_installdirs /usr/sbin
 
-	cd $(CURDIR)/debian/python-iptables-converter/usr/sbin && \
+	cd $(CURDIR)/debian/iptables-converter/usr/sbin && \
 		cp $(CURDIR)/iptables_converter.py iptables-converter && \
 		chmod 755 iptables-converter
 	dh_lintian
@@ -36,7 +36,6 @@ binary-indep: build install
 	dh_installman --language=C man/*
 	dh_compress
 	dh_fixperms
-	dh_python2
 	dh_installdeb
 	dh_gencontrol
 	dh_md5sums
