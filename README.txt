@@ -8,9 +8,9 @@
 #       License: GPLv3, or any newer version                          #
 #                see LICENSE.txt                                      #
 #                                                                     #
-#       Author:  sl0 (Johannes Hubertz)   <johannes@hubertz.de>       #
-#       Version: 0.6                                                  #
-#       Date:    2013-06-10                                           #
+#       Author:  Johannes Hubertz   <johannes@hubertz.de>             #
+#       Version: 0.7                                                  #
+#       Date:    2013-07-20                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #

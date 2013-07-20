@@ -7,10 +7,10 @@ from distutils.core import setup
 setup(name='iptables-converter',
     description='convert set of iptables-commands to iptables-save format',
     long_description=open('README.txt').read(),
-    version='0.6',
+    version='0.7',
     license='GNU General Public License version 3 (or later)',
     platforms= ['Linux', ],
-    author='sl0 (Johannes Hubertz)',
+    author='Johannes Hubertz',
     author_email='johannes@hubertz.de',
     url='https://github.com/sl0/conv.git',
     classifiers=[
@@ -26,6 +26,5 @@ setup(name='iptables-converter',
         'Topic :: Utilities',
     ],
     py_modules=['iptables_converter', ],
-    #'iptables_converter_tests'],
     )
 
