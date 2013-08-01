@@ -13,8 +13,8 @@ iptables_converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2013-07-20
-version:    0.7
+Date:       2013-08-02
+version:    0.8
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -223,7 +223,7 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.7"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.8"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()

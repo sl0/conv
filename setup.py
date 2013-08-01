@@ -7,7 +7,7 @@ from distutils.core import setup
 setup(name='iptables-converter',
     description='convert set of iptables-commands to iptables-save format',
     long_description=open('README.txt').read(),
-    version='0.7',
+    version='0.8',
     license='GNU General Public License version 3 (or later)',
     platforms= ['Linux', ],
     author='Johannes Hubertz',
