@@ -1,3 +1,14 @@
+iptables-converter (0.8) unstable; urgency=low
+
+  * [20c2ed1] manpages also renamed
+  * [569fdb5] renaming included the deletion of the old file
+  * [240c595] copy .py to pyshared as well
+  * [f10c3ab] dh_python neccessary for dependancies
+  * [86be17f] dh_python replaced by python-support reasoned by squeeze install
+  * [d4be880] Version changed to 0.8
+
+ -- Johannes Hubertz <johannes@hubertz.de>  Fri, 02 Aug 2013 00:50:59 +0200
+
 iptables-converter (0.7) unstable; urgency=low
 
   * [f4a6673] Version 0.7 released
