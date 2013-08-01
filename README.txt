@@ -9,8 +9,8 @@
 #                see LICENSE.txt                                      #
 #                                                                     #
 #       Author:  Johannes Hubertz   <johannes@hubertz.de>             #
-#       Version: 0.7                                                  #
-#       Date:    2013-07-20                                           #
+#       Version: 0.8                                                  #
+#       Date:    2013-08-01                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #
