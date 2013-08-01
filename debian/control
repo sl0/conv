@@ -7,7 +7,7 @@ Standards-Version: 3.9.3
 
 Package: iptables-converter
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}
+Depends: ${misc:Depends}, ${python:Depends}, ${sphinxdoc:Depends}
 Description: convert set of iptables-commands to iptables-save format
  iptables_converter.py: convert iptables in a script to iptables-save 
  readable format to stdout with [0:0] for iptables-restore -c

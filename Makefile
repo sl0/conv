@@ -7,8 +7,11 @@ testing:
 	#@nosetests -v --with-coverage  iptables_converter_tests.py
 
 
+doc:
+	(cd docs; make html )
+
 
 clean:
 	@python setup.py clean --bdist-base build
-	@rm -rf *~ *.pyc .coverage build
+	@rm -rf *~ *.pyc .coverage build docs/build/*
 
