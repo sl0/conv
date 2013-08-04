@@ -23,7 +23,7 @@ Runing the tests with nosetests::
 
 The untested lines are the following::
 
-   226	    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.7"
+   226	    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9"
    227	    usage = usage + "\tHave Fun!"
    228	    parser = OptionParser(usage)
    229	    parser.disable_interspersed_args()
