@@ -4,47 +4,57 @@
 export DH_VERBOSE=1
 export DH_OPTIONS=-v
 
-build: build-stamp
+PYTHON2=$(shell pyversions -vr)
+PYTHON3=$(shell py3versions -vr)
 
-build-stamp:
-	dh_testdir
+# Prevent setuptools/distribute from accessing the internet.
+export http_proxy = http://127.0.9.1:9
 
-clean:
-	dh_clean
+%:
+	dh $@ --with python2,python3,sphinxdoc
 
-install:	build
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+test-python%:
+	python$* setup.py test -vv
+
+override_dh_auto_test: $(PYTHON2:%=test-python%) $(PYTHON3:%=test-python%)
+endif
+
+build-python%:
+	python$* setup.py build
+
+override_dh_auto_build: $(PYTHON3:%=build-python%)
+	dh_auto_build
+
+install-python%:
+	python$* setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
+
+#override_dh_auto_install: $(PYTHON3:%=install-python%)
+#	dh_install --exclude=html
+
+override_dh_install: 
 	dh_prep
-	dh_installdirs /usr/sbin /usr/share/pyshared
+	dh_installdirs /usr/sbin /usr/share/pyshared /usr/share/man/man8
+	dh_installman --language=C man/*
+	dh_installdocs --exclude=html
 
+	#cd $(CURDIR)/debian/iptables-converter/usr/share/doc/iptables-converter &&
+	#	cp $/
 	cd $(CURDIR)/debian/iptables-converter/usr/share/pyshared && \
 		cp $(CURDIR)/iptables_converter.py iptables_converter.py && \
 	cd $(CURDIR)/debian/iptables-converter/usr/sbin && \
 		cp $(CURDIR)/iptables_converter.py iptables-converter && \
-		chmod 755 iptables-converter
+	cd $(CURDIR)
 	dh_lintian
 
-# Build architecture-independent files here.
-build-arch: build
-build-indep: build
 
-# Note that the following form is recommended however:
+override_dh_installdocs:
+	python setup.py build_sphinx
+	dh_installdocs --package=iptables-converter-doc build/sphinx/html
 
-build-arch: build-stamp
-build-indep: build-stamp
-binary-indep: build install
-	dh_installchangelogs
-	dh_install
-	dh_installdocs
-	dh_installman --language=C man/*
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	#dh_python2 -V -3.0
-	dh_pysupport
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf build
+	rm -rf *.egg-info
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
 
