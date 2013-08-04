@@ -13,8 +13,8 @@ iptables_converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2013-08-02
-version:    0.8
+Date:       2013-08-09
+version:    0.9
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -39,7 +39,6 @@ class Chains(UserDict):
 
     def put_into_fgr(self, content):
         """fill this line into this tabular"""
-        # print "put_into_fgr:", self.name, action, content
         self.length += 1
         cha = "filter"
         # act = ""
@@ -127,7 +126,7 @@ class Chains(UserDict):
         self.length = 0
         self.policy = "-"
         for tabular in self.tables:
-            self.data[tabular] = []    # print "# init:", name, tabular
+            self.data[tabular] = []
             self.poli[tabular] = "ACCEPT"
 
 
@@ -143,7 +142,6 @@ class Tables(UserDict):
 
     def reset(self, fname):
         """all predefined Chains aka lists are setup as new here"""
-        # print "# reading:", fname
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
 
         mang = ["PREROUTING", "INPUT", "FORWARD", "OUTPUT", "POSTROUTING", ]
@@ -166,15 +164,14 @@ class Tables(UserDict):
         for key in ["raw", "nat", "mangle", "filter"]:
             len = self.data[key].length
             if len > -1:
-                print "*%s" % (self.data[key].name)
+                print("*%s") % (self.data[key].name)
                 for chain in self.data[key].keys():
-                    # print type(self.data[key]), type(chain)
                     poli = self.data[key].poli[chain]
-                    print ":%s %s [0:0]" % (chain, poli)
+                    print(":%s %s [0:0]") % (chain, poli)
                 for chain in self.data[key].values():
                     for elem in chain:
-                        print elem
-                print "COMMIT"
+                        print(elem)
+                print("COMMIT")
 
     def put_into_tables(self, line):
         """put line into matching Chains-object"""
@@ -209,12 +206,11 @@ class Tables(UserDict):
                         self.tblctr += 1
                         self.put_into_tables(line)
             fil0.close()
-        except IOError, err:
-            print fname + ": ", err.strerror
-            msg = "File not found: %s" % (fname)
-            raise ValueError(msg)
+        except IOError as err:
+            print(fname + ": "), err.strerror
+            sys.exit(1)
         if not fname == "reference-one":
-            print "# generated from: %s" % (fname)
+            print("# generated from: %s") % (fname)
 
 
 def main():
@@ -223,7 +219,7 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.8"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
