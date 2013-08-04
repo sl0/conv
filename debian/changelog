@@ -1,9 +1,22 @@
+iptables-converter (0.9) unstable; urgency=low
+
+  * [27b26a6] README now 0.8 and 2013-08-01 as well
+  * [b97d833] sphinxdoc added, Makefile targer: doc
+  * [8e057b4] first version of sphinx-doc added
+  * [559dc16] iptables_converter.py now python3 ready, all prints changed
+  * [7cc85f1] distutils replaced by setuptools for -doc package
+  * [b49572b] documentation adapted to version 0.9
+  * [82d5a49] Makefile more replaced by cat, README adapted to v0.9
+  * [8a58ae2] control now shows two packages: iptables-converter and -docs
+
+ -- Johannes Hubertz <johannes@hubertz.de>  Mon, 05 Aug 2013 00:51:40 +0200
+
 iptables-converter (0.8) unstable; urgency=low
 
   * [20c2ed1] manpages also renamed
   * [569fdb5] renaming included the deletion of the old file
   * [240c595] copy .py to pyshared as well
-  * [f10c3ab] dh_python neccessary for dependancies
+  * [f10c3ab] dh_python necessary for dependencies
   * [86be17f] dh_python replaced by python-support reasoned by squeeze install
   * [d4be880] Version changed to 0.8
 
