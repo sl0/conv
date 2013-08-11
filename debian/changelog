@@ -1,3 +1,9 @@
+iptables-converter (0.9.1) unstable; urgency=low
+
+  * [aadc8a3] v0.9.1: tests are enhanced and rewritten, python3.2 now works
+
+ -- Johannes Hubertz <johannes@hubertz.de>  Sun, 11 Aug 2013 23:37:16 +0200
+
 iptables-converter (0.9) unstable; urgency=low
 
   * [27b26a6] README now 0.8 and 2013-08-01 as well
