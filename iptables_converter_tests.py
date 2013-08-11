@@ -11,7 +11,7 @@ class Chains_Test(unittest.TestCase):
 
     def test_01_create_a_chain_object(self):
         """
-        create a Filter group, f.e. filter
+        Chain 01: create a Filter group, f.e. filter
         """
         self.assertIsInstance(Chains("filter", \
             ["INPUT", "FORWARD", "OUTPUT"]), Chains)
@@ -27,7 +27,7 @@ class Chains_Test(unittest.TestCase):
 
     def test_02_prove_policies(self):
         """
-        check 3 valid policies, 1 exception
+        Chain 02: check 3 valid policies, 1 exception
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-P INPUT DROP")
@@ -46,7 +46,7 @@ class Chains_Test(unittest.TestCase):
 
     def test_03_tables_names(self):
         """
-        3 cases OK, 1 Exception
+        Chain 03: 3 cases OK, 1 Exception
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t filter -A INPUT -i sl0 -j ACCEPT")
@@ -64,7 +64,7 @@ class Chains_Test(unittest.TestCase):
 
     def test_04_flush(self):
         """
-        flush filter group, 2 rules and an invalid chain
+        Chain 04: flush filter group, 2 rules and an invalid chain
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t filter -A INPUT -i sl0 -j ACCEPT")
@@ -82,37 +82,42 @@ class Chains_Test(unittest.TestCase):
 
     def test_05_new_chain(self):
         """
-        create a new chain in filtergroup,
-        create an exsiting chain should fail
+        Chain 05: create a new chain in filtergroup,
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-N NEWCHAIN")
         self.assertEquals( \
             {'FORWARD': [], 'INPUT': [], 'NEWCHAIN': [], 'OUTPUT': []},
             filter.data)
+
+    def test_06_new_existing_chain_fails(self):
+        """
+        Chain 06: create an exsiting chain should fail
+        """
+        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         self.assertRaises(ValueError, filter.put_into_fgr, "-N INPUT")
 
-    def test_06_insert_rule_fail(self):
+    def test_07_insert_rule_fail(self):
         """
-        insert a rule into an empty chain fails
+        Chain 07: insert a rule into an empty chain fails
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
         self.assertRaises(ValueError, filter.put_into_fgr,  \
             "-I INPUT -j ACCEPT")
 
-    def test_07_insert_rule_fail(self):
+    def test_08_insert_rule_fail(self):
         """
-        insert a rule into a non_existing chain fails
+        Chain 08: insert a rule into a non_existing chain fails
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
         self.assertRaises(ValueError, filter.put_into_fgr,  \
             "-I PUT -j ACCEPT")
 
-    def test_08_insert_rule_works(self):
+    def test_09_insert_rule_works(self):
         """
-        insert a rule into a nonempty chain works at start
+        Chain 09: insert a rule into a nonempty chain works at start
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-A INPUT -p tcp -j ACCEPT")
@@ -123,9 +128,9 @@ class Chains_Test(unittest.TestCase):
                   '-A INPUT -p tcp -j ACCEPT']
         self.assertEquals(expect, filter.data["INPUT"])
 
-    def test_09_append_rule(self):
+    def test_10_append_rule(self):
         """
-        append a rule to a chain
+        Chain 10: append a rule to a chain
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-A INPUT -p tcp -j ACCEPT")
@@ -137,9 +142,9 @@ class Chains_Test(unittest.TestCase):
                   '-A INPUT -p esp -j ACCEPT']
         self.assertEquals(expect, filter.data["INPUT"])
 
-    def test_10_remove_predef_chain(self):
+    def test_11_remove_predef_chain(self):
         """
-        try to remove a prefined chain
+        Chain 11: try to remove a prefined chain
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         self.assertRaises(ValueError, filter.put_into_fgr,  \
@@ -152,7 +157,7 @@ class Chains_Test(unittest.TestCase):
     #    filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
     #    # following assertion removed because we always need to
     #    # remove a non existing chain, especially on runing such
-    #    # genereated scripts for the ver first time on a machine
+    #    # genereated scripts for the very first time on a machine
     #    # so the raise is removed due to practicapability
     #    #self.assertRaises(ValueError, filter.put_into_fgr,  \
     #    #   "-X USERDEFCHAIN")
@@ -160,7 +165,7 @@ class Chains_Test(unittest.TestCase):
 
     def test_12_remove_chain(self):
         """
-        try to remove an existing chain
+        Chain 12: try to remove an existing chain
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-N NEWCHAIN")
@@ -174,7 +179,7 @@ class Chains_Test(unittest.TestCase):
 
     def test_13_illegal_command(self):
         """
-        try an ilegal command
+        Chain 13: try an ilegal command
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         self.assertRaises(ValueError, filter.put_into_fgr,  \
@@ -188,7 +193,7 @@ class Tables_Test(unittest.TestCase):
 
     def test_01_create_a_tables_object(self):
         """
-        create a Tables object, check chains
+        Tables 01: create a Tables object, check chains
         """
         self.assertIsInstance(Tables(""), Tables)
 
@@ -202,7 +207,7 @@ class Tables_Test(unittest.TestCase):
 
     def test_02_nat_prerouting(self):
         """
-        nat PREROUTING entry
+        Tables 02: nat PREROUTING entry
         """
         tables = Tables("")
         line = "iptables -t nat -A PREROUTING -s 10.0.0.0/21"
@@ -213,7 +218,7 @@ class Tables_Test(unittest.TestCase):
 
     def test_03_mangle_table(self):
         """
-        mangle INPUT entry
+        Tables 03: mangle INPUT entry
         """
         tables = Tables("")
         line = "iptables -t mangle -A INPUT"
@@ -224,7 +229,7 @@ class Tables_Test(unittest.TestCase):
 
     def test_04_raw_table(self):
         """
-        raw OUTPUT entry
+        Tables 04: raw OUTPUT entry
         """
         tables = Tables("")
         line = "iptables -t raw -A OUTPUT"
@@ -235,7 +240,7 @@ class Tables_Test(unittest.TestCase):
 
     def test_05_not_existing_chain(self):
         """
-        INPUT to not existing chain
+        Tables 05: INPUT to not existing chain
         """
         tables = Tables("")
         line = "iptables -t raw -A NONEXIST"
@@ -249,7 +254,7 @@ class Tables_Test(unittest.TestCase):
 
     def test_06_read_not_existing_file(self):
         """
-        read non existing file
+        Tables 06: read non existing file
         """
         filename = "not-exist-ist-ok"
         happend = False
@@ -260,9 +265,22 @@ class Tables_Test(unittest.TestCase):
             happend = True
         self.assertEquals(happend, True)
 
-    def test_07_reference_one(self):
+    def test_07_read_empty_file(self):
         """
-        read default file: reference-one, check chains
+        Tables 07: read empty file (in relation to iptables-commands)
+        """
+        filename = "MANIFEST"
+        tables = Tables(filename)
+        expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
+                  'raw': {'OUTPUT': [], 'PREROUTING': []},
+                  'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
+                             'PREROUTING': [], 'OUTPUT': []},
+                  'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
+        self.assertEquals(expect, tables.data)
+
+    def test_08_reference_one(self):
+        """
+        Tables 08: read default file: reference-one, check chains
         """
         tables = Tables()
         expect = {
@@ -279,18 +297,6 @@ class Tables_Test(unittest.TestCase):
         self.maxDiff = None
         self.assertEquals(expect, tables.data)
         tables.table_printout()
-
-    def test_08_read_empty_file(self):
-        """read empty file (in relation to iptables-commands)
-        """
-        filename = "MANIFEST"
-        tables = Tables(filename)
-        expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
-                  'raw': {'OUTPUT': [], 'PREROUTING': []},
-                  'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
-                             'PREROUTING': [], 'OUTPUT': []},
-                  'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
-        self.assertEquals(expect, tables.data)
 
 
 if __name__ == "__main__":

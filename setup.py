@@ -3,11 +3,15 @@
 import sys
 from setuptools import setup, find_packages
 
+kw = {}
+if sys.version_info >= (3,):
+    kw['use_2to3'] = True
+
 
 setup(name='iptables-converter',
     description='convert set of iptables-commands to iptables-save format',
     long_description=open('README.txt').read(),
-    version='0.9',
+    version='0.9.1',
     license='GNU General Public License version 3 (or later)',
     platforms= ['Linux', ],
     author='Johannes Hubertz',
@@ -26,5 +30,6 @@ setup(name='iptables-converter',
         'Topic :: Utilities',
     ],
     py_modules=['iptables_converter', ],
+    **kw
     )
 

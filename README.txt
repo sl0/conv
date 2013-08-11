@@ -9,8 +9,8 @@
 #                see LICENSE.txt                                      #
 #                                                                     #
 #       Author:  Johannes Hubertz   <johannes@hubertz.de>             #
-#       Version: 0.9                                                  #
-#       Date:    2013-08-05                                           #
+#       Version: 0.9.1                                                #
+#       Date:    2013-08-11                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #
@@ -33,15 +33,20 @@ iptables_converter.py:
         lines starting with /sbin/iptables are understood as well
         ommitting -s source defaults to read a file named: rules
 
-        output is stdout to give a maximum of flexibility
+        output to stdout gives a maximum of flexibility
         paket-countes and byte-counters included now: [0:0]
         which keeps compatiblity to iptables-restore as well as to
         iptables-restore -c
 
         Tests have been written using unittests, see file:
-        iptables_converter_tests.py, test coverage 92%,
+        iptables_converter_tests.py, test coverage 91%,
         untested: main and optparse, but they seem to be OK ;-)
 
-        Comments welcome
+        It is tested to work well with python2.6, python2.7 and
+        python3.2. Some sphinx documentation is prepared.
+
+        Any Comments welcome.
+        Have fun!
+        Johannes
 # ################################################################### #
 # EoF

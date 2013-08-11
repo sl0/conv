@@ -13,14 +13,17 @@ iptables_converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2013-08-09
-version:    0.9
+Date:       2013-08-11
+version:    0.9.1
 License:    GNU General Public License version 3 or later
 
 Have Fun!
 """
 
-from UserDict import UserDict
+try:
+    from UserDict import UserDict
+except ImportError:
+    from collections import UserDict
 from optparse import OptionParser
 import re
 import sys
@@ -164,10 +167,10 @@ class Tables(UserDict):
         for key in ["raw", "nat", "mangle", "filter"]:
             len = self.data[key].length
             if len > -1:
-                print("*%s") % (self.data[key].name)
+                print("*%s" % (self.data[key].name))
                 for chain in self.data[key].keys():
                     poli = self.data[key].poli[chain]
-                    print(":%s %s [0:0]") % (chain, poli)
+                    print(":%s %s [0:0]" % (chain, poli))
                 for chain in self.data[key].values():
                     for elem in chain:
                         print(elem)
@@ -202,7 +205,7 @@ class Tables(UserDict):
                 line = str(zeile.strip())
                 self.linecounter += 1
                 for muster in ["^/sbin/iptables ", "^iptables "]:
-                    if re.search(muster, line) > 0:
+                    if re.search(muster, line):
                         self.tblctr += 1
                         self.put_into_tables(line)
             fil0.close()
@@ -210,7 +213,7 @@ class Tables(UserDict):
             print(fname + ": "), err.strerror
             sys.exit(1)
         if not fname == "reference-one":
-            print("# generated from: %s") % (fname)
+            print("# generated from: %s" % (fname))
 
 
 def main():
@@ -219,7 +222,7 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.1"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
