@@ -2,17 +2,14 @@ Source: iptables-converter
 Maintainer: Johannes Hubertz <johannes@hubertz.de>
 Section: utils
 Priority: optional
-Build-Depends: python-all-dev (>= 2.6.6-3-), python3-all-dev (>=3.2.3) , debhelper (>= 9), python-support, python3-sphinx
-X-Python-Version: >= 2.6
-X-Python3-Version: >= 3.2
+Build-Depends: python (>= 2.6.5-3-), debhelper (>= 9), python-sphinx (>= 1.0.7+dfsg) | python3-sphinx
+X-Python-Version: (>= 2.6)
 Standards-Version: 3.9.3
 
 Package: iptables-converter
 Section: utils
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, ${python3:Depends}
-X-Python-Version: >= 2.6
-X-Python3-Version: >= 3.2
+Depends: python (>= 2.6.5), ${misc:Depends}
 Description: convert set of iptables-commands to iptables-save format
  iptables_converter.py: convert iptables in a script to iptables-save 
  readable format to stdout with [0:0] for iptables-restore -c
@@ -21,7 +18,5 @@ Package: iptables-converter-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
-X-Python-Version: >= 2.6
-X-Python3-Version: >= 3.2
 Description: sphinx documentation for iptables-converter
  iptables-converter: convert iptables in a script to iptables-save 

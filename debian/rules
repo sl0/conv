@@ -3,15 +3,16 @@
 
 export DH_VERBOSE=1
 export DH_OPTIONS=-v
+export DEB_BUILD_OPTIONS=1
 
 PYTHON2=$(shell pyversions -vr)
-PYTHON3=$(shell py3versions -vr)
+#PYTHON3=$(shell py3versions -vr)
 
 # Prevent setuptools/distribute from accessing the internet.
 export http_proxy = http://127.0.9.1:9
 
 %:
-	dh $@ --with python2,python3,sphinxdoc
+	dh $@ --with python2,sphinxdoc
 
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 test-python%:
@@ -23,8 +24,8 @@ endif
 build-python%:
 	python$* setup.py build
 
-override_dh_auto_build: $(PYTHON3:%=build-python%)
-	dh_auto_build
+#override_dh_auto_build: $(PYTHON3:%=build-python%)
+#	dh_auto_build
 
 install-python%:
 	python$* setup.py install --root=$(CURDIR)/debian/tmp --install-layout=deb
@@ -38,10 +39,10 @@ override_dh_install:
 	dh_installman --language=C man/*
 	dh_installdocs --exclude=html
 
-	#cd $(CURDIR)/debian/iptables-converter/usr/share/doc/iptables-converter &&
-	#	cp $/
-	cd $(CURDIR)/debian/iptables-converter/usr/share/pyshared && \
-		cp $(CURDIR)/iptables_converter.py iptables_converter.py && \
+	##cd $(CURDIR)/debian/iptables-converter/usr/share/doc/iptables-converter &&
+	##	cp $/
+	#cd $(CURDIR)/debian/iptables-converter/usr/share/pyshared && \
+	#	cp $(CURDIR)/iptables_converter.py iptables_converter.py && \
 	cd $(CURDIR)/debian/iptables-converter/usr/sbin && \
 		cp $(CURDIR)/iptables_converter.py iptables-converter && \
 	cd $(CURDIR)
