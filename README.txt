@@ -9,8 +9,8 @@
 #                see LICENSE.txt                                      #
 #                                                                     #
 #       Author:  Johannes Hubertz   <johannes@hubertz.de>             #
-#       Version: 0.9.1                                                #
-#       Date:    2013-08-11                                           #
+#       Version: 0.9.2                                                #
+#       Date:    2013-08-25                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #
@@ -31,11 +31,11 @@ iptables_converter.py:
         which assumes, source is a plain ascii-file containing
         lines starting with iptables to build a firewall ruleset
         lines starting with /sbin/iptables are understood as well
-        ommitting -s source defaults to read a file named: rules
+        omitting -s source defaults to read a file named: rules
 
         output to stdout gives a maximum of flexibility
-        paket-countes and byte-counters included now: [0:0]
-        which keeps compatiblity to iptables-restore as well as to
+        packet-counters and byte-counters included now: [0:0]
+        which keeps compatibility to iptables-restore as well as to
         iptables-restore -c
 
         Tests have been written using unittests, see file:
@@ -44,6 +44,10 @@ iptables_converter.py:
 
         It is tested to work well with python2.6, python2.7 and
         python3.2. Some sphinx documentation is prepared.
+
+        Debian packages shipped for binary and sphinx-documentation
+        git-buildpackage creates them on the fly.
+        RPMs may be created by python setup.py bdist_rpm
 
         Any Comments welcome.
         Have fun!
