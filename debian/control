@@ -1,4 +1,4 @@
-Source: iptables-converter
+Source: python-iptables-converter
 Maintainer: Johannes Hubertz <johannes@hubertz.de>
 Section: utils
 Priority: optional
@@ -7,7 +7,7 @@ Uploaders: Toni Mueller <toni@debian.org>
 X-Python-Version: (>= 2.6)
 Standards-Version: 3.9.3
 
-Package: iptables-converter
+Package: python-iptables-converter
 Section: utils
 Architecture: all
 Depends: python (>= 2.6.5), ${misc:Depends}
@@ -15,7 +15,7 @@ Description: convert set of iptables-commands to iptables-save format
  iptables_converter.py: convert iptables in a script to iptables-save 
  readable format to stdout with [0:0] for iptables-restore -c
 
-Package: iptables-converter-doc
+Package: python-iptables-converter-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}

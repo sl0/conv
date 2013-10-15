@@ -44,7 +44,7 @@ override_dh_install:
 
 override_dh_installdocs:
 	python setup.py build_sphinx
-	dh_installdocs --package=iptables-converter-doc build/sphinx/html
+	dh_installdocs --package=python-iptables-converter-doc build/sphinx/html
 
 override_dh_auto_clean:
 	dh_auto_clean
