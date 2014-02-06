@@ -1,11 +1,5 @@
 FILES= Makefile README.txt LICENSE.txt iptables_converter.py iptables_converter_tests.py 
 
-testing:
-	@cat README.txt
-	@echo "Now starting tests ..."
-	/usr/local/bin/tox
-	@#nosetests -v --with-coverage  iptables_converter_tests.py
-
 
 rpm:
 	python setup.py bdist_rpm
