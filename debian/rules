@@ -36,7 +36,7 @@ override_dh_install:
 	##	cp $/
 	#cd $(CURDIR)/debian/iptables-converter/usr/share/pyshared && \
 	#	cp $(CURDIR)/iptables_converter.py iptables_converter.py && \
-	cd $(CURDIR)/debian/iptables-converter/usr/sbin && \
+	cd $(CURDIR)/debian/python-iptables-converter/usr/sbin && \
 		cp $(CURDIR)/iptables_converter.py iptables-converter && \
 	cd $(CURDIR)
 	dh_lintian
