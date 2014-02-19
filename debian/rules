@@ -36,7 +36,7 @@ override_dh_install:
 	##	cp $/
 	#cd $(CURDIR)/debian/iptables-converter/usr/share/pyshared && \
 	#	cp $(CURDIR)/iptables_converter.py iptables_converter.py && \
-	cd $(CURDIR)/debian/python-iptables-converter/usr/sbin && \
+	cd $(CURDIR)/debian/iptables-converter/usr/sbin && \
 		cp $(CURDIR)/iptables_converter.py iptables-converter && \
 	cd $(CURDIR)
 	dh_lintian
@@ -44,7 +44,7 @@ override_dh_install:
 
 override_dh_installdocs:
 	python setup.py build_sphinx
-	dh_installdocs --package=python-iptables-converter-doc build/sphinx/html
+	dh_installdocs --package=iptables-converter-doc build/sphinx/html
 
 override_dh_auto_clean:
 	dh_auto_clean
