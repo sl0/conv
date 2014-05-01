@@ -1,0 +1,8 @@
+ip6tables -F
+ip6tables -t nat -F
+ip6tables -N USER_CHAIN
+ip6tables -A INPUT -p tcp --dport 23 -j ACCEPT
+ip6tables -A USER_CHAIN -p icmp -j DROP
+ip6tables -P INPUT DROP
+ip6tables -t nat -A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport   80 -j SNAT --to-source 2001:db8:feed::1
+ip6tables -t nat -A PREROUTING  -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500
