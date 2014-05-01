@@ -11,7 +11,7 @@ if sys.version_info >= (3,):
 setup(name='iptables-converter',
     description='convert set of iptables-commands to iptables-save format',
     long_description=open('README.txt').read(),
-    version='0.9.2',
+    version='0.9.4',
     license='GNU General Public License version 3 (or later)',
     platforms= ['Linux', ],
     author='Johannes Hubertz',
@@ -29,7 +29,7 @@ setup(name='iptables-converter',
         'Topic :: System :: Networking :: Firewalls',
         'Topic :: Utilities',
     ],
-    py_modules=['iptables_converter', ],
+    py_modules=['iptables_converter', 'ip6tables_converter', ],
     **kw
     )
 

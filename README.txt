@@ -1,16 +1,20 @@
 # ################################################################### #
 #                                                                     #
 #       README.txt for iptables_converter.py                          #
+#                  and ip6tables_converter.py                         #
 #                                                                     #
 #       iptables_converter.py:                                        #
 #                convert iptables to iptables-save format             #
 #                output comes with [0:0] for iptables-restore -c      #
+#       ip6tables_converter.py:                                       #
+#                convert ip6tables to ip6tables-save format           #
+#                output comes with [0:0] for ip6tables-restore -c     #
 #       License: GPLv3, or any newer version                          #
 #                see LICENSE.txt                                      #
 #                                                                     #
 #       Author:  Johannes Hubertz   <johannes@hubertz.de>             #
-#       Version: 0.9.2                                                #
-#       Date:    2013-08-25                                           #
+#       Version: 0.9.4                                                #
+#       Date:    2014-05-01                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #
