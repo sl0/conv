@@ -2,7 +2,7 @@ Source: iptables-converter
 Maintainer: Johannes Hubertz <johannes@hubertz.de>
 Section: utils
 Priority: optional
-Build-Depends: python (>= 2.6.5-3-), debhelper (>= 9), python-sphinx (>= 1.0.7+dfsg) | python3-sphinx, python-setuptools, python-sphinxcontrib.nwdiag, python-sphinxcontrib.blockdiag 
+Build-Depends: python (>= 2.6.5-3-), debhelper (>= 9), python-sphinx (>= 1.0.7+dfsg) | python3-sphinx, python-setuptools, python-sphinxcontrib.nwdiag, python-sphinxcontrib.blockdiag
 Uploaders: Toni Mueller <toni@debian.org>
 X-Python-Version: (>= 2.6)
 Standards-Version: 3.9.5
@@ -12,12 +12,15 @@ Section: utils
 Architecture: all
 Depends: python (>= 2.6.5), ${misc:Depends}
 Description: convert set of iptables-commands to iptables-save format
- iptables_converter.py: convert iptables in a script to iptables-save 
+ iptables_converter.py: convert iptables in a script to iptables-save
  readable format to stdout with [0:0] for iptables-restore -c
+ ip6tables_converter.py: convert ip6tables in a script to ip6tables-save
+ readable format to stdout with [0:0] for ip6tables-restore -c
 
 Package: iptables-converter-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
 Description: sphinx documentation for iptables-converter
- iptables-converter: convert iptables in a script to iptables-save 
+ iptables-converter: convert iptables in a script to iptables-save
+ ip6tables-converter mentioned
