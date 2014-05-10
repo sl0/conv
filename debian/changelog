@@ -1,11 +1,11 @@
-iptables-converter (0.9.4) unstable; urgency=medium
+iptables-converter (0.9.4-1) unstable; urgency=medium
 
   * ip6tables-converter introduced, versionstring changed to 0.9.4
   * ip6tables-converter and tests written and tested
   * man-page for ip6tables-converter, re6ference-one
   * debian: control, manpages and rules adapted to ip6tables-converter.py
 
- -- hans <hans@jessie.hubertz.de>  Thu, 01 May 2014 21:46:05 +0200
+ -- Johannes Hubertz <johannes@hubertz.de>  Thu, 01 May 2014 21:46:05 +0200
 
 iptables-converter (0.9.3-1) unstable; urgency=low
 
