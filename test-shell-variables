@@ -1,0 +1,12 @@
+# test to raise failure on shell variables
+#
+#
+POLICY_A="ACCEPT"
+POLICY_R="REJECT"
+#
+#
+/sbin/iptables -A INPUT -i eth0 -p udp -j $POLICY_A -s 10.0.0.0/16 -d 10.0.0.1 --dport ipp
+/sbin/iptables -A INPUT -i eth0 -p udp -j $POLICY_R -s 10.0.0.0/16 -d 10.0.0.1 --dport ipp
+
+#
+# EoF
