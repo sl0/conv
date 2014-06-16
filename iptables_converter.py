@@ -204,11 +204,26 @@ class Tables(UserDict):
             for zeile in fil0:
                 line = str(zeile.strip())
                 self.linecounter += 1
+                if line.startswith('#'):
+                    continue
+                for element in ['\$', '\(', '\)', ]:
+                    if re.search(element, line):
+                        m1 = "Line %d:\n%s\nplain files only, " % \
+                             (self.linecounter, line)
+                        if element in ['\(', '\)', ]:
+                            m2 = "unable to convert shell functions, abort"
+                        else:
+                            m2 = "unable to resolve shell variables, abort"
+                        msg = m1 + m2
+                        raise ValueError(msg)
                 for muster in ["^/sbin/iptables ", "^iptables "]:
                     if re.search(muster, line):
                         self.tblctr += 1
                         self.put_into_tables(line)
             fil0.close()
+        except ValueError as err:
+            print (fname + ": "), err
+            sys.exit(1)
         except IOError as err:
             print(fname + ": "), err.strerror
             sys.exit(1)
