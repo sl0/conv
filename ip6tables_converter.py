@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 #
 """
-ip6tables-converter.py:
+ip6tables_converter.py:
     convert ip6tables commands within a script
     into a correspondig ip6tables-save script
 
@@ -13,8 +13,8 @@ ip6tables-converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2013-08-25
-version:    0.9.2
+Date:       2014-06-16
+version:    0.9.5
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -204,11 +204,26 @@ class Tables(UserDict):
             for zeile in fil0:
                 line = str(zeile.strip())
                 self.linecounter += 1
+                if line.startswith('#'):
+                    continue
+                for element in ['\$', '\(', '\)', ]:
+                    if re.search(element, line):
+                        m1 = "Line %d:\n%s\nplain files only, " % \
+                             (self.linecounter, line)
+                        if element in ['\(', '\)', ]:
+                            m2 = "unable to convert shell functions, abort"
+                        else:
+                            m2 = "unable to resolve shell variables, abort"
+                        msg = m1 + m2
+                        raise ValueError(msg)
                 for muster in ["^/sbin/ip6tables ", "^ip6tables "]:
                     if re.search(muster, line):
                         self.tblctr += 1
                         self.put_into_tables(line)
             fil0.close()
+        except ValueError as err:
+            print (fname + ": "), err
+            sys.exit(1)
         except IOError as err:
             print(fname + ": "), err.strerror
             sys.exit(1)
@@ -222,7 +237,7 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.2"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.5"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
@@ -231,7 +246,7 @@ def main():
     (options, args) = parser.parse_args()
     hlp = "\n\tplease use \"--help\" as argument, abort!\n"
     if options.sourcefile is None:
-        options.sourcefile = "rules6"
+        options.sourcefile = "rules"
     sourcefile = options.sourcefile
 
     chains = Tables(sourcefile)
