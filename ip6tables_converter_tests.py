@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 #encoding:utf8
-
 from ip6tables_converter import Chains, Tables, main as haupt
+from StringIO import StringIO
+from mock import patch
 import unittest
 
 
@@ -283,19 +284,59 @@ class Tables_Test(unittest.TestCase):
         Tables 08: read default file: re6ference-one, check chains
         """
         tables = Tables()
-        expect = {'filter': {'FORWARD': [], 
-                      'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '], 
-                      'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 
-                      'OUTPUT': []}, 
+        expect = {'filter': {'FORWARD': [],
+                      'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                      'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '],
+                      'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
-                  'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 
-                      'PREROUTING': [], 'OUTPUT': []}, 
-                  'nat': {'OUTPUT': [], 
-                       'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '], 
+                  'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
+                      'PREROUTING': [], 'OUTPUT': []},
+                  'nat': {'OUTPUT': [],
+                       'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
                        'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}, }
         self.maxDiff = None
         self.assertEquals(expect, tables.data)
-        tables.table_printout()
+        #tables.table_printout()
+
+    def test_09_shell_variables(self):
+        """
+        Tables 09: read buggy file with shell variables
+        """
+        msg = """test-shell-variables:  Line 8:
+/sbin/iptables -A INPUT -i eth0 -p udp -j $POLICY_A -s 10.0.0.0/16 -d 10.0.0.1 --dport ipp
+plain files only, unable to resolve shell variables, abort
+"""
+        sys_exit_val = False
+
+        try:
+            with patch('sys.stdout', new=StringIO()) as fake_out:
+                tables = Tables('test-shell-variables')
+        except SystemExit:
+            sys_exit_val = True
+        finally:
+            pass
+        self.assertEqual(fake_out.getvalue(), msg)
+        self.assertTrue(sys_exit_val)
+
+    def test_10_shell_functions(self):
+        """
+        Tables 10: read buggy file with shell functions
+        """
+        msg = """test-debian-bug-no-748638:  Line 6:
+block () {
+plain files only, unable to convert shell functions, abort
+"""
+        sys_exit_val = False
+        try:
+            with patch('sys.stdout', new=StringIO()) as fake_out:
+                tables = Tables('test-debian-bug-no-748638')
+        except SystemExit:
+            sys_exit_val = True
+        finally:
+            pass
+        self.assertEqual(fake_out.getvalue(), msg)
+        self.assertTrue(sys_exit_val)
+
 
 
 if __name__ == "__main__":
