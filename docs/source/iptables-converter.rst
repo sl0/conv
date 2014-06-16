@@ -2,7 +2,7 @@
 iptables-converter - intro
 ==========================
 
-Assume a shell-script containing the following content::
+Assume a plain file with following contents::
 
     iptables -F
     iptables -t nat -F
@@ -51,6 +51,17 @@ Given the above file as input the following is printed out::
     COMMIT
 
 As a file this might be read by iptables-restore, which works immediately.
+
+As the file read is not interpreted in any way, there are few known errorconditions:
+
+  #) the file contains some shell variables, indicated by '$',
+     this leads to an errormessage and exits immediately with returncode 1.
+  #) the file contains some shell functions, indicated by '(' and/or ')',
+     this leads to an errormessage and exits immediately with returncode 1.
+
+If you have such a file, and oyu want to speed up by converting, please 
+execute it and feed the output as a file to iptables-converter.   
+
 
 iptables-converter does some error-checking while reading input. 
 Just to mention it: **iptables -E xyz** and **iptables -L** are not implemented and throw exceptions for now!

@@ -11,38 +11,13 @@ two classes from which the iptables-converter script is build from.
 
 Runing the tests with nosetests::
 
-   nosetests  --with-coverage
-   ....................
-   Name                 Stmts   Miss  Cover   Missing
-   --------------------------------------------------
-   iptables_converter     174     14    92%   226-239, 243-244
-   ----------------------------------------------------------------------
-   Ran 20 tests in 0.038s
-   
-   OK
-
-The untested lines are the following::
-
-   226	    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9"
-   227	    usage = usage + "\tHave Fun!"
-   228	    parser = OptionParser(usage)
-   229	    parser.disable_interspersed_args()
-   230	    parser.add_option("-s", "", dest="sourcefile",
-   231	                      help="file with iptables commands, default: rules\n")
-   232	    (options, args) = parser.parse_args()
-   233	    hlp = "\n\tplease use \"--help\" as argument, abort!\n"
-   234	    if options.sourcefile is None:
-   235	        options.sourcefile = "rules"
-   236	    sourcefile = options.sourcefile
-   237	
-   238	    chains = Tables(sourcefile)
-   239	    chains.table_printout()
-
-and::
-
-   243	    main()
-   244	    sys.exit(0)
-
+    nosetests  ... --with-coverage
+    .......................
+    Name                 Stmts   Miss  Cover   Missing
+    --------------------------------------------------
+    iptables_converter     189     27    86%   25-26, 167-177, 240-253, 257-258
+    ----------------------------------------------------------------------
+    Ran 23 tests in 0.019s
 
 
 
