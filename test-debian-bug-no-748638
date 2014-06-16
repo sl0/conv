@@ -1,0 +1,18 @@
+# debian bugreport #748638
+#
+# Thanks to Guido, who found and reported this failure.
+#
+#
+block () {
+/sbin/iptables -A INPUT -i eth0 -p udp -j REJECT -s 10.0.0.0/16 -d 10.0.0.1 --dport ipp
+
+}
+
+allow () {
+/sbin/iptables -A INPUT -i eth0 -p udp -j ACCEPT -s 10.0.0.0/16 -d 10.0.0.1 --dport ipp
+}
+
+allow
+block
+#
+# EoF
