@@ -11,16 +11,20 @@ Package: iptables-converter
 Section: utils
 Architecture: all
 Depends: python (>= 2.6.5), ${misc:Depends}
-Description: convert set of iptables-commands to iptables-save format
- iptables_converter.py: convert iptables in a script to iptables-save
- readable format to stdout with [0:0] for iptables-restore -c
- ip6tables_converter.py: convert ip6tables in a script to ip6tables-save
- readable format to stdout with [0:0] for ip6tables-restore -c
+Description: convert iptables-commands from a file to iptables-save format
+ iptables_converter: reads a file with iptables commands and converts
+ these to an iptables-save readable format. To provide compatibility
+ with iptables-save -c command zero paket und byte counters [0:0] are
+ printed out.
+ ip6tables_converter reads a file with ip6tables commands and converts
+ these to an ip6tables-save readable format. To provide compatibility
+ with ip6tables-save -c command zero paket und byte counters [0:0] are
+ printed out.
 
 Package: iptables-converter-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
 Description: sphinx documentation for iptables-converter
- iptables-converter: convert iptables in a script to iptables-save
+ iptables-converter: convert iptables from file to iptables-save format
  ip6tables-converter mentioned
