@@ -3,8 +3,8 @@ iptables-converter (0.9.5-1) unstable; urgency=low
   * [63bdb0d] illegal characters '$()' no longer lead to faulty output
   * [3efcb8b] short inputfile should be valid except for a variable
   * [d36c02b] short inputfile should be valid except for a function.
-              Thanks to Guido provided debian bugreport #748638
-              closes #748638
+              Thanks to Guido for the bugreport
+              Closes: #748638
   * [302e5f9] tests now proof for shell varaibles and functions
   * [2369725] manpages updated and corrected for exit status
   * [202d159] copied and adapted from iptables-converter
@@ -13,7 +13,8 @@ iptables-converter (0.9.5-1) unstable; urgency=low
   * [7708973] adapted to additional tests for shell vars, funcs
   * [aa690f8] sphinx-doc updated, errors with functions and variables mentioned
   * [1ff76c9] version changed to 0.9.5
-  * [0751002] closes #748635
+  * [0751002] Improve package description.
+              Closes: #748635
 
  -- Johannes Hubertz <johannes@hubertz.de>  Mon, 16 Jun 2014 21:33:31 +0200
 

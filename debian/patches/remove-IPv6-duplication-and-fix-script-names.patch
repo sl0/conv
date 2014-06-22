@@ -1,0 +1,34 @@
+From 62af931f62ca93581cd31c88063e9f93a31542bb Mon Sep 17 00:00:00 2001
+Message-Id: <62af931f62ca93581cd31c88063e9f93a31542bb.1402985696.git.agx@sigxcpu.org>
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Tue, 17 Jun 2014 08:05:32 +0200
+Subject: [PATCH 1/2] Remove IPv6 duplication and fix script names
+
+---
+ debian/control | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/debian/control b/debian/control
+index e6e912e..7f55ea5 100644
+--- a/debian/control
++++ b/debian/control
+@@ -12,14 +12,11 @@ Section: utils
+ Architecture: all
+ Depends: python (>= 2.6.5), ${misc:Depends}
+ Description: convert iptables-commands from a file to iptables-save format
+- iptables_converter: reads a file with iptables commands and converts
++ iptables-converter: reads a file with iptables commands and converts
+  these to an iptables-save readable format. To provide compatibility
+  with iptables-save -c command zero paket und byte counters [0:0] are
+  printed out.
+- ip6tables_converter reads a file with ip6tables commands and converts
+- these to an ip6tables-save readable format. To provide compatibility
+- with ip6tables-save -c command zero paket und byte counters [0:0] are
+- printed out.
++ iptables6-converter does the same for IPv6.
+ 
+ Package: iptables-converter-doc
+ Section: doc
+-- 
+2.0.0
+
