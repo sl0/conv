@@ -1,0 +1,40 @@
+From cc0dd91f9b6d7af41cef134099425ae368af3cda Mon Sep 17 00:00:00 2001
+Message-Id: <cc0dd91f9b6d7af41cef134099425ae368af3cda.1402985696.git.agx@sigxcpu.org>
+In-Reply-To: <62af931f62ca93581cd31c88063e9f93a31542bb.1402985696.git.agx@sigxcpu.org>
+References: <62af931f62ca93581cd31c88063e9f93a31542bb.1402985696.git.agx@sigxcpu.org>
+From: =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
+Date: Tue, 17 Jun 2014 08:10:07 +0200
+Subject: [PATCH 2/2] Adjust bug numbers to match BTSs expectations
+
+---
+ debian/changelog | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/debian/changelog b/debian/changelog
+index ad0d761..2560148 100644
+--- a/debian/changelog
++++ b/debian/changelog
+@@ -3,8 +3,8 @@ iptables-converter (0.9.5-1) unstable; urgency=low
+   * [63bdb0d] illegal characters '$()' no longer lead to faulty output
+   * [3efcb8b] short inputfile should be valid except for a variable
+   * [d36c02b] short inputfile should be valid except for a function.
+-              Thanks to Guido provided debian bugreport #748638
+-              closes #748638
++              Thanks to Guido for the bugreport
++              Closes: #748638
+   * [302e5f9] tests now proof for shell varaibles and functions
+   * [2369725] manpages updated and corrected for exit status
+   * [202d159] copied and adapted from iptables-converter
+@@ -13,7 +13,8 @@ iptables-converter (0.9.5-1) unstable; urgency=low
+   * [7708973] adapted to additional tests for shell vars, funcs
+   * [aa690f8] sphinx-doc updated, errors with functions and variables mentioned
+   * [1ff76c9] version changed to 0.9.5
+-  * [0751002] closes #748635
++  * [0751002] Improve package description.
++              Closes: #748635
+ 
+  -- Johannes Hubertz <johannes@hubertz.de>  Mon, 16 Jun 2014 21:33:31 +0200
+ 
+-- 
+2.0.0
+

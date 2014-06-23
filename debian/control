@@ -12,14 +12,11 @@ Section: utils
 Architecture: all
 Depends: python (>= 2.6.5), ${misc:Depends}
 Description: convert iptables-commands from a file to iptables-save format
- iptables_converter: reads a file with iptables commands and converts
+ iptables-converter: reads a file with iptables commands and converts
  these to an iptables-save readable format. To provide compatibility
  with iptables-save -c command zero paket und byte counters [0:0] are
  printed out.
- ip6tables_converter reads a file with ip6tables commands and converts
- these to an ip6tables-save readable format. To provide compatibility
- with ip6tables-save -c command zero paket und byte counters [0:0] are
- printed out.
+ iptables6-converter does the same for IPv6.
 
 Package: iptables-converter-doc
 Section: doc

@@ -1,2 +1,4 @@
 remove_testing_section_from_makefile
 disable-broken-build-options-from-makefile
+adjust-bug-numbers-to-match-BTSs-expectations.patch
+remove-IPv6-duplication-and-fix-script-names.patch
