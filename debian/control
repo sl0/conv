@@ -16,7 +16,7 @@ Description: convert iptables-commands from a file to iptables-save format
  these to an iptables-save readable format. To provide compatibility
  with iptables-save -c command zero paket und byte counters [0:0] are
  printed out.
- iptables6-converter does the same for IPv6.
+ ip6tables-converter does the same for IPv6.
 
 Package: iptables-converter-doc
 Section: doc
