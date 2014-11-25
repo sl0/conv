@@ -2,9 +2,13 @@
 
 #encoding:utf8
 from ip6tables_converter import Chains, Tables, main as haupt
-from StringIO import StringIO
 from mock import patch
 import unittest
+try:
+    from StringIO import StringIO
+except:
+    from io import StringIO
+
 
 
 class Chains_Test(unittest.TestCase):

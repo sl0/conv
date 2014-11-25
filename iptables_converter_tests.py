@@ -3,9 +3,12 @@
 #encoding:utf8
 
 from iptables_converter import Chains, Tables, main as haupt
-from StringIO import StringIO
 from mock import patch
 import unittest
+try:
+    from StringIO import StringIO
+except:
+    from io import StringIO
 
 
 class Chains_Test(unittest.TestCase):
