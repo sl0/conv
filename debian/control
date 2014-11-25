@@ -2,10 +2,10 @@ Source: iptables-converter
 Maintainer: Johannes Hubertz <johannes@hubertz.de>
 Section: utils
 Priority: optional
-Build-Depends: python (>= 2.6.5-3-), debhelper (>= 9), python-sphinx (>= 1.0.7+dfsg) | python3-sphinx, python-setuptools, python-sphinxcontrib.nwdiag, python-sphinxcontrib.blockdiag
+Build-Depends: python (>= 2.6.5-3-), python-setuptools (>= 5.5.1), dh-python (>=1.20141111-2), debhelper (>= 9), python-sphinx (>= 1.0.7+dfsg)
 Uploaders: Toni Mueller <toni@debian.org>
 X-Python-Version: (>= 2.6)
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 
 Package: iptables-converter
 Section: utils
