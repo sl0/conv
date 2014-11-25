@@ -13,8 +13,8 @@ ip6tables_converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2014-06-16
-version:    0.9.5
+Date:       2014-11-25
+version:    0.9.6
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -67,7 +67,7 @@ class Chains(UserDict):
             liste.pop(0)
             cha = liste.pop(0)
             new = liste.pop(0)
-            if not new in ["ACCEPT", "DROP", "REJECT"]:
+            if new not in ["ACCEPT", "DROP", "REJECT"]:
                 msg = "Illegal policy: % s" % (new)
                 raise ValueError(msg)
             self.poli[cha] = new
@@ -96,7 +96,7 @@ class Chains(UserDict):
         if "-I" in action:  # or "-A" in action:
             chain_name = liste[1]
             existing = self.data.keys()
-            if not chain_name in existing:
+            if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
                 raise ValueError(msg)
             kette = self.data[chain_name]
@@ -110,7 +110,7 @@ class Chains(UserDict):
         if "-A" in action:  # or "-I" in action:
             chain_name = liste[1]
             existing = self.data.keys()
-            if not chain_name in existing:
+            if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
                 raise ValueError(msg)
             kette = self.data[chain_name]
@@ -237,7 +237,7 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.5"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.6"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
