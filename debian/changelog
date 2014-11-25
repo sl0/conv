@@ -1,3 +1,17 @@
+iptables-converter (0.9.6) unstable; urgency=low
+
+  * tox tests now fit in jessie
+  * patches applied and removed, format back to native
+  * keyword 'new' moved due to pep8 results tree times
+  * tests import adapted to python3
+  * tox.ini default tests now py26, pep8, docs
+  * sphinx extensions reduced, only autodoc is left
+  * Build-Dependancies and sphinx conf.py corrected
+  * debian/rules simplified
+  * version set to 0.9.6 everywhere
+
+ -- Johannes Hubertz <johannes@hubertz.de>  Tue, 25 Nov 2014 11:29:52 +0100
+
 iptables-converter (0.9.5-1) unstable; urgency=low
 
   * [63bdb0d] illegal characters '$()' no longer lead to faulty output
