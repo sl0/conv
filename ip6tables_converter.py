@@ -13,20 +13,29 @@ ip6tables_converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2014-11-25
-version:    0.9.6
+Date:       2014-11-28
+version:    0.9.7
 License:    GNU General Public License version 3 or later
 
 Have Fun!
 """
 
 try:
-    from UserDict import UserDict
-except ImportError:
     from collections import UserDict
+except ImportError:
+    from UserDict import UserDict
 from optparse import OptionParser
 import re
 import sys
+
+
+class ConverterError():
+    """on accidential case of error show given reason"""
+
+    def __init__(self, message):
+        """message to stdout to compatible testings 2.7 and 3.4"""
+        print (message)
+        sys.exit(1)
 
 
 class Chains(UserDict):
@@ -215,7 +224,7 @@ class Tables(UserDict):
                         else:
                             m2 = "unable to resolve shell variables, abort"
                         msg = m1 + m2
-                        raise ValueError(msg)
+                        raise ConverterError(msg)
                 for muster in ["^/sbin/ip6tables ", "^ip6tables "]:
                     if re.search(muster, line):
                         self.tblctr += 1
@@ -227,7 +236,7 @@ class Tables(UserDict):
         except IOError as err:
             print(fname + ": "), err.strerror
             sys.exit(1)
-        if not fname == "re6ference-one":
+        if not fname == "reference-one":
             print("# generated from: %s" % (fname))
 
 
@@ -237,7 +246,7 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.6"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.7"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()

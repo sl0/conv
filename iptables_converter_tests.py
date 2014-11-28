@@ -305,12 +305,8 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 09: read buggy file with shell variables
         """
-        msg = """test-shell-variables:  Line 8:
-/sbin/iptables -A INPUT -i eth0 -p udp -j $POLICY_A -s 10.0.0.0/16 -d 10.0.0.1 --dport ipp
-plain files only, unable to resolve shell variables, abort
-"""
+        expect = "Line 8:"
         sys_exit_val = False
-
         try:
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 tables = Tables('test-shell-variables')
@@ -318,17 +314,14 @@ plain files only, unable to resolve shell variables, abort
             sys_exit_val = True
         finally:
             pass
-        self.assertEqual(fake_out.getvalue(), msg)
+        self.assertIn(expect, fake_out.getvalue())
         self.assertTrue(sys_exit_val)
 
     def test_10_shell_functions(self):
         """
         Tables 10: read buggy file with shell functions
         """
-        msg = """test-debian-bug-no-748638:  Line 6:
-block () {
-plain files only, unable to convert shell functions, abort
-"""
+        expect = "Line 6:"
         sys_exit_val = False
         try:
             with patch('sys.stdout', new=StringIO()) as fake_out:
@@ -337,7 +330,7 @@ plain files only, unable to convert shell functions, abort
             sys_exit_val = True
         finally:
             pass
-        self.assertEqual(fake_out.getvalue(), msg)
+        self.assertIn(expect, fake_out.getvalue())
         self.assertTrue(sys_exit_val)
 
 
