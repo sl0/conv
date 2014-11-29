@@ -13,8 +13,8 @@
 #                see LICENSE.txt                                      #
 #                                                                     #
 #       Author:  Johannes Hubertz   <johannes@hubertz.de>             #
-#       Version: 0.9.4                                                #
-#       Date:    2014-05-01                                           #
+#       Version: 0.9.7                                                #
+#       Date:    2014-11-29                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #
@@ -46,8 +46,8 @@ iptables_converter.py:
         iptables_converter_tests.py, test coverage 91%,
         untested: main and optparse, but they seem to be OK ;-)
 
-        It is tested to work well with python2.6, python2.7 and
-        python3.2. Some sphinx documentation is prepared.
+        It is tested to work well with python2.7 and
+        python3.4. Some sphinx documentation is prepared.
 
         Debian packages shipped for binary and sphinx-documentation
         git-buildpackage creates them on the fly.
