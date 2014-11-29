@@ -1,3 +1,13 @@
+iptables-converter (0.9.7) unstable; urgency=low
+
+  * version increased to 0.9.7
+  * python3.4 led into some testing-trouble, cleaned up
+  * class ConverterError introduced, compatible for 2.7 and 3.4
+  * build-deps for python2,python3
+  * rules with python2,python3 support now
+
+ -- Johannes Hubertz <johannes@hubertz.de>  Sat, 29 Nov 2014 16:56:46 +0100
+
 iptables-converter (0.9.6) unstable; urgency=low
 
   * tox tests now fit in jessie
