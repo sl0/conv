@@ -11,7 +11,7 @@ export DEB_BUILD_OPTIONS=1
 export http_proxy = http://127.0.9.1:9
 
 %:
-	dh $@ --with python2,sphinxdoc --buildsystem=pybuild
+	dh $@ --with python2,python3,sphinxdoc --buildsystem=pybuild
 
 build: build-stamp
 
