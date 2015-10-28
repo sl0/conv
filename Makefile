@@ -6,7 +6,7 @@ doc:
 
 clean:
 	@python setup.py clean --bdist-base build
-	@rm -rf *~ *.pyc .coverage build docs/build/* .tox
+	@rm -rf *~ *.pyc .pybuild/ .coverage build docs/build/* .tox
 	@rm -rf iptables_converter.egg-info
 	@rm -rf dist __pycache__ *.py3
 	@(cd docs; make clean)
