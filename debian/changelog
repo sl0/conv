@@ -1,6 +1,7 @@
 iptables-converter (0.9.8) unstable; urgency=low
 
   *  german words replaced by english terms (Closes: #780688)
+  *  split master as uplink from debian/sid branch
 
  -- Johannes Hubertz <johannes@hubertz.de>  Tue, 17 Mar 2015 22:50:26 +0100
 
