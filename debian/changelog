@@ -1,4 +1,4 @@
-iptables-converter (0.9.8) unstable; urgency=low
+iptables-converter (0.9.8-1) unstable; urgency=low
 
   *  german words replaced by english terms (Closes: #780688)
   *  split master as uplink from debian/sid branch
