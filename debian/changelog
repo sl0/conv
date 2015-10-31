@@ -1,8 +1,10 @@
-iptables-converter (0.9.8-1) unstable; urgency=low
+iptables-converter (0.9.8-1) unstable; urgency=medium
 
-  *  debian format changed to quilt
-  *  split master as uplink from debian/sid branch
-  *  german words replaced by english terms (Closes: #780688)
+  * Import upstream version 0.9.8
+  * debian subtree deleted from master branch
+  * clean now removes .pybuild as well
+  * split master as uplink from debian/sid branch
+  * german words replaced by english terms (Closes: #780688)
 
  -- Johannes Hubertz <johannes@hubertz.de>  Tue, 17 Mar 2015 22:50:26 +0100
 
