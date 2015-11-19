@@ -31,4 +31,10 @@ Architecture: all
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
 Description: sphinx documentation for iptables-converter
  iptables-converter: convert iptables from file to iptables-save format
- ip6tables-converter mentioned
+ ip6tables-converter is mentioned as a companion, both they read a file
+ and convert contained iptables statements to an iptales-save readable
+ format. An intro page shows the concept with an example of the files.
+ A short description of the python classes and methods follows. All the
+ accompanied testcases are done with the python unittest module, they
+ are shown on an extra page. All these docs are made with sphinx, the
+ sources are included as reStructured text.
