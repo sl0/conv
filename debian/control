@@ -22,19 +22,15 @@ Description: convert iptables-commands from a file to iptables-save format
  iptables-converter: reads a file with iptables commands and converts
  these to an iptables-save readable format. To provide compatibility
  with iptables-save -c command zero packet and byte counters [0:0] are
- printed out.
- ip6tables-converter does the same for IPv6.
+ printed out. ip6tables-converter does the same for IPv6.
 
 Package: iptables-converter-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}, ${sphinxdoc:Depends}
-Description: sphinx documentation for iptables-converter
+Description: documentation for iptables-converter
  iptables-converter: convert iptables from file to iptables-save format
- ip6tables-converter is mentioned as a companion, both they read a file
- and convert contained iptables statements to an iptales-save readable
- format. An intro page shows the concept with an example of the files.
- A short description of the python classes and methods follows. All the
- accompanied testcases are done with the python unittest module, they
- are shown on an extra page. All these docs are made with sphinx, the
- sources are included as reStructured text.
+ ip6tables-converter: convert ip6tables from file to iptables-save format
+ .
+ This package contains the HTML-documentation for iptables-converter and
+ ip6tables-converter.
