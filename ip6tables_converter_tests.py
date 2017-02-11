@@ -286,18 +286,15 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 08: read default file: re6ference-one, check chains
         """
-        tables = Tables()
+        tables = Tables("re6ference-one")
         expect = {
             'filter': {'FORWARD': [],
             'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
-            'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '],
-            'OUTPUT': []},
+            'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
             'raw': {'OUTPUT': [], 'PREROUTING': []},
-            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
-            'PREROUTING': [], 'OUTPUT': []},
-            'nat': {'OUTPUT': [],
-            'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
-            'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}, }
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [], 'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '], 'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
+        }
         self.maxDiff = None
         self.assertEquals(expect, tables.data)
 
@@ -333,6 +330,25 @@ class Tables_Test(unittest.TestCase):
         self.assertIn(expect, fake_out.getvalue())
         self.assertTrue(sys_exit_val)
 
+    def test_11_re6ference_sloppy_one(self):
+        """
+        Tables 11: read sloppy input file: re6ference-sloppy-one, check chains
+        """
+        tables = Tables('re6ference-sloppy-one', True)
+        expect = {
+            'filter':
+                {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                 'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+            'raw': {'OUTPUT': [], 'PREROUTING': []},
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [],
+                'PREROUTING':
+                  ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
+                'POSTROUTING':
+                  ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
+        }
+        self.maxDiff = None
+        self.assertEqual(expect, tables.data)
 
 if __name__ == "__main__":
         unittest.main()

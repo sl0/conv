@@ -333,6 +333,24 @@ class Tables_Test(unittest.TestCase):
         self.assertIn(expect, fake_out.getvalue())
         self.assertTrue(sys_exit_val)
 
+    def test_11_reference_sloppy_one(self):
+        """
+        Tables 11: read sloppy input file: reference-sloppy-one, check chains
+        """
+        tables = Tables('reference-sloppy-one', True)
+        expect = {
+            'filter':
+                {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                 'USER_CHAIN': ['-A USER_CHAIN -p icmp --icmp-type echo-reply -j ACCEPT ',
+                                '-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+             'raw': {'OUTPUT': [], 'PREROUTING': []},
+             'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+             'nat': {'OUTPUT': [],
+                    'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 '],
+                    'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 ']}
+        }
+        self.maxDiff = None
+        self.assertEqual(expect, tables.data)
 
 if __name__ == "__main__":
         unittest.main()
