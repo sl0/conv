@@ -13,8 +13,8 @@
 #                see LICENSE.txt                                      #
 #                                                                     #
 #       Author:  Johannes Hubertz   <johannes@hubertz.de>             #
-#       Version: 0.9.8                                                #
-#       Date:    2015-03-17                                           #
+#       Version: 0.9.9                                                #
+#       Date:    2017-02-27                                           #
 #                                                                     #
 #       Have fun!                                                     #
 #                                                                     #
@@ -30,12 +30,16 @@ iptables_converter.py:
         loading through iptables-restore
 
     Usage:
-        iptables_converter.py [ -s source ]
+        iptables_converter.py [ -s source ] [ --sloppy ]
 
         which assumes, source is a plain ascii-file containing
         lines starting with iptables to build a firewall ruleset
         lines starting with /sbin/iptables are understood as well
         omitting -s source defaults to read a file named: rules
+
+        An optional sloppy parameter makes premature definitions
+        of any user defined chains unneccessary, they are defined
+        automatically by first mentioning.
 
         output to stdout gives a maximum of flexibility
         packet-counters and byte-counters included now: [0:0]
@@ -43,11 +47,10 @@ iptables_converter.py:
         iptables-restore -c
 
         Tests have been written using unittests, see file:
-        iptables_converter_tests.py, test coverage 91%,
-        untested: main and optparse, but they seem to be OK ;-)
+        iptables_converter_tests.py.
 
         It is tested to work well with python2.7 and
-        python3.4. Some sphinx documentation is prepared.
+        python3.5. Some sphinx documentation is prepared.
 
         Debian packages shipped for binary and sphinx-documentation
         git-buildpackage creates them on the fly.
