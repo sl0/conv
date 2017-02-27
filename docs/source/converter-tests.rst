@@ -2,9 +2,9 @@
 iptables-converter - tests
 ==========================
 
-Untested software, that means software which isn't accompanied by automated 
-functional tests, is assumed to be broken by design. As iptables-converter is 
-written in python, use of the popular unittests is done for your convienience. 
+Untested software, that means software which isn't accompanied by automated
+functional tests, is assumed to be broken by design. As iptables-converter is
+written in python, use of the popular unittests is done for your convienience.
 
 Two testclasses are build: Chains_Test and Tables_Test accordingly to the
 two classes from which the iptables-converter script is build from.
@@ -24,7 +24,7 @@ Runing the tests with nosetests::
 Chains_Test(unittest.TestCase)
 ==============================
 
-The tests are enumerated to assure a predefined sequence of evaluating for 
+The tests are enumerated to assure a predefined sequence of evaluating for
 cosmetical reason.
 
 1. A tables group is build first, filter is choosen. The predfined chains
@@ -34,7 +34,7 @@ cosmetical reason.
 2. Setting policy drop into the filter chains is prooved for each chain,
    an invalid policy keyword is tried and exeption raising is pooved.
 
-3. Append a rule (a valid iptables-statment) into each chain, try to 
+3. Append a rule (a valid iptables-statment) into each chain, try to
    use an invalid filter group and the exception raising for that.
 
 4. Insert rules and then flush them, proof emptiness. Then check exception
@@ -49,15 +49,15 @@ cosmetical reason.
 
 8. Inserting a rule into a nonempty chain works and is verified.
 
-9. Appending three rules to a chain works and their existance in chain 
+9. Appending three rules to a chain works and their existance in chain
    object dictionary is prooved.
 
 10. Try to remove a predefined chain raises exception.
 
-11. This test is removed (commented) for reason of practicability. 
-    It's intention was, to check if removal of a nonexisting chain raises 
-    exception. The code in the chain object is commented as well, as it is 
-    needed to achieve a clean status of the chains from any status. So it 
+11. This test is removed (commented) for reason of practicability.
+    It's intention was, to check if removal of a nonexisting chain raises
+    exception. The code in the chain object is commented as well, as it is
+    needed to achieve a clean status of the chains from any status. So it
     was not a good idea to raise an exception just for completeness.
 
 12. Creation and successful removal of an userdefined chain.
@@ -68,7 +68,7 @@ cosmetical reason.
 Tables_Test(unittest.TestCase)
 ==============================
 
-1.  Create a Tables object and verify the completeness of all the predefined 
+1.  Create a Tables object and verify the completeness of all the predefined
     chains.
 
 2.  Verify correctness of a given iptables -t nat command.
@@ -81,6 +81,13 @@ Tables_Test(unittest.TestCase)
 
 6.  Try to read a nonexisting file raises exception.
 
-7.  Read file reference-one and verify result.
+7.  Read empty file and verify result.
 
-8.  Read a  file without iptables commands and verify result.
+8.  Read file reference-one and verify result.
+
+9.  Read a buggy file with shell variables.
+
+10.  Read a buggy file with shell functions.
+
+11. Read a file without '-N' in sloppy mode without raising error.
+

@@ -8,6 +8,7 @@ ip6tables-converter \- program to convert ip6tables commands from file to ip6tab
 .SH SYNOPSIS
 .B ip6tables-converter
 .RI [ -s \  ip6tables-plain-file ]
+.RI [ --sloppy ]
 .br
 
 .SH DESCRIPTION
@@ -55,8 +56,12 @@ be compatibe to any ip6tables implementations out in the wild. If not, keep me i
 .B -s filename
 This option gives you a chance to take another filename instaed of "rules"
 
+.B --sloppy
+This indicates '-N UserChain' is not required prior to mentioning any UserChain input or append, the chain is build on the fly.
+It was build in for special user request.
+
 .SH AUTHOR
-Johannes Hubertz <johannes@hubertz.de> wrote this in 2013, 2014, 2015.
+Johannes Hubertz <johannes@hubertz.de> wrote this from 2013 to 2017.
 Any comments welcome anytime.
 
 .SH "SEE ALSO"
