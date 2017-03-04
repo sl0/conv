@@ -1,3 +1,13 @@
+iptables-converter (0.9.9-1) unstable; urgency=medium
+
+  * changelog rewritten using gbp dch
+  * Adds tests and test-data for new sloppy option
+  * Adds sloppy option
+  * sets 0.9.9 version
+  * Updates documentation
+
+ -- Johannes Hubertz <johannes@hubertz.de>  Sat, 04 Mar 2017 21:12:49 +0100
+
 iptables-converter (0.9.8-3) unstable; urgency=medium
 
   * reproducible and pristine-tar removed, description shortened
