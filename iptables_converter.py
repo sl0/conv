@@ -13,8 +13,8 @@ iptables_converter.py:
     output is written to stdout for maximum flexibilty
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2015-03-17
-version:    0.9.8
+Date:       2017-02-05
+version:    0.9.9
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -41,12 +41,13 @@ class ConverterError():
 class Chains(UserDict):
     """this is for one type of tables"""
 
-    def __init__(self, name, tables):
+    def __init__(self, name, tables, sloppy=False):
         """init Chains object"""
         UserDict.__init__(self)
         self.name = name
         self.tables = tables
         self.predef = tables
+        self.sloppy = sloppy
         self.reset()  # name, tables)
 
     def put_into_fgr(self, content):
@@ -107,7 +108,12 @@ class Chains(UserDict):
             existing = self.data.keys()
             if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
-                raise ValueError(msg)
+                if not self.sloppy:
+                    raise ValueError(msg)
+                else:
+                    new_chain_name = liste[1]
+                    self.data[new_chain_name] = []
+                    self.poli[new_chain_name] = '-'
             kette = self.data[chain_name]
             if len(kette) > 0:
                 kette.insert(0, content)
@@ -121,7 +127,12 @@ class Chains(UserDict):
             existing = self.data.keys()
             if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
-                raise ValueError(msg)
+                if not self.sloppy:
+                    raise ValueError(msg)
+                else:
+                    new_chain_name = liste[1]
+                    self.data[new_chain_name] = []
+                    self.poli[new_chain_name] = '-'
             kette = self.data[chain_name]
             kette.append(content)
             self.data[chain_name] = kette
@@ -147,22 +158,26 @@ class Tables(UserDict):
     some chaingroups in tables are predef: filter, nat, mangle, raw
     """
 
-    def __init__(self, fname="reference-one"):
+    def __init__(self, fname="reference-one", sloppy=False):
         """init Tables Object is easy going"""
         UserDict.__init__(self)
+        self.sloppy = sloppy
         self.reset(fname)
 
     def reset(self, fname):
         """all predefined Chains aka lists are setup as new here"""
-        filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
+        filters = ["INPUT", "FORWARD", "OUTPUT"]
+        filter = Chains("filter", filters, self.sloppy)
 
         mang = ["PREROUTING", "INPUT", "FORWARD", "OUTPUT", "POSTROUTING", ]
-        mangle = Chains("mangle", mang)
+        mangle = Chains("mangle", mang, self.sloppy)
 
         # kernel 2.6.32 has no INPUT in NAT!
-        nat = Chains("nat", ["PREROUTING", "OUTPUT", "POSTROUTING"])
+        nats = ["PREROUTING", "OUTPUT", "POSTROUTING"]
+        nat = Chains("nat", nats, self.sloppy)
 
-        raw = Chains("raw", ["PREROUTING", "OUTPUT", ])
+        raws = ["PREROUTING", "OUTPUT", ]
+        raw = Chains("raw", raws, self.sloppy)
 
         self.data["filter"] = filter
         self.data["mangle"] = mangle
@@ -246,11 +261,15 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.8"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.9"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
     parser.add_option("-s", "", dest="sourcefile",
+                      type="string",
+                      help="file with iptables commands, default: rules\n")
+    parser.add_option("--sloppy", "", dest="sloppy",
+                      action="store_true", default=False,
                       help="file with iptables commands, default: rules\n")
     (options, args) = parser.parse_args()
     hlp = "\n\tplease use \"--help\" as argument, abort!\n"
@@ -258,7 +277,7 @@ def main():
         options.sourcefile = "rules"
     sourcefile = options.sourcefile
 
-    chains = Tables(sourcefile)
+    chains = Tables(sourcefile, options.sloppy)
     chains.table_printout()
 
 
