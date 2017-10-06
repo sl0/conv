@@ -2,8 +2,7 @@
 
 #encoding:utf8
 
-from iptables_converter import Chains, Tables, main as haupt
-from mock import patch
+from iptables_converter import Chains, Tables, ConverterError
 import unittest
 try:
     from StringIO import StringIO
@@ -306,32 +305,16 @@ class Tables_Test(unittest.TestCase):
         Tables 09: read buggy file with shell variables
         """
         expect = "Line 8:"
-        sys_exit_val = False
-        try:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                tables = Tables('test-shell-variables')
-        except SystemExit:
-            sys_exit_val = True
-        finally:
-            pass
-        self.assertIn(expect, fake_out.getvalue())
-        self.assertTrue(sys_exit_val)
+        with self.assertRaisesRegexp(ConverterError, expect):
+            Tables('test-shell-variables')
 
     def test_10_shell_functions(self):
         """
         Tables 10: read buggy file with shell functions
         """
         expect = "Line 6:"
-        sys_exit_val = False
-        try:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                tables = Tables('test-debian-bug-no-748638')
-        except SystemExit:
-            sys_exit_val = True
-        finally:
-            pass
-        self.assertIn(expect, fake_out.getvalue())
-        self.assertTrue(sys_exit_val)
+        with self.assertRaisesRegexp(ConverterError, expect):
+            Tables('test-debian-bug-no-748638')
 
     def test_11_reference_sloppy_one(self):
         """
@@ -351,6 +334,7 @@ class Tables_Test(unittest.TestCase):
         }
         self.maxDiff = None
         self.assertEqual(expect, tables.data)
+
 
 if __name__ == "__main__":
         unittest.main()

@@ -2,8 +2,7 @@
 
 #encoding:utf8
 
-from ip6tables_converter import Chains, Tables, main as haupt
-from mock import patch
+from ip6tables_converter import Chains, Tables, ConverterError, main
 import unittest
 try:
     from StringIO import StringIO
@@ -303,32 +302,16 @@ class Tables_Test(unittest.TestCase):
         Tables 09: read buggy file with shell variables
         """
         expect = "Line 8:"
-        sys_exit_val = False
-        try:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                tables = Tables('test-shell-variables')
-        except SystemExit:
-            sys_exit_val = True
-        finally:
-            pass
-        self.assertIn(expect, fake_out.getvalue())
-        self.assertTrue(sys_exit_val)
+        with self.assertRaisesRegexp(ConverterError, expect):
+            Tables('test-shell-variables')
 
     def test_10_shell_functions(self):
         """
         Tables 10: read buggy file with shell functions
         """
         expect = "Line 6:"
-        sys_exit_val = False
-        try:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                tables = Tables('test-debian-bug-no-748638')
-        except SystemExit:
-            sys_exit_val = True
-        finally:
-            pass
-        self.assertIn(expect, fake_out.getvalue())
-        self.assertTrue(sys_exit_val)
+        with self.assertRaisesRegexp(ConverterError, expect):
+            Tables('test-debian-bug-no-748638')
 
     def test_11_re6ference_sloppy_one(self):
         """
