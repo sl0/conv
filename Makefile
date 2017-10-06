@@ -10,5 +10,5 @@ clean:
 	@rm -rf iptables_converter.egg-info
 	@rm -rf dist __pycache__ *.py3
 	$(MAKE) -C docs clean
-	@dh_clean
+	@[ ! -d debian ] || dh_clean
 
