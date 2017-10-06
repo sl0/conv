@@ -1,2 +1,4 @@
 .tox/*
-.pc
+dist/
+*.egg-info/
+*.pyc
