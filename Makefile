@@ -2,13 +2,13 @@ FILES= Makefile README.txt LICENSE.txt iptables_converter.py iptables_converter_
 
 
 doc:
-	(cd docs; make html )
+	$(MAKE) -C docs html
 
 clean:
 	@python setup.py clean --bdist-base build
 	@rm -rf *~ *.pyc .pybuild/ .coverage build docs/build/* .tox
 	@rm -rf iptables_converter.egg-info
 	@rm -rf dist __pycache__ *.py3
-	@(cd docs; make clean)
+	$(MAKE) -C docs clean
 	@dh_clean
 
