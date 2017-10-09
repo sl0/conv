@@ -20,6 +20,8 @@ License:    GNU General Public License version 3 or later
 Have Fun!
 """
 
+from __future__ import print_function
+
 try:
     from collections import UserDict
 except ImportError:
@@ -29,13 +31,8 @@ import re
 import sys
 
 
-class ConverterError():
-    """on accidential case of error show given reason"""
-
-    def __init__(self, message):
-        """message to stdout to compatible testings 2.7 and 3.4"""
-        print (message)
-        sys.exit(1)
+class ConverterError(Exception):
+    pass
 
 
 class Chains(UserDict):
@@ -245,12 +242,8 @@ class Tables(UserDict):
                         self.tblctr += 1
                         self.put_into_tables(line)
             fil0.close()
-        except ValueError as err:
-            print (fname + ": "), err
-            sys.exit(1)
-        except IOError as err:
-            print(fname + ": "), err.strerror
-            sys.exit(1)
+        except (ValueError, IOError) as err:
+            raise ConverterError(str(err))
         if not fname == "reference-one":
             print("# generated from: %s" % (fname))
 
@@ -277,10 +270,13 @@ def main():
         options.sourcefile = "rules"
     sourcefile = options.sourcefile
 
-    chains = Tables(sourcefile, options.sloppy)
-    chains.table_printout()
-
+    try:
+        chains = Tables(sourcefile, options.sloppy)
+        chains.table_printout()
+    except ConverterError as e:
+        print(str(e), file=sys.stderr)
+        return 1
+    return 0
 
 if __name__ == "__main__":
-    main()
-    sys.exit(0)
+    sys.exit(main())
