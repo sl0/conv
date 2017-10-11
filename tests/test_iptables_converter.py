@@ -306,7 +306,7 @@ class Tables_Test(unittest.TestCase):
         """
         expect = "Line 8:"
         with self.assertRaisesRegexp(ConverterError, expect):
-            Tables('test-shell-variables')
+            Tables('tests/data/test-shell-variables')
 
     def test_10_shell_functions(self):
         """
@@ -314,7 +314,7 @@ class Tables_Test(unittest.TestCase):
         """
         expect = "Line 6:"
         with self.assertRaisesRegexp(ConverterError, expect):
-            Tables('test-debian-bug-no-748638')
+            Tables('tests/data/test-debian-bug-no-748638')
 
     def test_11_reference_sloppy_one(self):
         """

@@ -10,5 +10,5 @@ iptables-converter - python classes
 .. autoclass:: iptables_converter.Tables
     :members:
 
-.. automodule:: iptables_converter_tests
+.. automodule:: test_iptables_converter
     :members:
