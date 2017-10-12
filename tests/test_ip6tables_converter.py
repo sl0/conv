@@ -201,7 +201,7 @@ class Tables_Test(unittest.TestCase):
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
                   'mangle': {'FORWARD': [], 'INPUT': [],
-                  'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+                             'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
                   'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
         self.assertEquals(expect, tables.data)
 
@@ -284,8 +284,8 @@ class Tables_Test(unittest.TestCase):
         tables = Tables("re6ference-one")
         expect = {
             'filter': {'FORWARD': [],
-            'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
-            'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+                       'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                       'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
             'raw': {'OUTPUT': [], 'PREROUTING': []},
             'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
             'nat': {'OUTPUT': [], 'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '], 'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
@@ -321,13 +321,14 @@ class Tables_Test(unittest.TestCase):
             'raw': {'OUTPUT': [], 'PREROUTING': []},
             'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
             'nat': {'OUTPUT': [],
-                'PREROUTING':
-                  ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
-                'POSTROUTING':
-                  ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
+                    'PREROUTING':
+                    ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
+                    'POSTROUTING':
+                    ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
         }
         self.maxDiff = None
         self.assertEqual(expect, tables.data)
+
 
 if __name__ == "__main__":
         unittest.main()
