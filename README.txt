@@ -25,39 +25,43 @@ iptables_converter.py
 =====================
 
 iptables_converter.py:
-        speeds up loading of many iptables-commands
-        by converting to iptables-save format and then
-        loading through iptables-restore
+        Speeds up loading of iptables-commands
+        by converting them to iptables-save format and then
+        loading them through iptables-restore
 
     Usage:
         iptables_converter.py [ -s source ] [ --sloppy ]
 
-        which assumes, source is a plain ascii-file containing
-        lines starting with iptables to build a firewall ruleset
-        lines starting with /sbin/iptables are understood as well
-        omitting -s source defaults to read a file named: rules
+        This assumes that source is a plain ascii-file containing
+        lines starting with iptables to build a firewall ruleset.
+        Lines starting with /sbin/iptables are understood as well.
+        Omitting -s source defaults to reading a file named 'rules'.
 
         An optional sloppy parameter makes premature definitions
         of any user defined chains unneccessary, they are defined
-        automatically by first mentioning.
+        automatically by first mentioning them.
 
-        output to stdout gives a maximum of flexibility
-        packet-counters and byte-counters included now: [0:0]
-        which keeps compatibility to iptables-restore as well as to
-        iptables-restore -c
+        Output to stdout gives a maximum of flexibility.
+        Packet-counters and byte-counters include [0:0] which keeps
+        compatibility to iptables-restore as well as to
+        iptables-restore -c.
 
-        Tests have been written using unittests, see file:
-        iptables_converter_tests.py.
+        Tests have been written using unittests, see
+        tests/test_iptables_converter.py.
 
         It is tested to work well with python2.7 and
         python3.5. Some sphinx documentation is prepared.
 
-        Debian packages shipped for binary and sphinx-documentation
-        git-buildpackage creates them on the fly.
-        RPMs may be created by python setup.py bdist_rpm
+        Debian packages are provided for the binaries[1] and
+        sphinx-documentation[2]. git-buildpackage creates them
+        on the fly.  RPMs may be created by python
+        'setup.py bdist_rpm'.
 
-        Any Comments welcome.
+        Any comments welcome.
         Have fun!
         Johannes
+
+[1]: https://packages.debian.org/sid/iptables-converter
+[2]: https://packages.debian.org/sid/iptables-converter-doc
 # ################################################################### #
 # EoF
