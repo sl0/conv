@@ -2,12 +2,8 @@
 
 #encoding:utf8
 
-from ip6tables_converter import Chains, Tables, ConverterError, main
+from ip6tables_converter import Chains, Tables, ConverterError
 import unittest
-try:
-    from StringIO import StringIO
-except:
-    from io import StringIO
 
 
 class Chains_Test(unittest.TestCase):

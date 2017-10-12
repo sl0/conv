@@ -4,10 +4,6 @@
 
 from iptables_converter import Chains, Tables, ConverterError
 import unittest
-try:
-    from StringIO import StringIO
-except:
-    from io import StringIO
 
 
 class Chains_Test(unittest.TestCase):
