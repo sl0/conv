@@ -205,7 +205,6 @@ class Tables(UserDict):
         for elem in liste:                  # remove redirects and the like
             if ">" not in elem:
                 rest = rest + elem + " "    # string again with single blanks
-        action = liste.pop(0)               # action is one of {N,F,A,I, etc.}
         fam = "filter"
         if "-t nat" in line:                # nat filter group
             fam = "nat"
@@ -265,7 +264,6 @@ def main():
                       action="store_true", default=False,
                       help="file with ip6tables commands, default: rules\n")
     (options, args) = parser.parse_args()
-    hlp = "\n\tplease use \"--help\" as argument, abort!\n"
     if options.sourcefile is None:
         options.sourcefile = "rules"
     sourcefile = options.sourcefile
