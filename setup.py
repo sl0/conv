@@ -10,7 +10,7 @@ if sys.version_info >= (3,):
 
 setup(name='iptables-converter',
     description='convert set of iptables-commands to iptables-save format',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     version='0.9.9',
     license='GNU General Public License version 3 (or later)',
     platforms= ['Linux', ],
