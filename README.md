@@ -61,6 +61,8 @@ Have fun!
 
 Johannes
 
+[![Build Status](https://travis-ci.org/sl0/conv.svg?branch=master)](https://travis-ci.org/sl0/conv)
+
 [1]: https://packages.debian.org/sid/iptables-converter
 [2]: https://packages.debian.org/sid/iptables-converter-doc
 ```
