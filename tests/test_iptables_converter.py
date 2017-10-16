@@ -4,10 +4,6 @@
 
 from iptables_converter import Chains, Tables, ConverterError
 import unittest
-try:
-    from StringIO import StringIO
-except:
-    from io import StringIO
 
 
 class Chains_Test(unittest.TestCase):
@@ -205,7 +201,7 @@ class Tables_Test(unittest.TestCase):
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
                   'mangle': {'FORWARD': [], 'INPUT': [],
-                  'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+                             'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
                   'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
         self.assertEquals(expect, tables.data)
 
@@ -288,15 +284,15 @@ class Tables_Test(unittest.TestCase):
         tables = Tables()
         expect = {
             'filter': {'FORWARD': [],
-            'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
-            'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '],
-            'OUTPUT': []},
+                       'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                       'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '],
+                       'OUTPUT': []},
             'raw': {'OUTPUT': [], 'PREROUTING': []},
             'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
-            'PREROUTING': [], 'OUTPUT': []},
+                       'PREROUTING': [], 'OUTPUT': []},
             'nat': {'OUTPUT': [],
-            'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 '],
-            'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 ']}}
+                    'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 '],
+                    'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 ']}}
         self.maxDiff = None
         self.assertEquals(expect, tables.data)
 
@@ -326,9 +322,9 @@ class Tables_Test(unittest.TestCase):
                 {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
                  'USER_CHAIN': ['-A USER_CHAIN -p icmp --icmp-type echo-reply -j ACCEPT ',
                                 '-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
-             'raw': {'OUTPUT': [], 'PREROUTING': []},
-             'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
-             'nat': {'OUTPUT': [],
+            'raw': {'OUTPUT': [], 'PREROUTING': []},
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [],
                     'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 '],
                     'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 ']}
         }
