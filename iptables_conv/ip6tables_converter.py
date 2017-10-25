@@ -1,11 +1,10 @@
-#!/usr/bin/python
 #
 # -*- coding: utf-8 -*-
 #
 """
-iptables_converter.py:
-    convert iptables commands within a script
-    into a correspondig iptables-save script
+ip6tables_converter.py:
+    convert ip6tables commands within a script
+    into a correspondig ip6tables-save script
 
     default filename to read is rules, to read some other
         file, append: -s filename
@@ -200,7 +199,7 @@ class Tables(UserDict):
     def put_into_tables(self, line):
         """put line into matching Chains-object"""
         liste = line.split()
-        liste.pop(0)                        # we always know, it's iptables
+        liste.pop(0)                        # we always know, it's ip6tables
         rest = ""
         for elem in liste:                  # remove redirects and the like
             if ">" not in elem:
@@ -236,7 +235,7 @@ class Tables(UserDict):
                             m2 = "unable to resolve shell variables, abort"
                         msg = m1 + m2
                         raise ConverterError(msg)
-                for muster in ["^/sbin/iptables ", "^iptables "]:
+                for muster in ["^/sbin/ip6tables ", "^ip6tables "]:
                     if re.search(muster, line):
                         self.tblctr += 1
                         self.put_into_tables(line)
@@ -259,10 +258,10 @@ def main():
     parser.disable_interspersed_args()
     parser.add_option("-s", "", dest="sourcefile",
                       type="string",
-                      help="file with iptables commands, default: rules\n")
+                      help="file with ip6tables commands, default: rules\n")
     parser.add_option("--sloppy", "", dest="sloppy",
                       action="store_true", default=False,
-                      help="file with iptables commands, default: rules\n")
+                      help="file with ip6tables commands, default: rules\n")
     (options, args) = parser.parse_args()
     if options.sourcefile is None:
         options.sourcefile = "rules"

@@ -2,7 +2,7 @@
 
 #encoding:utf8
 
-from ip6tables_converter import Chains, Tables, ConverterError
+from iptables_conv.ip6tables_converter import Chains, Tables, ConverterError
 import unittest
 
 

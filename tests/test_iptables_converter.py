@@ -2,7 +2,7 @@
 
 #encoding:utf8
 
-from iptables_converter import Chains, Tables, ConverterError
+from iptables_conv.iptables_converter import Chains, Tables, ConverterError
 import unittest
 
 

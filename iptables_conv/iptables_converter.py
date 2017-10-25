@@ -1,20 +1,20 @@
-#!/usr/bin/python
 #
 # -*- coding: utf-8 -*-
 #
 """
-ip6tables_converter.py:
-    convert ip6tables commands within a script
-    into a correspondig ip6tables-save script
+iptables_converter.py:
+    convert iptables commands within a script
+    into a correspondig iptables-save script
 
     default filename to read is rules, to read some other
         file, append: -s filename
 
-    output is written to stdout for maximum flexibilty
+    default output is written to stdout, for writing
+        to some file, append: -d filename
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2017-02-05
-version:    0.9.9
+Date:       2017-10-29
+version:    0.9.10
 License:    GNU General Public License version 3 or later
 
 Have Fun!
@@ -200,7 +200,7 @@ class Tables(UserDict):
     def put_into_tables(self, line):
         """put line into matching Chains-object"""
         liste = line.split()
-        liste.pop(0)                        # we always know, it's ip6tables
+        liste.pop(0)                        # we always know, it's iptables
         rest = ""
         for elem in liste:                  # remove redirects and the like
             if ">" not in elem:
@@ -236,7 +236,7 @@ class Tables(UserDict):
                             m2 = "unable to resolve shell variables, abort"
                         msg = m1 + m2
                         raise ConverterError(msg)
-                for muster in ["^/sbin/ip6tables ", "^ip6tables "]:
+                for muster in ["^/sbin/iptables ", "^iptables "]:
                     if re.search(muster, line):
                         self.tblctr += 1
                         self.put_into_tables(line)
@@ -253,16 +253,20 @@ def main():
     one option (-s) may be given: input-filename
     if none given, it defaults to: rules
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.9"
+    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.10"
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
+    parser.add_option("-d", "", dest="destfile",
+                      type="string",
+                      help="output filename, default: stdout\n")
     parser.add_option("-s", "", dest="sourcefile",
                       type="string",
-                      help="file with ip6tables commands, default: rules\n")
+                      help="file with iptables commands, default: rules\n")
     parser.add_option("--sloppy", "", dest="sloppy",
                       action="store_true", default=False,
-                      help="file with ip6tables commands, default: rules\n")
+                      help="-N name-of-userchain is inserted automatically,\n"
+                            "by default -N is neccessary in input\n")
     (options, args) = parser.parse_args()
     if options.sourcefile is None:
         options.sourcefile = "rules"
