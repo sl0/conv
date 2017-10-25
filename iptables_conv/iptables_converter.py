@@ -266,7 +266,7 @@ def main():
     parser.add_option("--sloppy", "", dest="sloppy",
                       action="store_true", default=False,
                       help="-N name-of-userchain is inserted automatically,\n"
-                            "by default -N is neccessary in input\n")
+                           "by default -N is neccessary in input\n")
     (options, args) = parser.parse_args()
     if options.sourcefile is None:
         options.sourcefile = "rules"
