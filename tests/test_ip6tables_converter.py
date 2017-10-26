@@ -248,7 +248,7 @@ class Tables_Test(unittest.TestCase):
         happend = False
         try:
             self.assertRaises(ValueError, tables, tables.put_into_tables(line))
-        except:
+        except ValueError:
             happend = True
         self.assertEquals(happend, True)
 
@@ -259,8 +259,8 @@ class Tables_Test(unittest.TestCase):
         filename = "not-exist-is-ok"
         happend = False
         try:
-            self.assertRaises(ValueError, Tables(filename))
-        except:
+            self.assertRaises(ConverterError, Tables(filename))
+        except ConverterError:
             happend = True
         self.assertEquals(happend, True)
 
