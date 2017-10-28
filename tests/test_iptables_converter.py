@@ -348,7 +348,6 @@ class Tables_Test(unittest.TestCase):
         self.maxDiff = None
         self.assertEquals(expect, tables.data)
 
-
     def test_14_re6ference_sloppy_one(self):
         """
         Tables 14: read sloppy input file: re6ference-sloppy-one, check chains
