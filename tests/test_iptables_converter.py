@@ -150,19 +150,6 @@ class Chains_Test(unittest.TestCase):
         self.assertRaises(ConverterError, filter.put_into_fgr,
                           "-X INPUT")
 
-    #def test_11_remove_nonexisting_chain(self):
-    #    """
-    #    try to remove a nonexisting chain
-    #    """
-    #    filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-    #    # following assertion removed because we always need to
-    #    # remove a non existing chain, especially on runing such
-    #    # genereated scripts for the very first time on a machine
-    #    # so the raise is removed due to practicapability
-    #    #self.assertRaises(ValueError, filter.put_into_fgr,
-    #    #   "-X USERDEFCHAIN")
-    #    pass
-
     def test_12_remove_chain(self):
         """
         Chain 12: try to remove an existing chain
@@ -327,6 +314,57 @@ class Tables_Test(unittest.TestCase):
             'nat': {'OUTPUT': [],
                     'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 '],
                     'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 ']}
+        }
+        self.maxDiff = None
+        self.assertEqual(expect, tables.data)
+
+    def test_12_create_a_tables6_object(self):
+        """
+        Tables 12: create an ipv6 Tables object, check chains
+        """
+        self.assertIsInstance(Tables("", ipversion=6), Tables)
+
+        tables = Tables("", ipversion=6)
+        expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
+                  'raw': {'OUTPUT': [], 'PREROUTING': []},
+                  'mangle': {'FORWARD': [], 'INPUT': [],
+                             'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+                  'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
+        self.assertEquals(expect, tables.data)
+
+    def test_13_re6ference_one(self):
+        """
+        Tables 13: read default file: re6ference-one, check chains
+        """
+        tables = Tables("re6ference-one", ipversion=6)
+        expect = {
+            'filter': {'FORWARD': [],
+                       'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                       'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+            'raw': {'OUTPUT': [], 'PREROUTING': []},
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [], 'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '], 'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
+        }
+        self.maxDiff = None
+        self.assertEquals(expect, tables.data)
+
+
+    def test_14_re6ference_sloppy_one(self):
+        """
+        Tables 14: read sloppy input file: re6ference-sloppy-one, check chains
+        """
+        tables = Tables('re6ference-sloppy-one', sloppy=True, ipversion=6)
+        expect = {
+            'filter':
+                {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                 'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+            'raw': {'OUTPUT': [], 'PREROUTING': []},
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [],
+                    'PREROUTING':
+                    ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
+                    'POSTROUTING':
+                    ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
         }
         self.maxDiff = None
         self.assertEqual(expect, tables.data)
