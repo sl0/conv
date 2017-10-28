@@ -155,16 +155,21 @@ class Tables(UserDict):
     some chaingroups in tables are predef: filter, nat, mangle, raw
     """
 
-    def __init__(self, fname="reference-one", sloppy=False):
+    def __init__(self, fname="reference-one", sloppy=False, ipversion=4):
         """init Tables Object is easy going"""
         UserDict.__init__(self)
         self.sloppy = sloppy
-        self.reset(fname)
+        self.patterns = ""
+        self.reset(fname, ipversion)
 
-    def reset(self, fname):
+    def reset(self, fname, ipversion):
         """all predefined Chains aka lists are setup as new here"""
-        filters = ["INPUT", "FORWARD", "OUTPUT"]
-        filter = Chains("filter", filters, self.sloppy)
+        self.patterns = ['^iptables', '^/sbin/iptables', ]
+        if ipversion == 6:
+            self.patterns = ['^ip6tables', '^/sbin/ip6tables', ]
+
+        filt = ["INPUT", "FORWARD", "OUTPUT"]
+        filters = Chains("filter", filt, self.sloppy)
 
         mang = ["PREROUTING", "INPUT", "FORWARD", "OUTPUT", "POSTROUTING", ]
         mangle = Chains("mangle", mang, self.sloppy)
@@ -176,7 +181,7 @@ class Tables(UserDict):
         raws = ["PREROUTING", "OUTPUT", ]
         raw = Chains("raw", raws, self.sloppy)
 
-        self.data["filter"] = filter
+        self.data["filter"] = filters
         self.data["mangle"] = mangle
         self.data["nat"] = nat
         self.data["raw"] = raw
@@ -236,8 +241,8 @@ class Tables(UserDict):
                             m2 = "unable to resolve shell variables, abort"
                         msg = m1 + m2
                         raise ConverterError(msg)
-                for muster in ["^/sbin/iptables ", "^iptables "]:
-                    if re.search(muster, line):
+                for pattern in self.patterns:
+                    if re.search(pattern, line):
                         self.tblctr += 1
                         self.put_into_tables(line)
             fil0.close()
@@ -272,8 +277,12 @@ def main():
         options.sourcefile = "rules"
     sourcefile = options.sourcefile
 
+    ipv = 4
+    if '6' in sys.argv[0]:
+        ipv = 6
+
     try:
-        chains = Tables(sourcefile, options.sloppy)
+        chains = Tables(sourcefile, options.sloppy, ipversion=ipv)
         chains.table_printout()
     except ConverterError as e:
         print(str(e), file=sys.stderr)

@@ -27,7 +27,7 @@ setup(name='iptables-converter',
       entry_points={
         'console_scripts': [
             'iptables_converter=iptables_conv.iptables_converter:main',
-            'ip6tables_converter=iptables_conv.ip6tables_converter:main',
+            'ip6tables_converter=iptables_conv.iptables_converter:main',
         ],
       },
       test_suite='nose.collector',
