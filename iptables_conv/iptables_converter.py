@@ -51,6 +51,8 @@ class Chains(UserDict):
         """fill this line into this tabular"""
         self.length += 1
         cha = "filter"
+        if len(content) == 0:
+            return
         # act = ""
         liste = content.split()
         action = liste[0]
@@ -60,7 +62,7 @@ class Chains(UserDict):
             legals = ["filter", "nat", "raw", "mangle"]
             if fname not in legals:
                 msg = "Valid is one of %s, got: %s" % (legals, fname)
-                raise ValueError(msg)
+                raise ConverterError(msg)
             action = liste[0]
             content = ""                       # rebuild content from here
             for elem in liste:
@@ -76,7 +78,7 @@ class Chains(UserDict):
             new = liste.pop(0)
             if new not in ["ACCEPT", "DROP", "REJECT"]:
                 msg = "Illegal policy: % s" % (new)
-                raise ValueError(msg)
+                raise ConverterError(msg)
             self.poli[cha] = new
             return
         if "-X" in action:
@@ -85,7 +87,7 @@ class Chains(UserDict):
             rem_chain_name = liste.pop(1)
             if rem_chain_name in predef:
                 msg = "Cannot remove predefined chain"
-                raise ValueError(msg)
+                raise ConverterError(msg)
             if rem_chain_name in self.data:
                 self.data[rem_chain_name] = []        # empty list
                 self.poli[rem_chain_name] = "-"       # empty policy, no need
@@ -96,7 +98,7 @@ class Chains(UserDict):
             existing = self.data.keys()
             if new_chain_name in existing:
                 msg = "Chain %s already exists" % (new_chain_name)
-                raise ValueError(msg)
+                raise ConverterError(msg)
             self.data[new_chain_name] = []        # empty list
             self.poli[new_chain_name] = "-"       # empty policy, no need
             return
@@ -106,7 +108,7 @@ class Chains(UserDict):
             if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
                 if not self.sloppy:
-                    raise ValueError(msg)
+                    raise ConverterError(msg)
                 else:
                     new_chain_name = liste[1]
                     self.data[new_chain_name] = []
@@ -116,7 +118,7 @@ class Chains(UserDict):
                 kette.insert(0, content)
             else:
                 msg = "Empty chain %s allows append only!" % (chain_name)
-                raise ValueError(msg)
+                raise ConverterError(msg)
             self.data[chain_name] = kette
             return
         if "-A" in action:  # or "-I" in action:
@@ -125,7 +127,7 @@ class Chains(UserDict):
             if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
                 if not self.sloppy:
-                    raise ValueError(msg)
+                    raise ConverterError(msg)
                 else:
                     new_chain_name = liste[1]
                     self.data[new_chain_name] = []
@@ -135,7 +137,7 @@ class Chains(UserDict):
             self.data[chain_name] = kette
             return
         msg = "Unknown filter command in input:", content
-        raise ValueError(msg)
+        raise ConverterError(msg)
 
     def reset(self):  # name, tables):
         """
