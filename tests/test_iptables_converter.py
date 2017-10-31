@@ -45,7 +45,8 @@ class Chains_Test(unittest.TestCase):
         self.assertEquals(
             {'FORWARD': 'REJECT', 'INPUT': 'DROP', 'OUTPUT': 'DROP'},
             filter.poli)
-        self.assertRaises(ConverterError, filter.put_into_fgr, "-P OUTPUT FAIL")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-P OUTPUT FAIL")
 
     def test_03_tables_names(self):
         """
@@ -59,11 +60,11 @@ class Chains_Test(unittest.TestCase):
         filter.put_into_fgr("-t nat -A OUTPUT -j ACCEPT")
         self.assertEquals(['-A OUTPUT -j ACCEPT '], filter.data["OUTPUT"])
 
-        #filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t nat -A FORWARD -j ACCEPT")
         self.assertEquals(['-A FORWARD -j ACCEPT '], filter.data["FORWARD"])
 
-        self.assertRaises(ConverterError, filter.put_into_fgr, "-t na -A INPUT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-t na -A INPUT")
 
     def test_04_flush(self):
         """
@@ -81,7 +82,8 @@ class Chains_Test(unittest.TestCase):
         self.assertEquals([], filter.data["INPUT"])
         self.assertEquals([], filter.data["OUTPUT"])
 
-        self.assertRaises(ConverterError, filter.put_into_fgr, "-t inval -F")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-t inval -F")
 
     def test_05_new_chain(self):
         """
@@ -98,25 +100,24 @@ class Chains_Test(unittest.TestCase):
         Chain 06: create an exsiting chain should fail
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertRaises(ConverterError, filter.put_into_fgr, "-N INPUT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-N INPUT")
 
     def test_07_insert_rule_fail(self):
         """
         Chain 07: insert a rule into an empty chain fails
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
-        self.assertRaises(ConverterError, filter.put_into_fgr,
-                          "-I INPUT -j ACCEPT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-I INPUT -j ACCEPT")
 
     def test_08_insert_rule_fail(self):
         """
         Chain 08: insert a rule into a non_existing chain fails
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
-        self.assertRaises(ConverterError, filter.put_into_fgr,
-                          "-I PUT -j ACCEPT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-I PUT -j ACCEPT")
 
     def test_09_insert_rule_works(self):
         """
@@ -150,8 +151,8 @@ class Chains_Test(unittest.TestCase):
         Chain 11: try to remove a prefined chain
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertRaises(ConverterError, filter.put_into_fgr,
-                          "-X INPUT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-X INPUT")
 
     def test_12_remove_chain(self):
         """
@@ -172,8 +173,8 @@ class Chains_Test(unittest.TestCase):
         Chain 13: try an ilegal command
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertRaises(ConverterError, filter.put_into_fgr,
-                          "-Y USERCHAIN")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-Y USERCHAIN")
 
 
 class Tables_Test(unittest.TestCase):
@@ -240,9 +241,8 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 06: read non existing file
         """
-        filename = "not-exist-is-ok"
         with self.assertRaises(ConverterError):
-            Tables(dst, filename)
+            Tables(dst, "not-exist-is-ok")
 
     def test_07_read_empty_file(self):
         """
