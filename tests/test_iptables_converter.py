@@ -4,6 +4,9 @@
 
 from iptables_conv.iptables_converter import Chains, Tables, ConverterError
 import unittest
+import sys
+
+dst = sys.stdout
 
 
 class Chains_Test(unittest.TestCase):
@@ -182,9 +185,9 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 01: create a Tables object, check chains
         """
-        self.assertIsInstance(Tables(""), Tables)
+        self.assertIsInstance(Tables(dst, ""), Tables)
 
-        tables = Tables("")
+        tables = Tables(dst, "")
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
                   'mangle': {'FORWARD': [], 'INPUT': [],
@@ -196,7 +199,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 02: nat PREROUTING entry
         """
-        tables = Tables("")
+        tables = Tables(dst, "")
         line = "iptables -t nat -A PREROUTING -s 10.0.0.0/21"
         line = line + " -p tcp --dport   80 -j SNAT --to-source 192.168.1.15"
         tables.put_into_tables(line)
@@ -207,7 +210,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 03: mangle INPUT entry
         """
-        tables = Tables("")
+        tables = Tables(dst, "")
         line = "iptables -t mangle -A INPUT"
         line = line + " -p tcp --dport   80 -j ACCEPT"
         tables.put_into_tables(line)
@@ -218,7 +221,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 04: raw OUTPUT entry
         """
-        tables = Tables("")
+        tables = Tables(dst, "")
         line = "iptables -t raw -A OUTPUT"
         line = line + " -p tcp --dport   80 -j ACCEPT"
         tables.put_into_tables(line)
@@ -229,7 +232,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 05: INPUT to not existing chain
         """
-        tables = Tables("")
+        tables = Tables(dst, "")
         line = "iptables -t raw -A NONEXIST"
         line = line + " -p tcp --dport   80 -j ACCEPT"
         happend = False
@@ -246,7 +249,7 @@ class Tables_Test(unittest.TestCase):
         filename = "not-exist-is-ok"
         happend = False
         try:
-            self.assertRaises(ConverterError, Tables(filename))
+            self.assertRaises(ConverterError, Tables(dst, filename))
         except ConverterError:
             happend = True
         self.assertEquals(happend, True)
@@ -256,7 +259,7 @@ class Tables_Test(unittest.TestCase):
         Tables 07: read empty file (in relation to iptables-commands)
         """
         filename = "MANIFEST"
-        tables = Tables(filename)
+        tables = Tables(dst, filename)
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
                   'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
@@ -268,7 +271,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 08: read default file: reference-one, check chains
         """
-        tables = Tables()
+        tables = Tables(dst)
         expect = {
             'filter': {'FORWARD': [],
                        'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
@@ -289,7 +292,7 @@ class Tables_Test(unittest.TestCase):
         """
         expect = "Line 8:"
         with self.assertRaisesRegexp(ConverterError, expect):
-            Tables('tests/data/test-shell-variables')
+            Tables(dst, 'tests/data/test-shell-variables')
 
     def test_10_shell_functions(self):
         """
@@ -297,13 +300,13 @@ class Tables_Test(unittest.TestCase):
         """
         expect = "Line 6:"
         with self.assertRaisesRegexp(ConverterError, expect):
-            Tables('tests/data/test-debian-bug-no-748638')
+            Tables(dst, 'tests/data/test-debian-bug-no-748638')
 
     def test_11_reference_sloppy_one(self):
         """
         Tables 11: read sloppy input file: reference-sloppy-one, check chains
         """
-        tables = Tables('reference-sloppy-one', True)
+        tables = Tables(dst, 'reference-sloppy-one', True)
         expect = {
             'filter':
                 {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
@@ -322,9 +325,9 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 12: create an ipv6 Tables object, check chains
         """
-        self.assertIsInstance(Tables("", ipversion=6), Tables)
+        self.assertIsInstance(Tables(dst, "", ipversion=6), Tables)
 
-        tables = Tables("", ipversion=6)
+        tables = Tables(dst, "", ipversion=6)
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
                   'mangle': {'FORWARD': [], 'INPUT': [],
@@ -336,7 +339,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 13: read default file: re6ference-one, check chains
         """
-        tables = Tables("re6ference-one", ipversion=6)
+        tables = Tables(dst, "re6ference-one", ipversion=6)
         expect = {
             'filter': {'FORWARD': [],
                        'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
@@ -352,7 +355,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 14: read sloppy input file: re6ference-sloppy-one, check chains
         """
-        tables = Tables('re6ference-sloppy-one', sloppy=True, ipversion=6)
+        tables = Tables(dst, 're6ference-sloppy-one', sloppy=True, ipversion=6)
         expect = {
             'filter':
                 {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
