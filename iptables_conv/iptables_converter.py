@@ -136,7 +136,7 @@ class Chains(UserDict):
             kette.append(content)
             self.data[chain_name] = kette
             return
-        msg = "Unknown filter command in input:", content
+        msg = "Unknown filter command in input:" + content
         raise ConverterError(msg)
 
     def reset(self):  # name, tables):
@@ -157,14 +157,20 @@ class Tables(UserDict):
     some chaingroups in tables are predef: filter, nat, mangle, raw
     """
 
-    def __init__(self, fname="reference-one", sloppy=False, ipversion=4):
+    def __init__(self,
+                 destfile,
+                 sourcefile="reference-one",
+                 sloppy=False,
+                 ipversion=4
+                 ):
         """init Tables Object is easy going"""
         UserDict.__init__(self)
+        self.destfile = destfile
         self.sloppy = sloppy
         self.patterns = ""
-        self.reset(fname, ipversion)
+        self.reset(sourcefile, ipversion)
 
-    def reset(self, fname, ipversion):
+    def reset(self, sourcefile, ipversion):
         """all predefined Chains aka lists are setup as new here"""
         self.patterns = ['^iptables', '^/sbin/iptables', ]
         if ipversion == 6:
@@ -187,22 +193,23 @@ class Tables(UserDict):
         self.data["mangle"] = mangle
         self.data["nat"] = nat
         self.data["raw"] = raw
-        if len(fname) > 0:
-            self.linecounter = self.read_file(fname)
+        if len(sourcefile) > 0:
+            self.linecounter = self.read_file(sourcefile)
 
     def table_printout(self):
         """printout nonempty tabulars in fixed sequence"""
         for key in ["raw", "nat", "mangle", "filter"]:
-            len = self.data[key].length
-            if len > -1:
-                print("*%s" % (self.data[key].name))
+            count = self.data[key].length
+            if count > -1:
+                self.destfile.write("*%s\n" % (self.data[key].name))
                 for chain in self.data[key].keys():
                     poli = self.data[key].poli[chain]
-                    print(":%s %s [0:0]" % (chain, poli))
+                    self.destfile.write(":%s %s [0:0]\n" % (chain, poli))
                 for chain in self.data[key].values():
                     for elem in chain:
-                        print(elem)
-                print("COMMIT")
+                        self.destfile.write(elem)
+                        self.destfile.write('\n')
+                self.destfile.write("COMMIT\n")
 
     def put_into_tables(self, line):
         """put line into matching Chains-object"""
@@ -222,12 +229,12 @@ class Tables(UserDict):
         fam_dict = self.data[fam]           # select the group dictionary
         fam_dict.put_into_fgr(rest)         # do action thers
 
-    def read_file(self, fname):
+    def read_file(self, sourcefile):
         """read file into Tables-object"""
         self.linecounter = 0
         self.tblctr = 0
         try:
-            fil0 = open(fname, 'r')
+            fil0 = open(sourcefile, 'r')
             for zeile in fil0:
                 line = str(zeile.strip())
                 self.linecounter += 1
@@ -235,13 +242,13 @@ class Tables(UserDict):
                     continue
                 for element in ['\$', '\(', '\)', ]:
                     if re.search(element, line):
-                        m1 = "Line %d:\n%s\nplain files only, " % \
-                             (self.linecounter, line)
+                        mstart = "Line %d:\n%s\nplain files only, " % \
+                            (self.linecounter, line)
                         if element in ['\(', '\)', ]:
-                            m2 = "unable to convert shell functions, abort"
+                            merr = "unable to convert shell functions, abort"
                         else:
-                            m2 = "unable to resolve shell variables, abort"
-                        msg = m1 + m2
+                            merr = "unable to resolve shell variables, abort"
+                        msg = mstart + merr
                         raise ConverterError(msg)
                 for pattern in self.patterns:
                     if re.search(pattern, line):
@@ -250,8 +257,7 @@ class Tables(UserDict):
             fil0.close()
         except (ValueError, IOError) as err:
             raise ConverterError(str(err))
-        if not fname == "reference-one":
-            print("# generated from: %s" % (fname))
+        self.destfile.write("# generated from: %s\n" % (sourcefile))
 
 
 def main():
@@ -274,20 +280,30 @@ def main():
                       action="store_true", default=False,
                       help="-N name-of-userchain is inserted automatically,\n"
                            "by default -N is neccessary in input\n")
-    (options, args) = parser.parse_args()
+    (options, _) = parser.parse_args()
+
     if options.sourcefile is None:
         options.sourcefile = "rules"
     sourcefile = options.sourcefile
 
-    ipv = 4
+    if options.destfile is not None:
+        destfile = open(options.destfile, 'w')
+    else:
+        destfile = sys.stdout
+
+    ipversion = 4
     if '6' in sys.argv[0]:
-        ipv = 6
+        ipversion = 6
 
     try:
-        chains = Tables(sourcefile, options.sloppy, ipversion=ipv)
+        chains = Tables(destfile,
+                        sourcefile,
+                        options.sloppy,
+                        ipversion=ipversion
+                        )
         chains.table_printout()
-    except ConverterError as e:
-        print(str(e), file=sys.stderr)
+    except ConverterError as err:
+        print(str(err), file=sys.stderr)
         return 1
     return 0
 
