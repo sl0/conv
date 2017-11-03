@@ -1,16 +1,21 @@
+""" setup.py for iptables-converter
+"""
+
 import os
 import sys
+import iptables_conv
+
 from setuptools import setup, find_packages
 
 
 if sys.argv[-1] == 'test':
-    test_requirements = [
+    dev_requirements = [
         'pytest',
         'flake8',
         'coverage'
     ]
     try:
-        modules = map(__import__, test_requirements)
+        _ = map(__import__, dev_requirements)
     except ImportError as err:
         err_msg = err.message.replace("No module named ", "")
         msg = "%s is not installed. Install your test requirments." % err_msg
@@ -22,13 +27,12 @@ if sys.argv[-1] == 'test':
 setup(name='iptables-converter',
       description='convert set of iptables-commands to iptables-save format',
       long_description=open('README.md').read(),
-      version='0.9.9.dev2',
-      license='dual: GNU General Public License version 3 (or later), '
-              'Apache Software License',
+      version=iptables_conv.__version__,
+      license=iptables_conv.__license__,
+      author=iptables_conv.__author__,
+      author_email=iptables_conv.__author_email__,
+      uri=iptables_conv.__uri__,
       platforms=['Linux', ],
-      author='Johannes Hubertz',
-      author_email='johannes@hubertz.de',
-      url='https://github.com/sl0/conv.git',
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'License :: OSI Approved :: '
@@ -49,6 +53,4 @@ setup(name='iptables-converter',
               'ip6tables-converter=iptables_conv.iptables_converter:main',
           ],
       },
-      test_suite='nose.collector',
-      tests_require=['nose'],
      )
