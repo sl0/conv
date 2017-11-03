@@ -4,6 +4,7 @@ iptables -t nat -F
 iptables -A INPUT -p tcp --dport 23 -j ACCEPT
 iptables -A USER_CHAIN -p icmp --icmp-type echo-reply -j ACCEPT
 iptables -A USER_CHAIN -p icmp -j DROP
+iptables -I USER_CHAIN -p icmp --icmp-type echo-request -j ACCEPT
 iptables -P INPUT DROP
 iptables -t nat -A POSTROUTING -s 10.0.0.0/21 -p tcp --dport   80 -j SNAT --to-source 192.168.1.15
 iptables -t nat -A PREROUTING  -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500

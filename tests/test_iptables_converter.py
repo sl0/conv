@@ -310,7 +310,8 @@ class Tables_Test(unittest.TestCase):
         expect = {
             'filter':
                 {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
-                 'USER_CHAIN': ['-A USER_CHAIN -p icmp --icmp-type echo-reply -j ACCEPT ',
+                 'USER_CHAIN': ['-I USER_CHAIN -p icmp --icmp-type echo-request -j ACCEPT ',
+                                '-A USER_CHAIN -p icmp --icmp-type echo-reply -j ACCEPT ',
                                 '-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
             'raw': {'OUTPUT': [], 'PREROUTING': []},
             'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
