@@ -377,13 +377,13 @@ def test_15_tables_printout(capsys):
     """
     Tables 15: check table_printout as well
     """
-    tables = Tables(sys.stdout,'reference-one')
+    tables = Tables(sys.stdout, 'reference-one')
     tables.table_printout()
     out, err = capsys.readouterr()
     assert len(err) == 0
-    words = [ '*raw', '*nat', '*mangle', '*filter' , 'COMMIT',
-            'INPUT', 'FORWARD', 'USER_CHAIN', '192.0.2.5', ]
-    absents = [ 'iptables', '-t raw', '-t mangle', 'udp', ]
+    words = ['*raw', '*nat', '*mangle', '*filter', 'COMMIT',
+             'INPUT', 'FORWARD', 'USER_CHAIN', '192.0.2.5', ]
+    absents = ['iptables', '-t raw', '-t mangle', 'udp', ]
     for word in words:
         assert word in out
     for absent in absents:
