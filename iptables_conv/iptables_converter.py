@@ -13,9 +13,10 @@ iptables_converter.py:
         to some file, append: -d filename
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2017-10-29
-version:    0.9.10
+Date:       2017-11-04
+Version:    see __init__.version
 License:    GNU General Public License version 3 or later
+            Apache License Version 2.0
 
 Have Fun!
 """
@@ -29,6 +30,7 @@ except ImportError:
 from optparse import OptionParser
 import re
 import sys
+from .__init__ import __version__
 
 
 class ConverterError(Exception):
@@ -268,10 +270,13 @@ class Tables(UserDict):
 def main():
     """
     main parses options, filnames and the like
-    one option (-s) may be given: input-filename
-    if none given, it defaults to: rules
+    option -s needs input-filename to be read,
+    if it is not given, it defaults to: rules.
+    option -d needs output-filename to be written,
+    if it is not given, it defaults to: sys.stdout
     """
-    usage = "usage:  %prog --help | -h \n\n\t%prog: version 0.9.10"
+    version = "version %s" % __version__
+    usage = "usage:  %prog --help | -h \n\n\t%prog: " + version
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
