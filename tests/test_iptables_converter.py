@@ -232,27 +232,17 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 05: INPUT to not existing chain
         """
-        tables = Tables(dst, "")
-        line = "iptables -t raw -A NONEXIST"
-        line = line + " -p tcp --dport   80 -j ACCEPT"
-        happend = False
-        try:
-            self.assertRaises(ConverterError, tables, tables.put_into_tables(line))
-        except ConverterError:
-            happend = True
-        self.assertEquals(happend, True)
+        line = "iptables -t raw -A NONEXIST -p tcp --dport   80 -j ACCEPT"
+        with self.assertRaises(ConverterError):
+            Tables(dst, "").put_into_tables(line)
 
     def test_06_read_not_existing_file(self):
         """
         Tables 06: read non existing file
         """
         filename = "not-exist-is-ok"
-        happend = False
-        try:
-            self.assertRaises(ConverterError, Tables(dst, filename))
-        except ConverterError:
-            happend = True
-        self.assertEquals(happend, True)
+        with self.assertRaises(ConverterError):
+            Tables(dst, filename)
 
     def test_07_read_empty_file(self):
         """
