@@ -230,12 +230,19 @@ class Tables(UserDict):
         fam_dict.put_into_fgr(rest)         # do action thers
 
     def read_file(self, sourcefile):
-        """read file into Tables-object"""
+        try:
+            with open(sourcefile, 'r') as f:
+                return self.read(f)
+            self.destfile.write("# generated from: %s\n" % (sourcefile))
+        except IOError as err:
+            raise ConverterError(str(err))
+
+    def read(self, fd):
+        """read data from file like object into Tables-object"""
         self.linecounter = 0
         self.tblctr = 0
         try:
-            fil0 = open(sourcefile, 'r')
-            for zeile in fil0:
+            for zeile in fd:
                 line = str(zeile.strip())
                 self.linecounter += 1
                 if line.startswith('#'):
@@ -254,10 +261,8 @@ class Tables(UserDict):
                     if re.search(pattern, line):
                         self.tblctr += 1
                         self.put_into_tables(line)
-            fil0.close()
-        except (ValueError, IOError) as err:
+        except ValueError as err:
             raise ConverterError(str(err))
-        self.destfile.write("# generated from: %s\n" % (sourcefile))
 
 
 def main():
