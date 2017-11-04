@@ -168,6 +168,7 @@ class Tables(UserDict):
         """init Tables Object is easy going"""
         UserDict.__init__(self)
         self.destfile = destfile
+        self.sourcefile = sourcefile
         self.sloppy = sloppy
         self.patterns = ""
         self.reset(sourcefile, ipversion)
@@ -200,6 +201,7 @@ class Tables(UserDict):
 
     def table_printout(self):
         """printout nonempty tabulars in fixed sequence"""
+        self.destfile.write("# generated from: %s\n" % (self.sourcefile))
         for key in ["raw", "nat", "mangle", "filter"]:
             count = self.data[key].length
             if count > -1:
@@ -235,7 +237,6 @@ class Tables(UserDict):
         try:
             with open(sourcefile, 'r') as f:
                 return self.read(f)
-            self.destfile.write("# generated from: %s\n" % (sourcefile))
         except IOError as err:
             raise ConverterError(str(err))
 
