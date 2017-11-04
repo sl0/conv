@@ -21,10 +21,10 @@
 #
 from __future__ import absolute_import, division, print_function
 
-__all__ = {
+__all__ = [
     "__title__", "__author__", "__author_email__",
-    "__license__", "__uri__", "__version__",
-}
+    "__license__", "__url__", "__version__",
+]
 
 __title__ = "iptables-converter"
 
@@ -33,6 +33,6 @@ __author_email__ = "johannes@hubertz.de"
 
 __license__ = "GNU General Public License version 3 or later, Apache License Version 2"
 
-__uri__ = "https://github.com/sl0/conv.git"
+__url__ = "https://github.com/sl0/conv.git"
 
 __version__ = "0.9.9.dev2"

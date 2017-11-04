@@ -31,7 +31,7 @@ setup(name='iptables-converter',
       license=iptables_conv.__license__,
       author=iptables_conv.__author__,
       author_email=iptables_conv.__author_email__,
-      uri=iptables_conv.__uri__,
+      url=iptables_conv.__url__,
       platforms=['Linux', ],
       classifiers=[
           'Development Status :: 5 - Production/Stable',
