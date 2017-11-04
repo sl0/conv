@@ -310,6 +310,9 @@ def main():
     except ConverterError as err:
         print(str(err), file=sys.stderr)
         return 1
+    finally:
+        if destfile != sys.stdout:
+            destfile.close()
     return 0
 
 
