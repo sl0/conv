@@ -371,7 +371,7 @@ def test_15_tables_printout(capsys):
     tables.table_printout()
     out, err = capsys.readouterr()
     assert len(err) == 0
-    words = ['*raw', '*nat', '*mangle', '*filter', 'COMMIT',
+    words = ['*raw', '*nat', '*mangle', '*filter', 'COMMIT', 'from:',
              'INPUT', 'FORWARD', 'USER_CHAIN', '192.0.2.5', ]
     absents = ['iptables', '-t raw', '-t mangle', 'udp', ]
     for word in words:
