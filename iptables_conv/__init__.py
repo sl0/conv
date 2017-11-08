@@ -35,4 +35,4 @@ __license__ = "GNU General Public License version 3 or later, Apache License Ver
 
 __url__ = "https://github.com/sl0/conv.git"
 
-__version__ = "0.9.9.dev2"
+__version__ = "0.9.9.dev3"
