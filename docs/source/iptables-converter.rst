@@ -2,6 +2,95 @@
 iptables-converter - intro
 ==========================
 
+In linux iptables exists since kernel version 2.4.
+
+A corresponding userland command **iptables** is used to
+control them.
+
+The tables are grouped in filter, nat, mangle and raw.
+In every group there are chains, which contain more or
+less traffic specific rules. Predefined in filter tables
+are INPUT, FORWARD and OUTPUT chain. Perhaps you like to
+read the fine manuals about the iptables command in Linux
+to get to know more about these.
+
+Usually a systemadministrator wants to write his rules in
+a shell script, which is run within the boot sequence or
+every now and then on every change... Over the time this
+script will grow. The longer it gets, the more time takes
+it to complete. Exactly this is the reason, why
+**iptables-converter** was written. Only motivation was to
+speed up the loading of long scripts with multiple iptables
+commands.
+
+The **iptables-converter** is a pure python script with
+two entrypoints:
+
+- **iptables-converter**
+- **ip6tables-converter**.
+
+They reside in linux userland, that means to run one of them
+you don't need root priviledges. Those are needed to load
+the output of the converters.
+
+Command line interface
+======================
+
+To have an idea which command line options are supported,
+just ask it for help::
+
+    $ iptables-converter --help
+    Usage:  iptables-converter --help | -h
+
+    	iptables-converter: version 0.9.10	Have Fun!
+
+    Options:
+      -h, --help     show this help message and exit
+      -d DESTFILE    output filename, default: stdout
+      -s SOURCEFILE  file with iptables commands, default: rules
+      --sloppy       -N name-of-userchain is inserted automatically, by default -N
+                     is neccessary in input
+
+**ip6tables-converter** surprisingly behaves exactly the same way, except from
+the '6' in the command and version line::
+
+    $ ip6tables-converter --help
+    Usage:  ip6tables-converter --help | -h
+
+    	ip6tables-converter: version 0.9.10	Have Fun!
+
+    Options:
+      -h, --help     show this help message and exit
+      -d DESTFILE    output filename, default: stdout
+      -s SOURCEFILE  file with iptables commands, default: rules
+      --sloppy       -N name-of-userchain is inserted automatically, by default -N
+                     is neccessary in input
+
+DEST- and SOURCEFILE
+--------------------
+
+These should be clear, the default values are build in for
+your convenience only. An iptables command generating script
+writes a file named *rules*, which is then read by the
+converter, if the **-s** option is not used. The converters
+ouptut is then written to **stdout**, if the **-d** option is
+not used. So it might be piped or somehow else processed.
+
+--sloppy
+--------
+
+The option **--sloppy** perhaps needs some explanation.
+Usually the iptables command insists on defined chains,
+especially you cannot insert or append a rule into a
+non-existent user defined chain. Especially the
+**-N UserChain** is needed normally in advance to the
+append operation. Inserting into an empty chain is
+forbidden as well. By using the **--sloppy** option this
+**-N** command is not needed in the input for the
+converter as it defines the UserCHain automatically on
+the first occurance of any.
+
+
 Default operating
 =================
 
@@ -16,15 +105,34 @@ Assume a plain file with following contents::
     iptables -t nat -A POSTROUTING -s 10.0.0.0/21 -p tcp --dport   80 -j SNAT --to-source 192.168.1.15
     iptables -t nat -A PREROUTING  -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500
 
-As times goes by, the script will grow. The more lines the longer will it take to be loaded.
-There should be a quicker way of getting things done. Using iptables-save we easily can save the
-actual ruleset from the kernel to a file. To load it's content into the kernel again is a very quick
-action compared to the loading of the originating shellscript. So the idea came up to have a
-converter just for saving time.
+As times goes by, this script will grow. The more lines
+it has, the longer will it take to be loaded. This is
+because every iptables statement needs to modify the
+kernels iptables as an atomar operation, which is a
+lot of overhead from locking the tables, modifying
+and unlocking them. There should be a quicker way of
+getting things done. Using iptables-save we can save
+easily the actual ruleset from the kernel to a file.
+To load it's content into the kernel again is a very
+quick action compared to the loading of the originating
+shellscript. The iptables-restore operation is one
+atomar operation from the kernels view regardless of
+the number of modifications. It's clear to be the much
+quicker the more lines are covered. The disadvantage
+of this proceeding is, the table, f.e. the filter
+tables, are loaded at once, i.e. no appending or
+inserterting using the same command is possible.
+You only need a complete set of iptable commands
+within a file, just like iptables-save gives it.
+So the idea came up to have a converter just for
+saving time.
 
-**iptables-converter** by default reads a file **rules**, using comandline parameter ``-s`` any other
-file. After having read completely, output is written to stdout for full flexibility.
-Given the above file as input the following is printed out::
+**iptables-converter** by default reads a file
+**rules**, using comandline parameter ``-s``
+any other file. After having read completely,
+output is written to stdout or to any path given
+with the ``-d`` commandline option. Given the
+above file as input the following is printed out::
 
     *raw
     :OUTPUT ACCEPT [0:0]
@@ -53,13 +161,14 @@ Given the above file as input the following is printed out::
     -A USER_CHAIN -p icmp -j DROP
     COMMIT
 
-As a file this might be read by iptables-restore, which works immediately.
+As a file this might be read by iptables-restore,
+which works immediately.
 
 Usage example
 -------------
 
-So you probably may want to run the converter from within a shell script
-or the like::
+So you probably may want to run the converter
+from within a shell script or the like::
 
     #!/bin/bash
 
@@ -71,7 +180,7 @@ or the like::
     [ ! -r $INPUT_FILE ] && exit 0
     [ ! -x $INPUT_FILE ] && exit 0
 
-    iptables-converter.py -s $INPUT_FILE > $OUTPUT_FILE
+    iptables-converter.py -s $INPUT_FILE -d $OUTPUT_FILE
 
     # do it only once!
     mv $INPUT_FILE $INPUT_FILE}.old
@@ -89,7 +198,8 @@ Error handling
 Shell functions and shell commands
 ----------------------------------
 
-As the file read is not interpreted in any way, there are few known error conditions:
+As the file which is read is not interpreted
+in any way, there are few known error conditions:
 
   #) the file contains some shell variables, indicated by '$',
      this leads to an errormessage and exits immediately with returncode 1.
@@ -100,7 +210,7 @@ If you have such a file, and you want to speed up by converting, please
 execute it and feed the output as a file to iptables-converter.
 
 
-Non exsitent user chains
+Non existent user chains
 ------------------------
 
 iptables-converter does some more error-checking while reading input.
@@ -108,11 +218,12 @@ iptables-converter does some more error-checking while reading input.
 Normal behavior is to raise an errror, if any append or insert
 statement to an userdefined chain is not preceeded by a corresonding
 creation statement '-N'. This may be changed to a more smooth
-handling with an additional commandline option '- - sloppy'.
+handling with an additional commandline option **--sloppy**.
 Having this, a non existent userchain is created on the fly when
 the first append statement is seen. So it is set as first entry gracefully.
 
 Inserting into an emtpy chain anyhow raises an error as iptables-restore
 would do it later on trying to set the files content into the kernel.
 
-Just to mention it: **iptables -E xyz** and **iptables -L** are not implemented and throw exceptions for now!
+Just to mention it: **iptables -E xyz** and **iptables -L** are not
+implemented and throw exceptions for now!

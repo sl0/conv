@@ -2,92 +2,105 @@
 iptables-converter - tests
 ==========================
 
+.. image:: https://travis-ci.org/sl0/conv.svg?branch=master
+   :target: https://travis-ci.org/sl0/conv
+
 Untested software, that means software which isn't accompanied by automated
 functional tests, is assumed to be broken by design. As iptables-converter is
 written in python, use of the popular unittests is done for your convienience.
+The unittests were run by nose, which later have been replaced by pytest.
+The advantages of pytest are much simpler tests and less overhead. So all newer
+testcases are written for pytest and thus rely on the plain python assert
+statement.
 
 Two testclasses are build: Chains_Test and Tables_Test accordingly to the
-two classes from which the iptables-converter script is build from.
+two classes from which the iptables-converter module and script is build from.
 
-Runing the tests with nosetests::
-
-    nosetests  ... --with-coverage
-    .......................
-    Name                 Stmts   Miss  Cover   Missing
-    --------------------------------------------------
-    iptables_converter     189     27    86%   25-26, 167-177, 240-253, 257-258
-    ----------------------------------------------------------------------
-    Ran 23 tests in 0.019s
+Lets see, how to run the tests within the source-tree by just calling
+pyteat::
 
 
+    $ pytest
+    ============================= test session starts ==============================
+    platform linux -- Python 3.6.3, pytest-3.2.3, py-1.4.34, pluggy-0.4.0
+    rootdir: /home/hans/devel/conv, inifile:
+    plugins: cov-2.5.1
+    collected 28 items
 
-Chains_Test(unittest.TestCase)
-==============================
+    tests/test_iptables_converter.py ............................
 
-The tests are enumerated to assure a predefined sequence of evaluating for
-cosmetical reason.
+    ========================== 28 passed in 0.05 seconds ===========================
+    $
 
-1. A tables group is build first, filter is choosen. The predfined chains
-   are given as parameter to the chains object, then their existance and
-   the default policy is prooved.
-
-2. Setting policy drop into the filter chains is prooved for each chain,
-   an invalid policy keyword is tried and exeption raising is pooved.
-
-3. Append a rule (a valid iptables-statment) into each chain, try to
-   use an invalid filter group and the exception raising for that.
-
-4. Insert rules and then flush them, proof emptiness. Then check exception
-   raising for flushing an invalid filter group
-
-5. Create a userdefind chain and verify existance in the objects dictionay.
-   Check exception raising on creating a predefined chain.
-
-6. Inserting a rule into an empty chain necessarily fails, exception is verified.
-
-7. Inserting a rule into a nonexisting chain fails with exception.
-
-8. Inserting a rule into a nonempty chain works and is verified.
-
-9. Appending three rules to a chain works and their existance in chain
-   object dictionary is prooved.
-
-10. Try to remove a predefined chain raises exception.
-
-11. This test is removed (commented) for reason of practicability.
-    It's intention was, to check if removal of a nonexisting chain raises
-    exception. The code in the chain object is commented as well, as it is
-    needed to achieve a clean status of the chains from any status. So it
-    was not a good idea to raise an exception just for completeness.
-
-12. Creation and successful removal of an userdefined chain.
-
-13. Just look if an illegal command raises an exception.
+All tests passed. Fine. If you want to see more, just add a **-v** to
+the commandline::
 
 
-Tables_Test(unittest.TestCase)
-==============================
+    $ pytest -v
+    ==================================== test session starts ====================================
+    platform linux -- Python 3.6.3, pytest-3.2.3, py-1.4.34, pluggy-0.4.0 -- /home/hans/wb/bin/python3.6
+    cachedir: .cache
+    rootdir: /home/hans/devel/conv, inifile:
+    plugins: cov-2.5.1
+    collected 28 items
 
-1.  Create a Tables object and verify the completeness of all the predefined
-    chains.
+    tests/test_iptables_converter.py::Chains_Test::test_01_create_a_chain_object PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_02_prove_policies PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_03_tables_names PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_04_flush PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_05_new_chain PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_06_new_existing_chain_fails PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_07_insert_rule_fail PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_08_insert_rule_fail PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_09_insert_rule_works PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_10_append_rule PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_11_remove_predef_chain PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_12_remove_chain PASSED
+    tests/test_iptables_converter.py::Chains_Test::test_13_illegal_command PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_01_create_a_tables_object PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_02_nat_prerouting PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_03_mangle_table PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_04_raw_table PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_05_not_existing_chain PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_06_read_not_existing_file PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_07_read_empty_file PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_08_reference_one PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_09_shell_variables PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_10_shell_functions PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_11_reference_sloppy_one PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_12_create_a_tables6_object PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_13_re6ference_one PASSED
+    tests/test_iptables_converter.py::Tables_Test::test_14_re6ference_sloppy_one PASSED
+    tests/test_iptables_converter.py::test_15_tables_printout PASSED
 
-2.  Verify correctness of a given iptables -t nat command.
+    ================================= 28 passed in 0.05 seconds =================================
+    $
 
-3.  Verify correctness of a given iptables -t mangle command.
 
-4.  Verify correctness of a given iptables -t raw command.
+If you want to get to know something about the test-coverage, just
+give pytest a try::
 
-5.  Inserting a rule into a nonexisting chain raises exception.
+    $ pytest --cov=iptables_conv --cov-report=term-missing
+    ==================================== test session starts ====================================
+    platform linux -- Python 3.6.3, pytest-3.2.3, py-1.4.34, pluggy-0.4.0
+    rootdir: /home/hans/devel/conv, inifile:
+    plugins: cov-2.5.1
+    collected 28 items
 
-6.  Try to read a nonexisting file raises exception.
+    tests/test_iptables_converter.py ............................
 
-7.  Read empty file and verify result.
+    ----------- coverage: platform linux, python 3.6.3-final-0 -----------
+    Name                                  Stmts   Miss  Cover   Missing
+    -------------------------------------------------------------------
+    iptables_conv/__init__.py                 8      0   100%
+    iptables_conv/iptables_converter.py     227     34    85%   28-29, 115-117, 268, 279-322, 326
+    -------------------------------------------------------------------
+    TOTAL                                   235     34    86%
 
-8.  Read file reference-one and verify result.
 
-9.  Read a buggy file with shell variables.
+    ================================= 28 passed in 0.08 seconds =================================
+    $
 
-10.  Read a buggy file with shell functions.
-
-11. Read a file without '-N' in sloppy mode without raising error.
-
+If you like to have a look into the sources, you will find the 
+tests directory. Therein all the tests reside. I hope they are
+self explaining.
