@@ -20,6 +20,7 @@ if sys.argv[-1] == 'test':
         err_msg = err.message.replace("No module named ", "")
         msg = "%s is not installed. Install your test requirments." % err_msg
         raise ImportError(msg)
+    os.system('flake8 iptables_conv tests')
     os.system('py.test')
     sys.exit()
 
