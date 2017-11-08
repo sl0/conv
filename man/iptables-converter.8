@@ -1,26 +1,27 @@
 
 .\"Created with GNOME Manpages Editor Wizard gmanedit
-.TH iptables-converter 8 "March 2015" "Johannes Hubertz" " "
+.TH iptables-converter 8 "November 2017" "Johannes Hubertz" " "
 
 .SH NAME
 iptables-converter \- program to convert iptables commands from file to iptables-restore format
 
 .SH SYNOPSIS
 .B iptables-converter
+.RI [ -d \  output-file ]
 .RI [ -s \  iptables-plain-file ]
 .RI [ --sloppy ]
 .br
 
 .SH DESCRIPTION
-The 
+The
 .B iptables-converter
-takes a regular file containing a series of iptables 
+takes a regular file containing a series of iptables
 invocations and converts such a sequence to a format compatible with
-the 
+the
 .B iptables-restore
 command. No attempt is made to reorder the sequence of the commands,
 especially nothing in the input is interpreted in any way.
-All input lines not starting with "iptables" or "/sbin/iptables" 
+All input lines not starting with "iptables" or "/sbin/iptables"
 are ignored. Any input lines starting with "#" are treated as comments
 and therefore are ignored.
 
@@ -28,7 +29,9 @@ and therefore are ignored.
 .PP
 if \fBiptables-converter\fP is run without any arguments, it tries to read a file named "rules" in workdir. That's the tribute to my way of doing.
 
-Output generally is send to
+In absence of command-line option
+.B -d
+output is send to
 .B stdout
 for your convienience and nowhere else. So you can inspect it and write to file for later feeding the iptables-restore command.
 
