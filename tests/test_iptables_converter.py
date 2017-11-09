@@ -248,7 +248,7 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 07: read empty file (in relation to iptables-commands)
         """
-        filename = "MANIFEST"
+        filename = "MANIFEST.in"
         tables = Tables(dst, filename)
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},

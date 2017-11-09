@@ -27,7 +27,7 @@ if sys.argv[-1] == 'test':
 
 setup(name='iptables-converter',
       description='convert set of iptables-commands to iptables-save format',
-      long_description=open('README.md').read(),
+      long_description=open('README.rst').read(),
       version=iptables_conv.__version__,
       license=iptables_conv.__license__,
       author=iptables_conv.__author__,

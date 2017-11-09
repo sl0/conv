@@ -1,4 +1,4 @@
 include Makefile
-include README.md
+include README.rst
 include LICENSE.txt
 include LICENSE_Apache.txt
