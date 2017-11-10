@@ -1,6 +1,6 @@
-==========================
-iptables-converter - intro
-==========================
+================================
+iptables-converter - description
+================================
 
 In linux iptables exists since kernel version 2.4.
 
@@ -27,11 +27,11 @@ The **iptables-converter** is a pure python script with
 two entrypoints:
 
 - **iptables-converter**
-- **ip6tables-converter**.
+- **ip6tables-converter**
 
 They reside in linux userland, that means to run one of them
-you don't need root priviledges. Those are needed to load
-the output of the converters.
+you don't need root priviledges, which are only needed to load
+the output of the converters into the kernelspace.
 
 Command line interface
 ======================
@@ -42,7 +42,7 @@ just ask it for help::
     $ iptables-converter --help
     Usage:  iptables-converter --help | -h
 
-    	iptables-converter: version 0.9.10	Have Fun!
+    	iptables-converter: version 0.9.10.rc1	Have Fun!
 
     Options:
       -h, --help     show this help message and exit
@@ -57,7 +57,7 @@ the '6' in the command and version line::
     $ ip6tables-converter --help
     Usage:  ip6tables-converter --help | -h
 
-    	ip6tables-converter: version 0.9.10	Have Fun!
+    	ip6tables-converter: version 0.9.10.rc1	Have Fun!
 
     Options:
       -h, --help     show this help message and exit
@@ -66,13 +66,18 @@ the '6' in the command and version line::
       --sloppy       -N name-of-userchain is inserted automatically, by default -N
                      is neccessary in input
 
+The only difference in between them is what is looked at.
+iptables-converter just handles lines starting with
+**iptables** or **/sbin/iptables**, ip6tables-converter
+only lines starting with **ip6tables** or **/sbin/ip6tables**.
+
 DEST- and SOURCEFILE
 --------------------
 
 These should be clear, the default values are build in for
-your convenience only. An iptables command generating script
-writes a file named *rules*, which is then read by the
-converter, if the **-s** option is not used. The converters
+your convenience only. A script generating iptables command
+writes them into a file named *rules*, which is then read by
+the converter, if the **-s** option is not used. The converters
 ouptut is then written to **stdout**, if the **-d** option is
 not used. So it might be piped or somehow else processed.
 
@@ -121,19 +126,17 @@ the number of modifications. It's clear to be the much
 quicker the more lines are covered. The disadvantage
 of this proceeding is, the table, f.e. the filter
 tables, are loaded at once, i.e. no appending or
-inserterting using the same command is possible.
+inserterting using the *same* command is possible.
 You only need a complete set of iptable commands
 within a file, just like iptables-save gives it.
 So the idea came up to have a converter just for
 saving time.
 
-**iptables-converter** by default reads a file
-**rules**, using comandline parameter ``-s``
-any other file. After having read completely,
-output is written to stdout or to any path given
-with the ``-d`` commandline option. Given the
-above file as input the following is printed out::
+Lets assume, the file shown above is named **generated-rules**,
+then we have easy going::
 
+    $ iptables-converter -s generated-rules -d converted-rules
+    $ cat converted-rules
     *raw
     :OUTPUT ACCEPT [0:0]
     :PREROUTING ACCEPT [0:0]
@@ -160,9 +163,15 @@ above file as input the following is printed out::
     -A INPUT -p tcp --dport 23 -j ACCEPT
     -A USER_CHAIN -p icmp -j DROP
     COMMIT
+    $
 
-As a file this might be read by iptables-restore,
-which works immediately.
+On the same machine or after beeing transferred to another
+one, the **converted-rules** file can be loaded into the kernel
+by using the command **iptables-restore** as *root user*::
+
+    # iptables-restore -c converted-rules
+
+Of course you use pathnames where filenames are mentioned.
 
 Usage example
 -------------
@@ -195,6 +204,15 @@ from within a shell script or the like::
 Error handling
 ==============
 
+In accidential cases of errors the converter should give you a
+traceback wherin the word **ConverterError** appears. This is to
+let you get to know, where in your whole programming universe
+the error happend.
+
+Two things can not be handled: Shell functions and shell
+variables, because the converter does not interpret your
+input-file.
+
 Shell functions and shell commands
 ----------------------------------
 
@@ -215,8 +233,8 @@ Non existent user chains
 
 iptables-converter does some more error-checking while reading input.
 
-Normal behavior is to raise an errror, if any append or insert
-statement to an userdefined chain is not preceeded by a corresonding
+Normal behavior is to raise an **ConverterError**, if any append or insert
+statement to an userdefined chain is not preceeded by a corresonding chain
 creation statement '-N'. This may be changed to a more smooth
 handling with an additional commandline option **--sloppy**.
 Having this, a non existent userchain is created on the fly when
@@ -225,5 +243,8 @@ the first append statement is seen. So it is set as first entry gracefully.
 Inserting into an emtpy chain anyhow raises an error as iptables-restore
 would do it later on trying to set the files content into the kernel.
 
+Not implemented
+---------------
+
 Just to mention it: **iptables -E xyz** and **iptables -L** are not
-implemented and throw exceptions for now!
+implemented in the **iptables-converter** and throw exceptions for now!

@@ -2,22 +2,22 @@
 iptables-converter - tests
 ==========================
 
-.. image:: https://travis-ci.org/sl0/conv.svg?branch=master
-   :target: https://travis-ci.org/sl0/conv
-
 Untested software, that means software which isn't accompanied by automated
 functional tests, is assumed to be broken by design. As iptables-converter is
 written in python, use of the popular unittests is done for your convienience.
-The unittests were run by nose, which later have been replaced by pytest.
-The advantages of pytest are much simpler tests and less overhead. So all newer
-testcases are written for pytest and thus rely on the plain python assert
-statement.
+The unittests were developed and run by nose, which later have been replaced
+by pytest. The advantages of pytest over nose are much simpler tests and less
+overhead. So all newer testcases are written for pytest and thus rely on the
+plain python assert statement.
 
 Two testclasses are build: Chains_Test and Tables_Test accordingly to the
 two classes from which the iptables-converter module and script is build from.
 
+Basic usage
+-----------
+
 Lets see, how to run the tests within the source-tree by just calling
-pyteat::
+pytest::
 
 
     $ pytest
@@ -32,7 +32,12 @@ pyteat::
     ========================== 28 passed in 0.05 seconds ===========================
     $
 
-All tests passed. Fine. If you want to see more, just add a **-v** to
+All tests passed. Fine.
+
+Verbose usage
+-------------
+
+If you want to see more, just add a **-v** to
 the commandline::
 
 
@@ -77,6 +82,9 @@ the commandline::
     $
 
 
+Code coverage
+-------------
+
 If you want to get to know something about the test-coverage, just
 give pytest a try::
 
@@ -101,6 +109,37 @@ give pytest a try::
     ================================= 28 passed in 0.08 seconds =================================
     $
 
-If you like to have a look into the sources, you will find the 
+If you like to have a look into the sources, you will find the
 tests directory. Therein all the tests reside. I hope they are
 self explaining.
+
+testrunner
+----------
+
+To simply run the tests, **setup.py** has a test target::
+
+    $ python setup.py test
+       ...
+    $
+
+This runs flake8 and pytest.
+If you prefer less typing::
+
+    $ pytest
+       ...
+    $
+
+Or, possibly the best way of doing is the following super power.
+
+Check tests, syntax and style
+-----------------------------
+
+For your convenience, a **tox.ini** is prepared.
+Give tox a try to check altogether in one single run:
+
+    - python2.7
+    - python3.5
+    - python3.6
+    - flake8
+    - docs
+
