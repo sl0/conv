@@ -54,29 +54,28 @@ class Chains(UserDict):
         self.length += 1
         if len(content) == 0:
             return
-        # act = ""
-        liste = content.split()
-        action = liste[0]
+        elements = content.split()
+        action = elements[0]
         if "-t" in action:
-            liste.pop(0)  # remove 1st: -t
-            fname = liste.pop(0)
+            elements.pop(0)  # remove 1st: -t
+            fname = elements.pop(0)
             legals = ["filter", "nat", "raw", "mangle"]
             if fname not in legals:
                 msg = "Valid is one of %s, got: %s" % (legals, fname)
                 raise ConverterError(msg)
-            action = liste[0]
+            action = elements[0]
             content = ""                       # rebuild content from here
-            for elem in liste:
+            for elem in elements:
                 content = content + elem + " "
-            if len(liste) > 1:
-                chain_name = liste[1]
+            if len(elements) > 1:
+                chain_name = elements[1]
         if "-F" in action:
             self.reset()
             return
         if "-P" in action:
-            liste.pop(0)
-            cha = liste.pop(0)
-            new = liste.pop(0)
+            elements.pop(0)
+            cha = elements.pop(0)
+            new = elements.pop(0)
             if new not in ["ACCEPT", "DROP", "REJECT"]:
                 msg = "Illegal policy: % s" % (new)
                 raise ConverterError(msg)
@@ -85,7 +84,7 @@ class Chains(UserDict):
         if "-X" in action:
             predef = ['INPUT', 'FORWARD', 'OUTPUT',
                       'PREROUTING', 'POSTROUTING']
-            rem_chain_name = liste.pop(1)
+            rem_chain_name = elements.pop(1)
             if rem_chain_name in predef:
                 msg = "Cannot remove predefined chain"
                 raise ConverterError(msg)
@@ -95,7 +94,7 @@ class Chains(UserDict):
                 self.data.pop(rem_chain_name)
             return
         if "-N" in action:
-            new_chain_name = liste.pop(1)
+            new_chain_name = elements.pop(1)
             existing = self.data.keys()
             if new_chain_name in existing:
                 msg = "Chain %s already exists" % (new_chain_name)
@@ -103,39 +102,39 @@ class Chains(UserDict):
             self.data[new_chain_name] = []        # empty list
             self.poli[new_chain_name] = "-"       # empty policy, no need
             return
-        if "-I" in action:  # or "-A" in action:
-            chain_name = liste[1]
+        if "-I" in action:
+            chain_name = elements[1]
             existing = self.data.keys()
             if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
                 if not self.sloppy:
                     raise ConverterError(msg)
                 else:
-                    new_chain_name = liste[1]
+                    new_chain_name = elements[1]
                     self.data[new_chain_name] = []
                     self.poli[new_chain_name] = '-'
-            kette = self.data[chain_name]
-            if len(kette) > 0:
-                kette.insert(0, content)
+            stuff = self.data[chain_name]
+            if len(stuff) > 0:
+                stuff.insert(0, content)
             else:
                 msg = "Empty chain %s allows append only!" % (chain_name)
                 raise ConverterError(msg)
-            self.data[chain_name] = kette
+            self.data[chain_name] = stuff
             return
-        if "-A" in action:  # or "-I" in action:
-            chain_name = liste[1]
+        if "-A" in action:
+            chain_name = elements[1]
             existing = self.data.keys()
             if chain_name not in existing:
                 msg = "invalid chain name: %s" % (chain_name)
                 if not self.sloppy:
                     raise ConverterError(msg)
                 else:
-                    new_chain_name = liste[1]
+                    new_chain_name = elements[1]
                     self.data[new_chain_name] = []
                     self.poli[new_chain_name] = '-'
-            kette = self.data[chain_name]
-            kette.append(content)
-            self.data[chain_name] = kette
+            stuff = self.data[chain_name]
+            stuff.append(content)
+            self.data[chain_name] = stuff
             return
         msg = "Unknown filter command in input:" + content
         raise ConverterError(msg)
@@ -169,6 +168,8 @@ class Tables(UserDict):
         self.destfile = destfile
         self.sourcefile = sourcefile
         self.sloppy = sloppy
+        self.linecounter = 0
+        self.tblctr = 0
         self.patterns = ""
         self.reset(sourcefile, ipversion)
 
@@ -216,10 +217,10 @@ class Tables(UserDict):
 
     def put_into_tables(self, line):
         """put line into matching Chains-object"""
-        liste = line.split()
-        liste.pop(0)                        # we always know, it's iptables
+        elements = line.split()
+        elements.pop(0)                     # we always know, it's iptables
         rest = ""
-        for elem in liste:                  # remove redirects and the like
+        for elem in elements:               # remove redirects and the like
             if ">" not in elem:
                 rest = rest + elem + " "    # string again with single blanks
         fam = "filter"
@@ -234,18 +235,18 @@ class Tables(UserDict):
 
     def read_file(self, sourcefile):
         try:
-            with open(sourcefile, 'r') as f:
-                return self.read(f)
+            with open(sourcefile, 'r') as file_descriptor:
+                return self.read(file_descriptor)
         except IOError as err:
             raise ConverterError(str(err))
 
-    def read(self, fd):
         """read data from file like object into Tables-object"""
+    def read(self, file_descriptor):
         self.linecounter = 0
         self.tblctr = 0
         try:
-            for zeile in fd:
-                line = str(zeile.strip())
+            for this_line in file_descriptor:
+                line = str(this_line.strip())
                 self.linecounter += 1
                 if line.startswith('#'):
                     continue
