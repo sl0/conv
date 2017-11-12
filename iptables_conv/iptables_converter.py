@@ -52,7 +52,6 @@ class Chains(UserDict):
     def put_into_fgr(self, content):
         """fill this line into this tabular"""
         self.length += 1
-        cha = "filter"
         if len(content) == 0:
             return
         # act = ""
@@ -320,7 +319,3 @@ def main():
         if destfile != sys.stdout:
             destfile.close()
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
