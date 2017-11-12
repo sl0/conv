@@ -38,10 +38,20 @@ class ConverterError(Exception):
 
 
 class Chains(UserDict):
-    """this is for one type of tables"""
+    """ chains are grouped in iptables
+
+    :param str name: chain group name, 'filter', 'nat', ...
+    :param list tables: list of chains
+    :param bool sloppy: needs '-N'(default) or not
+
+    :return: object representing chain group
+    :rtype: Chains
+    :raises ConverterError: on some illegal conditions
+    """
 
     def __init__(self, name, tables, sloppy=False):
-        """init Chains object"""
+        """ init Chains object
+        """
         UserDict.__init__(self)
         self.name = name
         self.tables = tables
@@ -50,7 +60,12 @@ class Chains(UserDict):
         self.reset()  # name, tables)
 
     def put_into_fgr(self, content):
-        """fill this line into this tabular"""
+        """ fill this line into this tabular
+
+        :param str content: one line of inputfile
+        :return: None
+        :raises ConverterError: on some illegal conditions
+        """
         self.length += 1
         if len(content) == 0:
             return
@@ -139,10 +154,8 @@ class Chains(UserDict):
         msg = "Unknown filter command in input:" + content
         raise ConverterError(msg)
 
-    def reset(self):  # name, tables):
-        """
-        name is one of filter, nat, raw, mangle,
-        tables is a list of tables in that table-class
+    def reset(self):
+        """ action method for iptables -F
         """
         self.poli = {}               # empty dict
         self.length = 0
@@ -153,8 +166,17 @@ class Chains(UserDict):
 
 
 class Tables(UserDict):
-    """
-    some chaingroups in tables are predef: filter, nat, mangle, raw
+    """ some chaingroups in tables are predef: filter, nat, mangle, raw
+
+    :param str destfile: which file or pathname is to be written
+    :param str sourcefile: which file or pathname is to be read
+    :param bool sloppy: '-N' is needed(default) or not
+    :param int ipversion: 4(default) or 6
+
+    :return: Tables after read sourcefile written into destfile
+    :rtype: Tables
+
+    :raises ConverterError: on some illegal conditions
     """
 
     def __init__(self,
@@ -174,7 +196,13 @@ class Tables(UserDict):
         self.reset(sourcefile, ipversion)
 
     def reset(self, sourcefile, ipversion):
-        """all predefined Chains aka lists are setup as new here"""
+        """all predefined Chains aka lists are setup as new here
+
+        :param str sourcefile: file to be read
+        :param int ipversion: 4 or 6
+
+        :return: None
+        """
         self.patterns = ['^iptables', '^/sbin/iptables', ]
         if ipversion == 6:
             self.patterns = ['^ip6tables', '^/sbin/ip6tables', ]
@@ -216,7 +244,11 @@ class Tables(UserDict):
                 self.destfile.write("COMMIT\n")
 
     def put_into_tables(self, line):
-        """put line into matching Chains-object"""
+        """put line into matching Chains-object
+
+        :param line: one line of inputfile
+        :return: None
+        """
         elements = line.split()
         elements.pop(0)                     # we always know, it's iptables
         rest = ""
@@ -234,14 +266,27 @@ class Tables(UserDict):
         fam_dict.put_into_fgr(rest)         # do action thers
 
     def read_file(self, sourcefile):
+        """ open file or error
+
+        :param sourcefile: file or pathname of file to be read
+
+        :return: file_descriptor
+        :raises ConverterError: on IOError
+        """
         try:
             with open(sourcefile, 'r') as file_descriptor:
                 return self.read(file_descriptor)
         except IOError as err:
             raise ConverterError(str(err))
 
-        """read data from file like object into Tables-object"""
     def read(self, file_descriptor):
+        """read data from file like object into Tables-object
+
+        :param file_descriptor: filedescriptor of file to be read
+
+        :return: None
+        :raises ConverterError: on some illegal conditions
+        """
         self.linecounter = 0
         self.tblctr = 0
         try:
@@ -269,8 +314,7 @@ class Tables(UserDict):
 
 
 def main():
-    """
-    main parses options, filnames and the like
+    """ main parses options, filnames and the like
     option -s needs input-filename to be read,
     if it is not given, it defaults to: rules.
     option -d needs output-filename to be written,
