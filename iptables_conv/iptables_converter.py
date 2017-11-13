@@ -347,7 +347,7 @@ def main():
         destfile = sys.stdout
 
     ipversion = 4
-    if '6' in sys.argv[0]:
+    if sys.argv[0].startswith("ip6"):
         ipversion = 6
 
     try:
