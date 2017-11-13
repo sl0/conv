@@ -29,6 +29,7 @@ except ImportError:
     from UserDict import UserDict
 from optparse import OptionParser
 import re
+import os
 import sys
 from .__init__ import __version__
 
@@ -347,7 +348,7 @@ def main():
         destfile = sys.stdout
 
     ipversion = 4
-    if sys.argv[0].startswith("ip6"):
+    if os.path.basename(sys.argv[0]).startswith("ip6"):
         ipversion = 6
 
     try:
