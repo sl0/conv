@@ -14,9 +14,9 @@ output comes with [0:0] for ip6tables-restore -c
 
 **Source**: https://github.com:sl0/conv.git
 
-**Version**: 0.9.10.rc1
+**Version**: 0.9.10.rc2
 
-**Date**: 2017-11-08
+**Date**: 2017-11-15
 
 **Licenses**:
 
@@ -65,7 +65,9 @@ To run them locally, please use python:
 
     python setup test
 
-It is tested to work well with python2.7 and python3.5. The tests are
+or tox, which is the preferred testrunner.
+**iptables-converter** is tested to work well with python2.7, python3.5
+and python3.6.  The tests are
 done using pytest for easier writing future testcases. Some sphinx
 documentation is prepared. Debian packages are provided for the
 `binaries <https://packages.debian.org/sid/iptables-converter>`__ and
