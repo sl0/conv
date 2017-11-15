@@ -13,7 +13,7 @@ iptables_converter.py:
         to some file, append: -d filename
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2017-11-04
+Date:       2017-11-15
 Version:    see __init__.version
 License:    GNU General Public License version 3 or later
             Apache License Version 2.0
@@ -314,12 +314,10 @@ class Tables(UserDict):
             raise ConverterError(str(err))
 
 
-def main():
-    """ main parses options, filnames and the like
-    option -s needs input-filename to be read,
-    if it is not given, it defaults to: rules.
-    option -d needs output-filename to be written,
-    if it is not given, it defaults to: sys.stdout
+def my_options():
+    """ commandline options assembly
+
+    :returns: :class: OptionParser
     """
     version = "version %s" % __version__
     usage = "usage:  %prog --help | -h \n\n\t%prog: " + version
@@ -337,6 +335,18 @@ def main():
                       help="-N name-of-userchain is inserted automatically,\n"
                            "by default -N is neccessary in input\n")
     (options, _) = parser.parse_args()
+    return options
+
+
+def main():
+    """ main parses options, filnames and the like
+    option -s needs input-filename to be read,
+    if it is not given, it defaults to: rules.
+    option -d needs output-filename to be written,
+    if it is not given, it defaults to: sys.stdout
+    """
+
+    options = my_options()
 
     if options.sourcefile is None:
         options.sourcefile = "rules"
