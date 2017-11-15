@@ -24,3 +24,6 @@ tests are written to use the unittest module.
 
 .. automodule:: tests.test_iptables_converter
     :members:
+
+.. automodule:: tests.test_iptables_options
+    :members:

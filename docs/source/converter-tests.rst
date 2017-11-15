@@ -28,8 +28,9 @@ pytest::
     collected 28 items
 
     tests/test_iptables_converter.py ............................
+    tests/test_iptables_options.py .......
 
-    ========================== 28 passed in 0.05 seconds ===========================
+    ========================== 35 passed in 0.08 seconds ===========================
     $
 
 All tests passed. Fine.
@@ -42,13 +43,13 @@ the commandline::
 
 
     $ pytest -v
-    ==================================== test session starts ====================================
+    ================================== test session starts ==================================
     platform linux -- Python 3.6.3, pytest-3.2.3, py-1.4.34, pluggy-0.4.0 -- /home/hans/wb/bin/python3.6
     cachedir: .cache
     rootdir: /home/hans/devel/conv, inifile:
     plugins: cov-2.5.1
-    collected 28 items
-
+    collected 35 items                                                                       
+    
     tests/test_iptables_converter.py::Chains_Test::test_01_create_a_chain_object PASSED
     tests/test_iptables_converter.py::Chains_Test::test_02_prove_policies PASSED
     tests/test_iptables_converter.py::Chains_Test::test_03_tables_names PASSED
@@ -77,8 +78,15 @@ the commandline::
     tests/test_iptables_converter.py::Tables_Test::test_13_re6ference_one PASSED
     tests/test_iptables_converter.py::Tables_Test::test_14_re6ference_sloppy_one PASSED
     tests/test_iptables_converter.py::test_15_tables_printout PASSED
-
-    ================================= 28 passed in 0.05 seconds =================================
+    tests/test_iptables_options.py::test_01_iptables_converter_option_h PASSED
+    tests/test_iptables_options.py::test_02_iptables_converter_option_s PASSED
+    tests/test_iptables_options.py::test_03_iptables_converter_option_d PASSED
+    tests/test_iptables_options.py::test_03_iptables_converter_option_sd PASSED
+    tests/test_iptables_options.py::test_09_iptables_converter_main_dlft PASSED
+    tests/test_iptables_options.py::test_10_iptables_converter_main_ok PASSED
+    tests/test_iptables_options.py::test_11_iptables_converter_main_write PASSED
+    
+    =============================== 35 passed in 0.05 seconds ===============================
     $
 
 
@@ -101,9 +109,10 @@ give pytest a try::
     Name                                  Stmts   Miss  Cover   Missing
     -------------------------------------------------------------------
     iptables_conv/__init__.py                 8      0   100%
-    iptables_conv/iptables_converter.py     226     34    85%   28-29, 71, 128-130, 313, 323-366
+    iptables_conv/iptables_converter.py     230      7    97%   28-29, 72, 129-131, 314
     -------------------------------------------------------------------
-    TOTAL                                   234     34    85%
+    TOTAL                                   238      7    97%
+
 
 
 
