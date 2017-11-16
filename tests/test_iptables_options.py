@@ -46,7 +46,7 @@ def test_03_iptables_converter_option_d():
                        'sloppy': False}
 
 
-def test_03_iptables_converter_option_sd():
+def test_04_iptables_converter_option_sd():
     """ check my_options returns source- and destfile
     """
     sys.argv = ['bla', '-s', 'one', '-d', 'two']
@@ -57,7 +57,7 @@ def test_03_iptables_converter_option_sd():
                        'sloppy': False}
 
 
-def test_09_iptables_converter_main_dlft(capsys):
+def test_05_iptables_converter_main_dlft(capsys):
     """ check main behavior on default file not found
     """
     sys.argv = ['ip6tab', ]
@@ -70,7 +70,7 @@ def test_09_iptables_converter_main_dlft(capsys):
     assert result == 1
 
 
-def test_10_iptables_converter_main_ok(capsys):
+def test_06_iptables_converter_main_ok(capsys):
     """ check main reads a named file
     """
     sys.argv = ['ip6tab', '-s', 'reference-one', ]
@@ -82,7 +82,7 @@ def test_10_iptables_converter_main_ok(capsys):
     assert result == 0
 
 
-def test_11_iptables_converter_main_write(capsys):
+def test_07_iptables_converter_main_write(capsys):
     """ check main reads and writes w/o error
     """
     sys.argv = ['ip6tab', '-s', 'reference-one', '-d', '/dev/null', ]
