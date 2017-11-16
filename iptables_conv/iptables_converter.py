@@ -13,7 +13,7 @@ iptables_converter.py:
         to some file, append: -d filename
 
 Author:     Johannes Hubertz <johannes@hubertz.de>
-Date:       2017-11-15
+Date:       2017-11-16
 Version:    see __init__.version
 License:    GNU General Public License version 3 or later
             Apache License Version 2.0

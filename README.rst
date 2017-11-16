@@ -14,9 +14,9 @@ output comes with [0:0] for ip6tables-restore -c
 
 **Source**: https://github.com:sl0/conv.git
 
-**Version**: 0.9.10.rc2
+**Version**: 0.9.10
 
-**Date**: 2017-11-15
+**Date**: 2017-11-16
 
 **Licenses**:
 

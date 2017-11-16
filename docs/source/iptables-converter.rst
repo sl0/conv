@@ -42,7 +42,7 @@ just ask it for help::
     $ iptables-converter --help
     Usage:  iptables-converter --help | -h
 
-    	iptables-converter: version 0.9.10.rc1	Have Fun!
+            iptables-converter: version 0.9.10       Have Fun!
 
     Options:
       -h, --help     show this help message and exit
@@ -57,7 +57,7 @@ the '6' in the command and version line::
     $ ip6tables-converter --help
     Usage:  ip6tables-converter --help | -h
 
-    	ip6tables-converter: version 0.9.10.rc1	Have Fun!
+            ip6tables-converter: version 0.9.10       Have Fun!
 
     Options:
       -h, --help     show this help message and exit
