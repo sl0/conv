@@ -3,16 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-==============================================
-Welcome to iptables-converter's documentation!
-==============================================
-
-
-what's up here?
-===============
-
-**iptables-converter** is a python script to convert a shellscript file containing iptables commands,
-usually your firewall startup script, to an iptables-restore format. The latter has exactly one big advantage: speed!
+.. include:: ../../README.rst
 
 .. toctree::
    :maxdepth: 1

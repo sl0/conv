@@ -2,13 +2,11 @@
 
 #encoding:utf8
 
-from ip6tables_converter import Chains, Tables, main as haupt
-from mock import patch
+from iptables_conv.iptables_converter import Chains, Tables, ConverterError
 import unittest
-try:
-    from StringIO import StringIO
-except:
-    from io import StringIO
+import sys
+
+dst = sys.stdout
 
 
 class Chains_Test(unittest.TestCase):
@@ -47,7 +45,8 @@ class Chains_Test(unittest.TestCase):
         self.assertEquals(
             {'FORWARD': 'REJECT', 'INPUT': 'DROP', 'OUTPUT': 'DROP'},
             filter.poli)
-        self.assertRaises(ValueError, filter.put_into_fgr, "-P OUTPUT FAIL")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-P OUTPUT FAIL")
 
     def test_03_tables_names(self):
         """
@@ -61,11 +60,11 @@ class Chains_Test(unittest.TestCase):
         filter.put_into_fgr("-t nat -A OUTPUT -j ACCEPT")
         self.assertEquals(['-A OUTPUT -j ACCEPT '], filter.data["OUTPUT"])
 
-        #filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t nat -A FORWARD -j ACCEPT")
         self.assertEquals(['-A FORWARD -j ACCEPT '], filter.data["FORWARD"])
 
-        self.assertRaises(ValueError, filter.put_into_fgr, "-t na -A INPUT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-t na -A INPUT")
 
     def test_04_flush(self):
         """
@@ -83,7 +82,8 @@ class Chains_Test(unittest.TestCase):
         self.assertEquals([], filter.data["INPUT"])
         self.assertEquals([], filter.data["OUTPUT"])
 
-        self.assertRaises(ValueError, filter.put_into_fgr, "-t inval -F")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-t inval -F")
 
     def test_05_new_chain(self):
         """
@@ -100,25 +100,24 @@ class Chains_Test(unittest.TestCase):
         Chain 06: create an exsiting chain should fail
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertRaises(ValueError, filter.put_into_fgr, "-N INPUT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-N INPUT")
 
     def test_07_insert_rule_fail(self):
         """
         Chain 07: insert a rule into an empty chain fails
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
-        self.assertRaises(ValueError, filter.put_into_fgr,
-                          "-I INPUT -j ACCEPT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-I INPUT -j ACCEPT")
 
     def test_08_insert_rule_fail(self):
         """
         Chain 08: insert a rule into a non_existing chain fails
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        #filter.put_into_fgr("-I INPUT -p tcp -j ACCEPT")
-        self.assertRaises(ValueError, filter.put_into_fgr,
-                          "-I PUT -j ACCEPT")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-I PUT -j ACCEPT")
 
     def test_09_insert_rule_works(self):
         """
@@ -152,21 +151,8 @@ class Chains_Test(unittest.TestCase):
         Chain 11: try to remove a prefined chain
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertRaises(ValueError, filter.put_into_fgr,
-                          "-X INPUT")
-
-    #def test_11_remove_nonexisting_chain(self):
-    #    """
-    #    try to remove a nonexisting chain
-    #    """
-    #    filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-    #    # following assertion removed because we always need to
-    #    # remove a non existing chain, especially on runing such
-    #    # genereated scripts for the very first time on a machine
-    #    # so the raise is removed due to practicapability
-    #    #self.assertRaises(ValueError, filter.put_into_fgr,
-    #    #   "-X USERDEFCHAIN")
-    #    pass
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-X INPUT")
 
     def test_12_remove_chain(self):
         """
@@ -187,8 +173,8 @@ class Chains_Test(unittest.TestCase):
         Chain 13: try an ilegal command
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertRaises(ValueError, filter.put_into_fgr,
-                          "-Y USERCHAIN")
+        with self.assertRaises(ConverterError):
+            filter.put_into_fgr("-Y USERCHAIN")
 
 
 class Tables_Test(unittest.TestCase):
@@ -200,13 +186,13 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 01: create a Tables object, check chains
         """
-        self.assertIsInstance(Tables(""), Tables)
+        self.assertIsInstance(Tables(dst, ""), Tables)
 
-        tables = Tables("")
+        tables = Tables(dst, "")
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
                   'mangle': {'FORWARD': [], 'INPUT': [],
-                  'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+                             'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
                   'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
         self.assertEquals(expect, tables.data)
 
@@ -214,8 +200,8 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 02: nat PREROUTING entry
         """
-        tables = Tables("")
-        line = "ip6tables -t nat -A PREROUTING -s 10.0.0.0/21"
+        tables = Tables(dst, "")
+        line = "iptables -t nat -A PREROUTING -s 10.0.0.0/21"
         line = line + " -p tcp --dport   80 -j SNAT --to-source 192.168.1.15"
         tables.put_into_tables(line)
         expect = ['-A PREROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 ']
@@ -225,8 +211,8 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 03: mangle INPUT entry
         """
-        tables = Tables("")
-        line = "ip6tables -t mangle -A INPUT"
+        tables = Tables(dst, "")
+        line = "iptables -t mangle -A INPUT"
         line = line + " -p tcp --dport   80 -j ACCEPT"
         tables.put_into_tables(line)
         expect = ['-A INPUT -p tcp --dport 80 -j ACCEPT ']
@@ -236,8 +222,8 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 04: raw OUTPUT entry
         """
-        tables = Tables("")
-        line = "ip6tables -t raw -A OUTPUT"
+        tables = Tables(dst, "")
+        line = "iptables -t raw -A OUTPUT"
         line = line + " -p tcp --dport   80 -j ACCEPT"
         tables.put_into_tables(line)
         expect = ['-A OUTPUT -p tcp --dport 80 -j ACCEPT ']
@@ -247,34 +233,23 @@ class Tables_Test(unittest.TestCase):
         """
         Tables 05: INPUT to not existing chain
         """
-        tables = Tables("")
-        line = "ip6tables -t raw -A NONEXIST"
-        line = line + " -p tcp --dport   80 -j ACCEPT"
-        happend = False
-        try:
-            self.assertRaises(ValueError, tables, tables.put_into_tables(line))
-        except:
-            happend = True
-        self.assertEquals(happend, True)
+        line = "iptables -t raw -A NONEXIST -p tcp --dport   80 -j ACCEPT"
+        with self.assertRaises(ConverterError):
+            Tables(dst, "").put_into_tables(line)
 
     def test_06_read_not_existing_file(self):
         """
         Tables 06: read non existing file
         """
-        filename = "not-exist-is-ok"
-        happend = False
-        try:
-            self.assertRaises(ValueError, Tables(filename))
-        except:
-            happend = True
-        self.assertEquals(happend, True)
+        with self.assertRaises(ConverterError):
+            Tables(dst, "not-exist-is-ok")
 
     def test_07_read_empty_file(self):
         """
-        Tables 07: read empty file (in relation to ip6tables-commands)
+        Tables 07: read empty file (in relation to iptables-commands)
         """
-        filename = "MANIFEST"
-        tables = Tables(filename)
+        filename = "MANIFEST.in"
+        tables = Tables(dst, filename)
         expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
                   'raw': {'OUTPUT': [], 'PREROUTING': []},
                   'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
@@ -282,19 +257,22 @@ class Tables_Test(unittest.TestCase):
                   'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
         self.assertEquals(expect, tables.data)
 
-    def test_08_re6ference_one(self):
+    def test_08_reference_one(self):
         """
-        Tables 08: read default file: re6ference-one, check chains
+        Tables 08: read default file: reference-one, check chains
         """
-        tables = Tables("re6ference-one")
+        tables = Tables(dst)
         expect = {
             'filter': {'FORWARD': [],
-            'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
-            'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+                       'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                       'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '],
+                       'OUTPUT': []},
             'raw': {'OUTPUT': [], 'PREROUTING': []},
-            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
-            'nat': {'OUTPUT': [], 'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '], 'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
-        }
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
+                       'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [],
+                    'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 '],
+                    'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 ']}}
         self.maxDiff = None
         self.assertEquals(expect, tables.data)
 
@@ -303,38 +281,72 @@ class Tables_Test(unittest.TestCase):
         Tables 09: read buggy file with shell variables
         """
         expect = "Line 8:"
-        sys_exit_val = False
-        try:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                tables = Tables('test-shell-variables')
-        except SystemExit:
-            sys_exit_val = True
-        finally:
-            pass
-        self.assertIn(expect, fake_out.getvalue())
-        self.assertTrue(sys_exit_val)
+        with self.assertRaisesRegexp(ConverterError, expect):
+            Tables(dst, 'tests/data/test-shell-variables')
 
     def test_10_shell_functions(self):
         """
         Tables 10: read buggy file with shell functions
         """
         expect = "Line 6:"
-        sys_exit_val = False
-        try:
-            with patch('sys.stdout', new=StringIO()) as fake_out:
-                tables = Tables('test-debian-bug-no-748638')
-        except SystemExit:
-            sys_exit_val = True
-        finally:
-            pass
-        self.assertIn(expect, fake_out.getvalue())
-        self.assertTrue(sys_exit_val)
+        with self.assertRaisesRegexp(ConverterError, expect):
+            Tables(dst, 'tests/data/test-debian-bug-no-748638')
 
-    def test_11_re6ference_sloppy_one(self):
+    def test_11_reference_sloppy_one(self):
         """
-        Tables 11: read sloppy input file: re6ference-sloppy-one, check chains
+        Tables 11: read sloppy input file: reference-sloppy-one, check chains
         """
-        tables = Tables('re6ference-sloppy-one', True)
+        tables = Tables(dst, 'reference-sloppy-one', True)
+        expect = {
+            'filter':
+                {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                 'USER_CHAIN': ['-I USER_CHAIN -p icmp --icmp-type echo-request -j ACCEPT ',
+                                '-A USER_CHAIN -p icmp --icmp-type echo-reply -j ACCEPT ',
+                                '-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+            'raw': {'OUTPUT': [], 'PREROUTING': []},
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [],
+                    'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 '],
+                    'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 ']}
+        }
+        self.maxDiff = None
+        self.assertEqual(expect, tables.data)
+
+    def test_12_create_a_tables6_object(self):
+        """
+        Tables 12: create an ipv6 Tables object, check chains
+        """
+        self.assertIsInstance(Tables(dst, "", ipversion=6), Tables)
+
+        tables = Tables(dst, "", ipversion=6)
+        expect = {'filter': {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
+                  'raw': {'OUTPUT': [], 'PREROUTING': []},
+                  'mangle': {'FORWARD': [], 'INPUT': [],
+                             'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+                  'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
+        self.assertEquals(expect, tables.data)
+
+    def test_13_re6ference_one(self):
+        """
+        Tables 13: read default file: re6ference-one, check chains
+        """
+        tables = Tables(dst, "re6ference-one", ipversion=6)
+        expect = {
+            'filter': {'FORWARD': [],
+                       'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
+                       'USER_CHAIN': ['-A USER_CHAIN -p icmp -j DROP '], 'OUTPUT': []},
+            'raw': {'OUTPUT': [], 'PREROUTING': []},
+            'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
+            'nat': {'OUTPUT': [], 'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '], 'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
+        }
+        self.maxDiff = None
+        self.assertEquals(expect, tables.data)
+
+    def test_14_re6ference_sloppy_one(self):
+        """
+        Tables 14: read sloppy input file: re6ference-sloppy-one, check chains
+        """
+        tables = Tables(dst, 're6ference-sloppy-one', sloppy=True, ipversion=6)
         expect = {
             'filter':
                 {'FORWARD': [], 'INPUT': ['-A INPUT -p tcp --dport 23 -j ACCEPT '],
@@ -342,13 +354,31 @@ class Tables_Test(unittest.TestCase):
             'raw': {'OUTPUT': [], 'PREROUTING': []},
             'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
             'nat': {'OUTPUT': [],
-                'PREROUTING':
-                  ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
-                'POSTROUTING':
-                  ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
+                    'PREROUTING':
+                    ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '],
+                    'POSTROUTING':
+                    ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
         }
         self.maxDiff = None
         self.assertEqual(expect, tables.data)
+
+
+def test_15_tables_printout(capsys):
+    """
+    Tables 15: check table_printout as well
+    """
+    tables = Tables(sys.stdout, 'reference-one')
+    tables.table_printout()
+    out, err = capsys.readouterr()
+    assert len(err) == 0
+    words = ['*raw', '*nat', '*mangle', '*filter', 'COMMIT', 'from:',
+             'INPUT', 'FORWARD', 'USER_CHAIN', '192.0.2.5', ]
+    absents = ['iptables', '-t raw', '-t mangle', 'udp', ]
+    for word in words:
+        assert word in out
+    for absent in absents:
+        assert absent not in out
+
 
 if __name__ == "__main__":
         unittest.main()

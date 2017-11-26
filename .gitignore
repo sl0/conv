@@ -1,2 +1,5 @@
 .tox/*
-.pc
+dist/
+docs/build
+*.egg-info/
+*.pyc
