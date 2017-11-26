@@ -3,9 +3,13 @@
 
 include /usr/share/dpkg/pkg-info.mk
 
-export DH_VERBOSE=1
-export DH_OPTIONS=-v
-export DEB_BUILD_OPTIONS=1
+# export DH_VERBOSE=1
+# export DH_OPTIONS=-v
+
+PYTHON2_VERSIONS = $(shell pyversions -r)
+PYTHON3_VERSIONS = $(shell py3versions -r)
+
+py3sdo = set -e; $(foreach py, $(PYTHON3_VERSIONS), $(py) $(1);)
 
 # Prevent setuptools/distribute from accessing the internet.
 export http_proxy = http://127.0.9.1:9
@@ -13,30 +17,31 @@ export http_proxy = http://127.0.9.1:9
 %:
 	dh $@ --with python2,python3,sphinxdoc --buildsystem=pybuild
 
+override_dh_autobuild:
+	dh_autobuild
+	PYTHONPATH=. sphinx-build -N -bhtml docs/ build/html # HTML generator
+
+override_dh_auto_install:
+	dh_auto_install
+	$(call py3sdo, setup.py install --root=$(CURDIR)/debian/$(DEB_SOURCE) --install-layout=deb)
+
 build: build-stamp
 
 build-stamp:
 	dh_testdir
 
-clean:
-	dh_clean
-
-override_dh_install:
-	dh_prep
-	dh_installdirs /usr/sbin /usr/share/pyshared /usr/share/man/man8
-	dh_installman --language=C man/*
-	dh_installdocs --exclude=html
-	cd $(CURDIR)/debian/iptables-converter/usr/sbin && \
-	cp $(CURDIR)/iptables_converter.py iptables-converter && \
-	cp $(CURDIR)/ip6tables_converter.py ip6tables-converter && \
-	cd $(CURDIR)
-	dh_lintian
+override_dh_auto_test:
+	cd /build/iptables-converter-0.9.10/ ; py.test
+	find  /build/iptables-converter-0.9.10 -type f -name *.pyc$ | xargs rm -f
 
 override_dh_installdocs:
 	python setup.py build_sphinx
-	dh_installdocs --package=iptables-converter-doc build/sphinx/html
+	dh_installdocs --package=iptables-converter-doc docs/build/html
 
 override_dh_auto_clean:
 	rm -rf build
 	rm -rf *.egg-info
+
+clean:
+	dh_clean
 
