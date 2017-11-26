@@ -1,3 +1,90 @@
+iptables-converter (0.9.10-1~1.gbp29e23e) UNRELEASED; urgency=medium
+
+  ** SNAPSHOT build @29e23e505f7858f41cfe5ac91022dc1e146f4575 **
+
+  [ Johannes Hubertz ]
+  * Adds Apache License as 2nd Free Software License
+
+  [ Guido Günther ]
+  * Be more make'ish
+  * Only invoke dh_clean if debian/ is present
+  * Update .gitignore
+  * Use a single exit point
+  * Run tests on commit
+  * Move tests to tests/
+  * Test python3 too
+  * Copyedit README.txt
+  * Convert to markdown file
+  * Add travis build status
+  * Ignore generated docs
+  * flake8: Ignore docs and setup.py
+  * Drop unused variables
+  * Use two empty lines after functions
+  * Drop unused imports
+  * Fix indentaion
+  * Test flake8 on travis too
+
+  [ Johannes Hubertz ]
+  * Creates iptables_conv module
+  * Keep sphinx happy importing from the tests
+  * Renews README.md
+  * Keep flake8 happy
+  * Removes plain except: statements
+  * Cleanup: Delete superfluous duplicated code
+  * Decide ipversion and search pattern on sys.argv[0]
+  * Replace ValueError by ConverterError
+  * Moves testcases from test_ip6tab... to test_iptab...
+  * Keep flake8 happy, removes a blankline
+  * Adds -d option to write file, defaults to stdout
+  * Adapts tests to destfile capable Tables object
+  * Adds -I to reference-sloppy-one, adapt testcase
+  * Replaces nosetests by pytest for flexibility
+  * Corrects License info in python module
+  * Move setup vars into module __init__.py
+  * Keep flake8 happy
+  * Remove warnings about unknown uri directive
+  * with self.asserRaises is more pythonic
+
+  [ Guido Günther ]
+  * Use assertRaises as context manager
+  * Allow to read Tables from file like objects
+  * Close the file we write to
+
+  [ Johannes Hubertz ]
+  * Takes version out of __init__.version
+  * Fix missing generated from: string
+  * Extends testcase for missed string
+  * Adapts tox.ini to actual python versions and pytest
+  * Adds flake8 to setup.py test
+  * Adds wheel for bdist_wheel
+  * Expands man pages about the -d option
+  * Adds build_sphinx and upload_sphinx setup targets
+  * Reviews sphinx documentation
+  * Sets version to 0.9.10.rc1
+  * Adapts README to 0.9.10.rc1
+  * Get rid of MANIFEST, replace markdown
+  * Rewrites the sphinx sources
+  * removes superflouos lines
+  * Replaces german wording
+  * Rewrites most doc-strings for better documentation
+  * Updates documeted coverage
+
+  [ Dominik George ]
+  * Be less flexible with argv[0] to not break on locally renamed files.
+
+  [ Johannes Hubertz ]
+  * Prefer basename over dangling wrong namend symlinks
+  * Separates OptionParser from main
+  * Adds tests for my_options and main
+  * Check in new testresults into the docs
+  * Updates README.rst and sets version to 0.9.10.rc2
+  * Adds correct dependency for tox to build sphinxdocs
+  * Adjusts numbering of the tests
+  * Set version to 0.9.10, correct the date
+  * Adapts new entrypoint and pyhton module structure to debian
+
+ -- hans hubertz <hans@devel.hubertz.de>  Mon, 27 Nov 2017 00:13:05 +0100
+
 iptables-converter (0.9.9-1) unstable; urgency=medium
 
   * changelog rewritten using gbp dch
