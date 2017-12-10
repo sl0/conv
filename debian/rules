@@ -6,6 +6,10 @@ include /usr/share/dpkg/pkg-info.mk
 # export DH_VERBOSE=1
 # export DH_OPTIONS=-v
 
+PYTHON3_VERSIONS = $(shell py3versions -r)
+
+py3sdo = set -e; $(foreach py, $(PYTHON3_VERSIONS), $(py) $(1);)
+
 # Prevent setuptools/distribute from accessing the internet.
 export http_proxy = http://127.0.9.1:9
 
@@ -15,6 +19,12 @@ export http_proxy = http://127.0.9.1:9
 override_dh_auto_test:
 	cd /build/iptables-converter-0.9.10/ ; python3 -m pytest
 	find  /build/iptables-converter-0.9.10 -type f -name *.pyc$ | xargs rm -f
+
+
+override_dh_auto_install:
+	dh_auto_install
+	$(call py3sdo, setup.py install --root=$(CURDIR)/debian/$(DEB_SOURCE) --install-layout=deb)
+
 
 override_dh_installdocs:
 	python3 setup.py build_sphinx
