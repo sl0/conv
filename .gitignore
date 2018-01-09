@@ -3,3 +3,4 @@ dist/
 docs/build
 *.egg-info/
 *.pyc
+.pc
