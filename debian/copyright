@@ -1,9 +1,25 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: iptables_converter
+Upstream-Contact: Johannes Hubertz <johannes@hubertz.de>
+Comment: sl0.self, sl0, Johannes are aliases of Johannes Hubertz over the time
 Source: https://github.com/sl0/conv.git
 
 Files: *
-Copyright: 2012, 2013 Johannes Hubertz <johannes@hubertz.de>
+Copyright: © 2012-2018 Johannes Hubertz <johannes@hubertz.de>
+License: GPL-3+
+
+Files: Makefile debian/*
+Copyright: © 2013, 2014, 2018 Toni Mueller <debian@tonimueller.org>
+License: GPL-3+
+
+Files: Makefile debian/changelog dev_requirements.txt docs/source/conf.py docs/source/sources.rst iptables_conv/iptables_converter.py setup.cfg setup.py tests/data/test-debian-bug-no-748638 tests/data/test-shell-variables tests/test_iptables_converter.py
+Copyright: © 2015, 2017 Guido Günther <agx@sigxcpu.org>
+License: GPL-3+
+
+Files: iptables_conv/iptables_converter.py
+Copyright: © 2017 Dominik George <nik@naturalnet.de>
+License: GPL-3+
+
 License: GPL-3+
  This program is free software; you can redistribute it
  and/or modify it under the terms of the GNU General Public
