@@ -20,7 +20,7 @@ output comes with [0:0] for ip6tables-restore -c
 
 **Licenses**:
 
-    - GNU GENERAL PUBLIC LICENSE Version 3 later
+    - GNU GENERAL PUBLIC LICENSE Version 3 or any later
     - Apache License Version 2.0
 
 **Author**: Johannes Hubertz johannes@hubertz.de
