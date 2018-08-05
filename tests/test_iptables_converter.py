@@ -18,13 +18,13 @@ class Chains_Test(unittest.TestCase):
         """
         self.assertIsInstance(Chains("filter",
                                      ["INPUT", "FORWARD", "OUTPUT"]), Chains)
-        self.assertEquals({}, Chains("filter", []))
+        self.assertEqual({}, Chains("filter", []))
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
-        self.assertEquals("filter", filter.name)
-        self.assertEquals(['INPUT', 'FORWARD', 'OUTPUT'], filter.tables)
-        self.assertEquals("-", filter.policy)
-        self.assertEquals(0, filter.length)
-        self.assertEquals(
+        self.assertEqual("filter", filter.name)
+        self.assertEqual(['INPUT', 'FORWARD', 'OUTPUT'], filter.tables)
+        self.assertEqual("-", filter.policy)
+        self.assertEqual(0, filter.length)
+        self.assertEqual(
             {'FORWARD': 'ACCEPT', 'INPUT': 'ACCEPT', 'OUTPUT': 'ACCEPT'},
             filter.poli)
 
@@ -34,15 +34,15 @@ class Chains_Test(unittest.TestCase):
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-P INPUT DROP")
-        self.assertEquals(
+        self.assertEqual(
             {'FORWARD': 'ACCEPT', 'INPUT': 'DROP', 'OUTPUT': 'ACCEPT'},
             filter.poli)
         filter.put_into_fgr("-P FORWARD REJECT")
-        self.assertEquals(
+        self.assertEqual(
             {'FORWARD': 'REJECT', 'INPUT': 'DROP', 'OUTPUT': 'ACCEPT'},
             filter.poli)
         filter.put_into_fgr("-P OUTPUT DROP")
-        self.assertEquals(
+        self.assertEqual(
             {'FORWARD': 'REJECT', 'INPUT': 'DROP', 'OUTPUT': 'DROP'},
             filter.poli)
         with self.assertRaises(ConverterError):
@@ -54,14 +54,14 @@ class Chains_Test(unittest.TestCase):
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t filter -A INPUT -i sl0 -j ACCEPT")
-        self.assertEquals(['-A INPUT -i sl0 -j ACCEPT '], filter.data["INPUT"])
+        self.assertEqual(['-A INPUT -i sl0 -j ACCEPT '], filter.data["INPUT"])
 
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t nat -A OUTPUT -j ACCEPT")
-        self.assertEquals(['-A OUTPUT -j ACCEPT '], filter.data["OUTPUT"])
+        self.assertEqual(['-A OUTPUT -j ACCEPT '], filter.data["OUTPUT"])
 
         filter.put_into_fgr("-t nat -A FORWARD -j ACCEPT")
-        self.assertEquals(['-A FORWARD -j ACCEPT '], filter.data["FORWARD"])
+        self.assertEqual(['-A FORWARD -j ACCEPT '], filter.data["FORWARD"])
 
         with self.assertRaises(ConverterError):
             filter.put_into_fgr("-t na -A INPUT")
@@ -72,15 +72,15 @@ class Chains_Test(unittest.TestCase):
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t filter -A INPUT -i sl0 -j ACCEPT")
-        self.assertEquals(['-A INPUT -i sl0 -j ACCEPT '],
+        self.assertEqual(['-A INPUT -i sl0 -j ACCEPT '],
                           filter.data["INPUT"])
         filter.put_into_fgr("-A OUTPUT -o sl1 -j ACCEPT")
-        self.assertEquals(['-A OUTPUT -o sl1 -j ACCEPT'],
+        self.assertEqual(['-A OUTPUT -o sl1 -j ACCEPT'],
                           filter.data["OUTPUT"])
 
         filter.put_into_fgr("-F")
-        self.assertEquals([], filter.data["INPUT"])
-        self.assertEquals([], filter.data["OUTPUT"])
+        self.assertEqual([], filter.data["INPUT"])
+        self.assertEqual([], filter.data["OUTPUT"])
 
         with self.assertRaises(ConverterError):
             filter.put_into_fgr("-t inval -F")
@@ -91,7 +91,7 @@ class Chains_Test(unittest.TestCase):
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-N NEWCHAIN")
-        self.assertEquals(
+        self.assertEqual(
             {'FORWARD': [], 'INPUT': [], 'NEWCHAIN': [], 'OUTPUT': []},
             filter.data)
 
@@ -130,7 +130,7 @@ class Chains_Test(unittest.TestCase):
         expect = ['-I INPUT -p esp -j ACCEPT',
                   '-I INPUT -p udp -j ACCEPT',
                   '-A INPUT -p tcp -j ACCEPT']
-        self.assertEquals(expect, filter.data["INPUT"])
+        self.assertEqual(expect, filter.data["INPUT"])
 
     def test_10_append_rule(self):
         """
@@ -138,13 +138,13 @@ class Chains_Test(unittest.TestCase):
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-A INPUT -p tcp -j ACCEPT")
-        self.assertEquals(['-A INPUT -p tcp -j ACCEPT'], filter.data["INPUT"])
+        self.assertEqual(['-A INPUT -p tcp -j ACCEPT'], filter.data["INPUT"])
         filter.put_into_fgr("-A INPUT -p udp -j ACCEPT")
         filter.put_into_fgr("-A INPUT -p esp -j ACCEPT")
         expect = ['-A INPUT -p tcp -j ACCEPT',
                   '-A INPUT -p udp -j ACCEPT',
                   '-A INPUT -p esp -j ACCEPT']
-        self.assertEquals(expect, filter.data["INPUT"])
+        self.assertEqual(expect, filter.data["INPUT"])
 
     def test_11_remove_predef_chain(self):
         """
@@ -160,11 +160,11 @@ class Chains_Test(unittest.TestCase):
         """
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-N NEWCHAIN")
-        self.assertEquals(
+        self.assertEqual(
             {'FORWARD': [], 'INPUT': [], 'NEWCHAIN': [], 'OUTPUT': []},
             filter.data)
         filter.put_into_fgr("-X NEWCHAIN")
-        self.assertEquals(
+        self.assertEqual(
             {'FORWARD': [], 'INPUT': [], 'OUTPUT': []},
             filter.data)
 
@@ -194,7 +194,7 @@ class Tables_Test(unittest.TestCase):
                   'mangle': {'FORWARD': [], 'INPUT': [],
                              'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
                   'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
-        self.assertEquals(expect, tables.data)
+        self.assertEqual(expect, tables.data)
 
     def test_02_nat_prerouting(self):
         """
@@ -205,7 +205,7 @@ class Tables_Test(unittest.TestCase):
         line = line + " -p tcp --dport   80 -j SNAT --to-source 192.168.1.15"
         tables.put_into_tables(line)
         expect = ['-A PREROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 ']
-        self.assertEquals(expect, tables.data["nat"]["PREROUTING"])
+        self.assertEqual(expect, tables.data["nat"]["PREROUTING"])
 
     def test_03_mangle_table(self):
         """
@@ -216,7 +216,7 @@ class Tables_Test(unittest.TestCase):
         line = line + " -p tcp --dport   80 -j ACCEPT"
         tables.put_into_tables(line)
         expect = ['-A INPUT -p tcp --dport 80 -j ACCEPT ']
-        self.assertEquals(expect, tables.data["mangle"]["INPUT"])
+        self.assertEqual(expect, tables.data["mangle"]["INPUT"])
 
     def test_04_raw_table(self):
         """
@@ -227,7 +227,7 @@ class Tables_Test(unittest.TestCase):
         line = line + " -p tcp --dport   80 -j ACCEPT"
         tables.put_into_tables(line)
         expect = ['-A OUTPUT -p tcp --dport 80 -j ACCEPT ']
-        self.assertEquals(expect, tables.data["raw"]["OUTPUT"])
+        self.assertEqual(expect, tables.data["raw"]["OUTPUT"])
 
     def test_05_not_existing_chain(self):
         """
@@ -255,7 +255,7 @@ class Tables_Test(unittest.TestCase):
                   'mangle': {'FORWARD': [], 'INPUT': [], 'POSTROUTING': [],
                              'PREROUTING': [], 'OUTPUT': []},
                   'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
-        self.assertEquals(expect, tables.data)
+        self.assertEqual(expect, tables.data)
 
     def test_08_reference_one(self):
         """
@@ -274,14 +274,14 @@ class Tables_Test(unittest.TestCase):
                     'POSTROUTING': ['-A POSTROUTING -s 10.0.0.0/21 -p tcp --dport 80 -j SNAT --to-source 192.168.1.15 '],
                     'PREROUTING': ['-A PREROUTING -d 192.0.2.5/32 -p tcp --dport 443 -j DNAT --to-destination 10.0.0.5:1500 ']}}
         self.maxDiff = None
-        self.assertEquals(expect, tables.data)
+        self.assertEqual(expect, tables.data)
 
     def test_09_shell_variables(self):
         """
         Tables 09: read buggy file with shell variables
         """
         expect = "Line 8:"
-        with self.assertRaisesRegexp(ConverterError, expect):
+        with self.assertRaisesRegex(ConverterError, expect):
             Tables(dst, 'tests/data/test-shell-variables')
 
     def test_10_shell_functions(self):
@@ -289,7 +289,7 @@ class Tables_Test(unittest.TestCase):
         Tables 10: read buggy file with shell functions
         """
         expect = "Line 6:"
-        with self.assertRaisesRegexp(ConverterError, expect):
+        with self.assertRaisesRegex(ConverterError, expect):
             Tables(dst, 'tests/data/test-debian-bug-no-748638')
 
     def test_11_reference_sloppy_one(self):
@@ -324,7 +324,7 @@ class Tables_Test(unittest.TestCase):
                   'mangle': {'FORWARD': [], 'INPUT': [],
                              'POSTROUTING': [], 'PREROUTING': [], 'OUTPUT': []},
                   'nat': {'OUTPUT': [], 'PREROUTING': [], 'POSTROUTING': []}}
-        self.assertEquals(expect, tables.data)
+        self.assertEqual(expect, tables.data)
 
     def test_13_re6ference_one(self):
         """
@@ -340,7 +340,7 @@ class Tables_Test(unittest.TestCase):
             'nat': {'OUTPUT': [], 'PREROUTING': ['-A PREROUTING -d 2001:db8:feed::1/128 -p tcp --dport 443 -j DNAT --to-destination 2001:db8:feed::1:1500 '], 'POSTROUTING': ['-A POSTROUTING -s 2001:db8:dead::/64 -p tcp --dport 80 -j SNAT --to-source 2001:db8:feed::1 ']}
         }
         self.maxDiff = None
-        self.assertEquals(expect, tables.data)
+        self.assertEqual(expect, tables.data)
 
     def test_14_re6ference_sloppy_one(self):
         """
