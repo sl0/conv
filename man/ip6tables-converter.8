@@ -6,11 +6,7 @@
 ip6tables-converter \- program to convert ip6tables commands from file to ip6tables-restore format
 
 .SH SYNOPSIS
-.B ip6tables-converter
-.RI [ -d \  output-file ]
-.RI [ -s \  iptables-plain-file ]
-.RI [ --sloppy ]
-.br
+.B ip6tables-converter [options]
 
 .SH DESCRIPTION
 The
@@ -40,7 +36,7 @@ Thank you for any hints of how to do it, I can't imagine because of some lacks i
 brain.
 
 .SH EXIT STATUS
-Normally ip6tables-converter returns a value of 0. In accidential case of
+Normally ip6tables-converter returns a value of 0. In accidental case of
 .B errors
 exit status 1 is returned. For example, if there are shell variables or shell functions
 in the inputfile, these are treated as error, which is reported. To avoid these,
@@ -54,6 +50,8 @@ informed, thanks. I'll do my very best.
 
 .SH OPTIONS
 .B -d filename
+or
+.B --dest-file=Destinationfile
 This options argument defines the destination filename, where the output is written to.
 If omitted, output is written to
 .B stdout
@@ -61,6 +59,8 @@ for your convienience and nowhere else. So you can inspect it and write to file
 for later feeding the ip6tables-restore command.
 
 .B -s filename
+or
+.B --source-file=Sourcefile
 This options argument names the source file, where input is read from. If omitted, the
 default filename is "rules".
 

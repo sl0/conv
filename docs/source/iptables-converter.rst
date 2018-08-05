@@ -42,14 +42,16 @@ just ask it for help::
     $ iptables-converter --help
     Usage:  iptables-converter --help | -h
 
-            iptables-converter: version 0.9.10       Have Fun!
+            iptables-converter: version 0.9.11  Have Fun!
 
     Options:
-      -h, --help     show this help message and exit
-      -d DESTFILE    output filename, default: stdout
-      -s SOURCEFILE  file with iptables commands, default: rules
-      --sloppy       -N name-of-userchain is inserted automatically, by default -N
-                     is neccessary in input
+      -h, --help            show this help message and exit
+      -d DESTFILE, --dest-file=DESTFILE
+                            output filename, default: stdout
+      -s SOURCEFILE, --source-file=SOURCEFILE
+                            file with iptables commands, default: rules
+      --sloppy              -N name-of-userchain is inserted automatically, by
+                            default -N is neccessary in input
 
 **ip6tables-converter** surprisingly behaves exactly the same way, except from
 the '6' in the command and version line::
@@ -57,14 +59,16 @@ the '6' in the command and version line::
     $ ip6tables-converter --help
     Usage:  ip6tables-converter --help | -h
 
-            ip6tables-converter: version 0.9.10       Have Fun!
+        ip6tables-converter: version 0.9.11 Have Fun!
 
     Options:
-      -h, --help     show this help message and exit
-      -d DESTFILE    output filename, default: stdout
-      -s SOURCEFILE  file with iptables commands, default: rules
-      --sloppy       -N name-of-userchain is inserted automatically, by default -N
-                     is neccessary in input
+      -h, --help            show this help message and exit
+      -d DESTFILE, --dest-file=DESTFILE
+                            output filename, default: stdout
+      -s SOURCEFILE, --source-file=SOURCEFILE
+                            file with iptables commands, default: rules
+      --sloppy              -N name-of-userchain is inserted automatically, by
+                            default -N is neccessary in input
 
 The only difference in between them is what is looked at.
 iptables-converter just handles lines starting with
