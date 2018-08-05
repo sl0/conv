@@ -324,10 +324,10 @@ def my_options():
     usage = usage + "\tHave Fun!"
     parser = OptionParser(usage)
     parser.disable_interspersed_args()
-    parser.add_option("-d", "", dest="destfile",
+    parser.add_option("-d", "--dest-file", dest="destfile",
                       type="string",
                       help="output filename, default: stdout\n")
-    parser.add_option("-s", "", dest="sourcefile",
+    parser.add_option("-s", "--source-file", dest="sourcefile",
                       type="string",
                       help="file with iptables commands, default: rules\n")
     parser.add_option("--sloppy", "", dest="sloppy",

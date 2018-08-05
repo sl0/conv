@@ -15,8 +15,9 @@ def test_01_iptables_converter_option_h(capsys):
 
     assert ': SystemExit' in str(execinfo)
 
-    items = ['Options', 'SOURCEFILE', 'DESTFILE', 'version',
-             '--help', '--sloppy', 'Have Fun!', ]
+    items = ['Options', 'SOURCEFILE', 'DESTFILE', 'version', '--help',
+             '--dest-file', '--source-file', '--sloppy',
+             'Have Fun!', ]
 
     for item in items:
         assert item in out
@@ -92,3 +93,25 @@ def test_07_iptables_converter_main_write(capsys):
     assert len(out) == 0
     assert len(err) == 0
     assert result == 0
+
+
+def test_08_iptables_converter_option_dest_file():
+    """ check my_options, destfile name returning
+    """
+    sys.argv = ['ip6tab', '--dest-file', 'one', ]
+    options = my_options()
+
+    assert options == {'destfile': 'one',
+                       'sourcefile': None,
+                       'sloppy': False}
+
+
+def test_09_iptables_converter_option_source_file():
+    """ check my_options sloppy and sourcefile name returning
+    """
+    sys.argv = ['iptab', '-s', 'reference-one', '--sloppy', ]
+    options = my_options()
+
+    assert options == {'destfile': None,
+                       'sourcefile': 'reference-one',
+                       'sloppy': True}
