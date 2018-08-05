@@ -1,6 +1,6 @@
 
 .\"Created with GNOME Manpages Editor Wizard gmanedit
-.TH iptables-converter 8 "November 2017" "Johannes Hubertz" " "
+.TH iptables-converter 8 "August 2018" "Johannes Hubertz" " "
 
 .SH NAME
 iptables-converter \- program to convert iptables commands from file to iptables-restore format
@@ -25,26 +25,22 @@ All input lines not starting with "iptables" or "/sbin/iptables"
 are ignored. Any input lines starting with "#" are treated as comments
 and therefore are ignored.
 
-
 .PP
-if \fBiptables-converter\fP is run without any arguments, it tries to read a file named "rules" in workdir. That's the tribute to my way of doing.
-
-In absence of command-line option
-.B -d
-output is send to
+If \fBiptables-converter\fP is run without any arguments, it tries to read a file named
+.B "rules"
+in workdir. Output is written to
 .B stdout
-for your convienience and nowhere else. So you can inspect it and write to file for later feeding the iptables-restore command.
+That's the tribute to my way of doing.
 
 .PP
 Something needs to be mentioned:
 .B iptables -E
-intellectually still is an unsolved problem and not implemented for now, sorry. Thank you for any
-.B hints
-of how to do it, I can't imagine because of some lacks in my brain.
+intellectually still is an unsolved problem and not implemented for now, sorry.
+Thank you for any hints of how to do it, I can't imagine because of some lacks in my
+brain.
 
-.SH "EXIT STATUS"
-Normally iptables-converter returns a value of 0.
-In accidential case of
+.SH EXIT STATUS
+Normally iptables-converter returns a value of 0. In accidental case of
 .B errors
 exit status 1 is returned. For example, if there are shell variables or shell functions
 in the inputfile, these are treated as error, which is reported. To avoid these,
@@ -53,22 +49,31 @@ execute your scripts and feed their output as a file to iptables-converter.
 .SH VERSIONS
 iptables-converter
 .B should
-be compatibe to any iptables implementations out in the wild. If not, keep me informed, thanks. I'll do my very best.
+be compatibe to any iptables implementations out in the wild. If not, keep me
+informed, thanks. I'll do my very best.
 
 .SH OPTIONS
+.B -d filename
+This options argument defines the destination filename, where the output is written to.
+If omitted, output is written to
+.B stdout
+for your convienience and nowhere else. So you can inspect it and write to file
+for later feeding the iptables-restore command.
+
 .B -s filename
-This option gives you a chance to take another filename instaed of "rules"
+This options argument names the source file, where input is read from. If omitted, the
+default filename is "rules".
 
 .B --sloppy
-This indicates '-N UserChain' is not required prior to mentioning any UserChain input or append, the chain is build on the fly.
-It was build in for special user request.
+This indicates '-N UserChain' is not required prior to mentioning any UserChain
+input or append, the chain is build on the fly. It was build in for special user
+request.
 
 .SH AUTHOR
-Johannes Hubertz <johannes@hubertz.de> wrote this from 2013 to 2017.
+Johannes Hubertz <johannes@hubertz.de> wrote this from 2013 to 2018.
 Any comments welcome anytime.
 
 .SH "SEE ALSO"
 .BR iptables (8)
 .BR iptables-save (8)
 .BR iptables-restore (8)
-

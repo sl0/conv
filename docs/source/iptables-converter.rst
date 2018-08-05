@@ -204,7 +204,7 @@ from within a shell script or the like::
 Error handling
 ==============
 
-In accidential cases of errors the converter should give you a
+In accidental cases of errors the converter should give you a
 traceback wherin the word **ConverterError** appears. This is to
 let you get to know, where in your whole programming universe
 the error happend.
