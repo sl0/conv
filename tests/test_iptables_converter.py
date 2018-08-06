@@ -73,10 +73,10 @@ class Chains_Test(unittest.TestCase):
         filter = Chains("filter", ["INPUT", "FORWARD", "OUTPUT"])
         filter.put_into_fgr("-t filter -A INPUT -i sl0 -j ACCEPT")
         self.assertEqual(['-A INPUT -i sl0 -j ACCEPT '],
-                          filter.data["INPUT"])
+                         filter.data["INPUT"])
         filter.put_into_fgr("-A OUTPUT -o sl1 -j ACCEPT")
         self.assertEqual(['-A OUTPUT -o sl1 -j ACCEPT'],
-                          filter.data["OUTPUT"])
+                         filter.data["OUTPUT"])
 
         filter.put_into_fgr("-F")
         self.assertEqual([], filter.data["INPUT"])
@@ -281,7 +281,7 @@ class Tables_Test(unittest.TestCase):
         Tables 09: read buggy file with shell variables
         """
         expect = "Line 8:"
-        with self.assertRaisesRegex(ConverterError, expect):
+        with self.assertRaisesRegexp(ConverterError, expect):
             Tables(dst, 'tests/data/test-shell-variables')
 
     def test_10_shell_functions(self):
@@ -289,7 +289,7 @@ class Tables_Test(unittest.TestCase):
         Tables 10: read buggy file with shell functions
         """
         expect = "Line 6:"
-        with self.assertRaisesRegex(ConverterError, expect):
+        with self.assertRaisesRegexp(ConverterError, expect):
             Tables(dst, 'tests/data/test-debian-bug-no-748638')
 
     def test_11_reference_sloppy_one(self):
